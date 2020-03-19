@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/my_notes_navigation"
+        android:icon="@drawable/ic_saved"
+        android:title="@string/my_notes" />
+
+    <item
+        android:id="@+id/login_navigation"
+        android:icon="@drawable/ic_login"
+        android:title="@string/login" />
+
+    <item
+        android:id="@+id/history_navigation"
+        android:icon="@drawable/ic_history"
+        android:title="@string/history" />
+
+    <item
+        android:id="@+id/settings_navigation"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+
+</menu>

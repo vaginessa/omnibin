@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/about_app"
+        app:icon="@drawable/ic_info_settings">
+
+        <Preference
+            android:title="@string/news_channel"
+            app:iconSpaceReserved="false">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://t.me/dogbin_android" />
+        </Preference>
+
+        <Preference
+            android:title="@string/contact_developer"
+            app:iconSpaceReserved="false">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://t.me/f0x1d" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/ui"
+        app:icon="@drawable/ic_style">
+
+        <SwitchPreferenceCompat
+            android:key="dark_theme"
+            android:title="@string/dark_theme"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/account"
+        app:icon="@drawable/ic_account_settings">
+
+        <Preference
+            android:key="log_in"
+            android:title="@string/log_in"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/network"
+        app:icon="@drawable/ic_vpn_settings">
+
+        <SwitchPreferenceCompat
+            android:key="proxy_enable"
+            android:summary="@string/use_proxy_summary"
+            android:title="@string/use_proxy"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="proxy"
+            android:title="@string/socks_proxy"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

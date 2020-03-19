@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">dogbin</string>
+    <string name="publish">Опубликовать</string>
+    <string name="custom_url">Пользовательский URL</string>
+    <string name="your_text">Ваш текст</string>
+    <string name="settings">Настройки</string>
+    <string name="network">Сеть</string>
+    <string name="use_proxy">Использовать прокси</string>
+    <string name="use_proxy_summary">Для пользователей из России</string>
+    <string name="login">Логин</string>
+    <string name="register">Регистрация</string>
+    <string name="password">Пароль</string>
+    <string name="invalid_login_or_password">Неправильный логин или пароль</string>
+    <string name="my_notes">Мои записи</string>
+    <string name="update">Обновить</string>
+    <string name="edit">Редактировать</string>
+    <string name="copied_to_clipboard">%s скопировано в буфер обмена</string>
+    <string name="history">История</string>
+    <string name="host">Хост</string>
+    <string name="port">Порт</string>
+    <string name="requires_auth">Авторизация</string>
+    <string name="socks_proxy">Ввод SOCKS4/5 прокси</string>
+    <string name="you_need_to_setup_proxy">Вам нужно выбрать хост и порт</string>
+    <string name="some_links">Несколько ссылок</string>
+    <string name="news_channel">Telegram канал</string>
+    <string name="contact_developer">Связаться с разработчиком</string>
+    <string name="about_app">О приложении</string>
+    <string name="log_out">Выйти</string>
+    <string name="account">Аккаунт</string>
+    <string name="log_in">Войти</string>
+    <string name="dogbin_block_in_russia">Известно, что dogbin заблокирован на территории России, поэтому, если вы из России, то вам требуется настроить прокси</string>
+    <string name="ui">UI</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="dark_theme_q">Используется тема, на основе системной</string>
+    <string name="invalid_link">Ссылка уже используется или недействительна</string>
+    <string name="error">Ошибка: %s</string>
+</resources>

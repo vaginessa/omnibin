@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">dogbin</string>
+    <string name="publish">Publish</string>
+    <string name="custom_url">Custom URL</string>
+    <string name="your_text">Your text</string>
+    <string name="settings">Settings</string>
+    <string name="network">Network</string>
+    <string name="use_proxy">Use proxy</string>
+    <string name="use_proxy_summary">For users from Russia</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
+    <string name="invalid_login_or_password">Incorrect login or password</string>
+    <string name="my_notes">My notes</string>
+    <string name="update">Update</string>
+    <string name="edit">Edit</string>
+    <string name="copied_to_clipboard">%s copied to clipboard</string>
+    <string name="history">History</string>
+    <string name="host">Host</string>
+    <string name="port">Port</string>
+    <string name="requires_auth">Authorization</string>
+    <string name="socks_proxy">Enter SOCKS4/5 proxy</string>
+    <string name="you_need_to_setup_proxy">You need to setup proxy host and port</string>
+    <string name="some_links">Some links</string>
+    <string name="news_channel">Telegram channel</string>
+    <string name="contact_developer">Contact developer</string>
+    <string name="about_app">About app</string>
+    <string name="log_out">Log out</string>
+    <string name="account">Account</string>
+    <string name="log_in">Log in</string>
+    <string name="dogbin_block_in_russia"></string>
+    <string name="ui">UI</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="dark_theme_q">System depending theme</string>
+    <string name="invalid_link">Link is already in use or invalid</string>
+    <string name="error">Error: %s</string>
+</resources>
