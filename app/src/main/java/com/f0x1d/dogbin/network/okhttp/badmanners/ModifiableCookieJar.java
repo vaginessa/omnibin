@@ -1,4 +1,4 @@
-package com.badmanners.okhttp;
+package com.f0x1d.dogbin.network.okhttp.badmanners;
 
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.cache.CookieCache;

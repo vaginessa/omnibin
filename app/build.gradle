@@ -10,8 +10,8 @@ android {
         applicationId "com.f0x1d.dogbin"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.2.2"
+        versionCode 9
+        versionName "1.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +33,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.browser:browser:1.2.0'
 
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'

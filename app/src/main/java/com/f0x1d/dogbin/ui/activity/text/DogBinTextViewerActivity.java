@@ -1,13 +1,14 @@
 package com.f0x1d.dogbin.ui.activity.text;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dogbin.R;
@@ -64,6 +65,14 @@ public class DogBinTextViewerActivity extends BaseActivity {
                 return;
 
             mTextCodeView.setText(text);
+        });
+
+        mDogBinTextViewModel.getIsRedirectData().observe(this, redirectURL -> {
+            if (redirectURL == null)
+                return;
+
+            new CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(redirectURL));
+            finish();
         });
 
         mDogBinTextViewModel.getIsEditableData().observe(this, isEditable -> {

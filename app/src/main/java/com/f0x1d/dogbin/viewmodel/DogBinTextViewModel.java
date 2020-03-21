@@ -15,15 +15,18 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DogBinTextViewModel extends AndroidViewModel {
+public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.NetworkEventsListener {
 
     private MutableLiveData<String> mTextResponseData = new MutableLiveData<>();
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
     private MutableLiveData<Boolean> mIsEditableData = new MutableLiveData<>();
+    private MutableLiveData<String> mRedirectURLData = new MutableLiveData<>();
     private String mSlug;
 
     public DogBinTextViewModel(@NonNull Application application) {
         super(application);
+
+        DogBinApi.getInstance().registerListener(this);
     }
 
     public void load(String slug) {
@@ -49,7 +52,8 @@ public class DogBinTextViewModel extends AndroidViewModel {
         DogBinApi.getInstance().getService().getDocumentTextHTML(slug).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                mIsEditableData.setValue(response.body().contains("edit action  enabled"));
+                String responseBody = response.body();
+                mIsEditableData.setValue(responseBody != null && responseBody.contains("edit action  enabled"));
             }
 
             @Override
@@ -78,8 +82,23 @@ public class DogBinTextViewModel extends AndroidViewModel {
         return mIsEditableData;
     }
 
+    public LiveData<String> getIsRedirectData() {
+        return mRedirectURLData;
+    }
+
     public String getSlug() {
         return mSlug;
+    }
+
+    @Override
+    public void onRedirect(String url) {
+        mRedirectURLData.postValue(url);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        DogBinApi.getInstance().unregisterListener(this);
     }
 
     public enum LoadingState {
