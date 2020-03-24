@@ -34,4 +34,5 @@
     <string name="dark_theme_q">System depending theme</string>
     <string name="invalid_link">Link is already in use or invalid</string>
     <string name="error">Error: %s</string>
+    <string name="error_during_register">Error during registration! Maybe user with the same login exists or password is weak</string>
 </resources>

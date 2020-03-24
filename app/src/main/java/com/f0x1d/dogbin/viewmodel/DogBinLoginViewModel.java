@@ -20,9 +20,18 @@ public class DogBinLoginViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
     private MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mRegisteredData = new MutableLiveData<>();
+
+    private MutableLiveData<Boolean> mIsInLoginModeData = new MutableLiveData<>();
 
     public DogBinLoginViewModel(@NonNull Application application) {
         super(application);
+
+        mIsInLoginModeData.setValue(true);
+    }
+
+    public void switchMode() {
+        mIsInLoginModeData.setValue(!mIsInLoginModeData.getValue());
     }
 
     public void login(String login, String password) {
@@ -34,6 +43,24 @@ public class DogBinLoginViewModel extends AndroidViewModel {
                 mLoadingStateData.setValue(LoadingState.LOADED);
 
                 mLoggedInData.setValue(response.body() != null);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                processError(t);
+            }
+        });
+    }
+
+    public void register(String login, String password) {
+        mLoadingStateData.setValue(LoadingState.LOADING);
+
+        DogBinApi.getInstance().getService().register(NetworkUtils.getAuthBody(login, password)).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                mLoadingStateData.setValue(LoadingState.LOADED);
+
+                mRegisteredData.setValue(response.body() != null);
             }
 
             @Override
@@ -56,6 +83,14 @@ public class DogBinLoginViewModel extends AndroidViewModel {
 
     public LiveData<Boolean> getLoggedInData() {
         return mLoggedInData;
+    }
+
+    public LiveData<Boolean> getRegisteredData() {
+        return mRegisteredData;
+    }
+
+    public LiveData<Boolean> getIsInLoginModeData() {
+        return mIsInLoginModeData;
     }
 
     public enum LoadingState {

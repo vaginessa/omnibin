@@ -18,6 +18,9 @@ public interface DogBinApiService {
     @GET("me")
     Call<String> me();
 
+    @POST("register")
+    Call<String> register(@Body RequestBody body);
+
 
     // Creating and reading docs
     @POST("documents")

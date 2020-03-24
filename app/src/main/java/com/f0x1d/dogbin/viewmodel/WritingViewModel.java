@@ -54,11 +54,11 @@ public class WritingViewModel extends AndroidViewModel {
         Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show();
     }
 
-    public LiveData<LoadingState> getLoadingState() {
+    public LiveData<LoadingState> getLoadingStateData() {
         return mLoadingStateData;
     }
 
-    public LiveData<DocumentLinkResponse> getDocumentResponse() {
+    public LiveData<DocumentLinkResponse> getDocumentResponseData() {
         return mDocumentResponseData;
     }
 

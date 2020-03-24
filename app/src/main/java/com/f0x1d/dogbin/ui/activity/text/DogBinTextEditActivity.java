@@ -24,7 +24,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -75,7 +74,7 @@ public class DogBinTextEditActivity extends BaseActivity {
             mWritebarText.setText(mTextFromIntent);
         }
 
-        mWritingViewModel.getLoadingState().observe(this, loadingState -> {
+        mWritingViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
                 return;
 
@@ -93,7 +92,7 @@ public class DogBinTextEditActivity extends BaseActivity {
             }
         });
 
-        mWritingViewModel.getDocumentResponse().observe(this, document -> {
+        mWritingViewModel.getDocumentResponseData().observe(this, document -> {
             if (document == null) {
                 mSlugText.setError(getString(R.string.invalid_link));
                 return;

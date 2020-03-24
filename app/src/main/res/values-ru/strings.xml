@@ -34,4 +34,5 @@
     <string name="dark_theme_q">Используется тема, на основе системной</string>
     <string name="invalid_link">Ссылка уже используется или недействительна</string>
     <string name="error">Ошибка: %s</string>
+    <string name="error_during_register">Ошибка во время регистрации! Возможно пользователь с таким логином существует или ваш пароль слабый</string>
 </resources>

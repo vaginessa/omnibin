@@ -1,8 +1,8 @@
 package com.f0x1d.dogbin.ui.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -13,13 +13,14 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.viewmodel.DogBinLoginViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 public class DogBinLoginActivity extends BaseActivity {
 
     private EditText mLoginText;
     private EditText mPasswordText;
-    private MaterialButton mLoginButton;
-    private MaterialButton mRegisterButton;
+    private ExtendedFloatingActionButton mLoginButton;
+    private MaterialButton mSwitchStateButton;
 
     private DogBinLoginViewModel mDogBinLoginViewModel;
 
@@ -33,7 +34,7 @@ public class DogBinLoginActivity extends BaseActivity {
         mLoginText = findViewById(R.id.login_text);
         mPasswordText = findViewById(R.id.password_text);
         mLoginButton = findViewById(R.id.login_button);
-        mRegisterButton = findViewById(R.id.register_button);
+        mSwitchStateButton = findViewById(R.id.switch_state_button);
 
         mDogBinLoginViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
@@ -62,8 +63,37 @@ public class DogBinLoginActivity extends BaseActivity {
             }
         });
 
-        mLoginButton.setOnClickListener(v -> mDogBinLoginViewModel.login(mLoginText.getText().toString(), mPasswordText.getText().toString()));
-        mRegisterButton.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://del.dog/register"))));
+        mDogBinLoginViewModel.getRegisteredData().observe(this, isRegistered -> {
+            if (isRegistered) {
+                startActivity(new Intent(DogBinLoginActivity.this, MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(DogBinLoginActivity.this, R.string.error_during_register, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        View.OnClickListener loginClickListener = v -> mDogBinLoginViewModel.login(mLoginText.getText().toString(), mPasswordText.getText().toString());
+        View.OnClickListener registerClickListener = v -> mDogBinLoginViewModel.register(mLoginText.getText().toString(), mPasswordText.getText().toString());
+
+        mDogBinLoginViewModel.getIsInLoginModeData().observe(this, inLoginMode -> {
+            if (inLoginMode) {
+                mSwitchStateButton.setText(R.string.register);
+
+                mLoginButton.setText(R.string.log_in);
+                mLoginButton.setIconResource(R.drawable.ic_login);
+
+                mLoginButton.setOnClickListener(loginClickListener);
+            } else {
+                mSwitchStateButton.setText(R.string.log_in);
+
+                mLoginButton.setText(R.string.register);
+                mLoginButton.setIconResource(R.drawable.ic_register);
+
+                mLoginButton.setOnClickListener(registerClickListener);
+            }
+        });
+
+        mSwitchStateButton.setOnClickListener(v -> mDogBinLoginViewModel.switchMode());
     }
 
     @Override

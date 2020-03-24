@@ -57,7 +57,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mLoginPreference.setTitle(R.string.log_out);
         mLoginPreference.setOnPreferenceClickListener(preference -> {
             if (DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved()) {
-                DogBinApi.getInstance().getCookieJar().getCookieCache().clear();
+                DogBinApi.getInstance().getCookieJar().clear();
 
                 startActivity(new Intent(requireActivity(), MainActivity.class));
                 requireActivity().finish();
