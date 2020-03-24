@@ -15,15 +15,15 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.viewmodel.DogBinTextViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
-
-import de.markusressel.kodeeditor.library.view.CodeEditorLayout;
+import com.pddstudio.highlightjs.HighlightJsView;
+import com.pddstudio.highlightjs.models.Theme;
 
 public class DogBinTextViewerActivity extends BaseActivity {
 
     private DogBinTextViewModel mDogBinTextViewModel;
 
     private MaterialToolbar mToolbar;
-    private CodeEditorLayout mTextCodeView;
+    private HighlightJsView mTextCodeView;
     private ProgressBar mLoadingProgress;
 
     @Override
@@ -41,8 +41,11 @@ public class DogBinTextViewerActivity extends BaseActivity {
 
         mToolbar.setTitle(mDogBinTextViewModel.getSlug());
 
-        mTextCodeView.setShowDivider(false);
-        mTextCodeView.setEditable(false);
+        mTextCodeView.setShowLineNumbers(true);
+        mTextCodeView.setZoomSupportEnabled(true);
+        mTextCodeView.setTheme(isNightTheme() ? Theme.DOGBIN_NIGHT_THEME : Theme.GOOGLECODE);
+        if (isNightTheme())
+            mTextCodeView.setBackgroundColor(getResources().getColor(R.color.dogBinBackground));
 
         mDogBinTextViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
@@ -64,7 +67,7 @@ public class DogBinTextViewerActivity extends BaseActivity {
             if (text == null)
                 return;
 
-            mTextCodeView.setText(text);
+            mTextCodeView.setSource(text);
         });
 
         mDogBinTextViewModel.getIsRedirectData().observe(this, redirectURL -> {
@@ -81,7 +84,7 @@ public class DogBinTextViewerActivity extends BaseActivity {
                 mToolbar.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
                     startActivityForResult(new Intent(DogBinTextViewerActivity.this, DogBinTextEditActivity.class)
                             .putExtra("slug", mDogBinTextViewModel.getSlug())
-                            .putExtra(Intent.EXTRA_TEXT, mTextCodeView.getText())
+                            .putExtra(Intent.EXTRA_TEXT, mDogBinTextViewModel.getTextData().getValue())
                             .putExtra("edit", true), 1);
                     return false;
                 });

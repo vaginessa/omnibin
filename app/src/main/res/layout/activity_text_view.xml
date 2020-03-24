@@ -12,15 +12,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <de.markusressel.kodeeditor.library.view.CodeEditorLayout
+    <com.pddstudio.highlightjs.HighlightJsView
         android:id="@+id/text_code_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:ke_minimap_enabled="false"
-        app:ke_editor_backgroundColor="?android:windowBackground"
-        app:ke_editor_maxZoom="10.0"
-        app:ke_lineNumbers_backgroundColor="?android:windowBackground"
-        app:ke_lineNumbers_textColor="?textColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

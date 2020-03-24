@@ -1,5 +1,6 @@
 package com.f0x1d.dogbin.ui.activity.base;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,5 +32,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1 && lightTheme) {
             getWindow().setNavigationBarColor(Color.BLACK);
         }
+    }
+
+    protected boolean isNightTheme() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
+        }
+        return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 }
