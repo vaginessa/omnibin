@@ -58,7 +58,6 @@ public class DogBinTextViewerActivity extends BaseActivity {
                     mLoadingProgress.setVisibility(View.VISIBLE);
                     mTextCodeView.setVisibility(View.GONE);
                     break;
-                case HIGHLIGHTED_TEXT:
                 case LOADED:
                     mLoadingProgress.setVisibility(View.GONE);
                     mTextCodeView.setVisibility(View.VISIBLE);

@@ -96,7 +96,7 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
 
     @Override
     public void onHighlighted() {
-        mLoadingStateData.postValue(LoadingState.HIGHLIGHTED_TEXT);
+        mLoadingStateData.postValue(LoadingState.LOADED);
     }
 
     @Override
@@ -106,6 +106,6 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
     }
 
     public enum LoadingState {
-        LOADING, LOADED, HIGHLIGHTED_TEXT
+        LOADING, LOADED
     }
 }
