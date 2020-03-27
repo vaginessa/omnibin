@@ -10,12 +10,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.retrofit.DogBinApi;
+import com.pddstudio.highlightjs.HighlightJsView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.NetworkEventsListener {
+public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.NetworkEventsListener, HighlightJsView.OnContentHighlightedListener {
 
     private MutableLiveData<String> mTextResponseData = new MutableLiveData<>();
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
@@ -36,8 +37,6 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
         DogBinApi.getInstance().getService().getDocumentText(slug).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                mLoadingStateData.setValue(LoadingState.LOADED);
-
                 mTextResponseData.setValue(response.body());
             }
 
@@ -96,12 +95,17 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
     }
 
     @Override
+    public void onHighlighted() {
+        mLoadingStateData.postValue(LoadingState.HIGHLIGHTED_TEXT);
+    }
+
+    @Override
     protected void onCleared() {
         super.onCleared();
         DogBinApi.getInstance().unregisterListener(this);
     }
 
     public enum LoadingState {
-        LOADING, LOADED
+        LOADING, LOADED, HIGHLIGHTED_TEXT
     }
 }

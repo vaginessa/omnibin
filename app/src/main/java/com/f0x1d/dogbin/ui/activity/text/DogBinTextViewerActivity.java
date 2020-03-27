@@ -47,6 +47,8 @@ public class DogBinTextViewerActivity extends BaseActivity {
         if (isNightTheme())
             mTextCodeView.setBackgroundColor(getResources().getColor(R.color.dogBinBackground));
 
+        mTextCodeView.setOnContentHighlightedListener(mDogBinTextViewModel);
+
         mDogBinTextViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
                 return;
@@ -56,6 +58,7 @@ public class DogBinTextViewerActivity extends BaseActivity {
                     mLoadingProgress.setVisibility(View.VISIBLE);
                     mTextCodeView.setVisibility(View.GONE);
                     break;
+                case HIGHLIGHTED_TEXT:
                 case LOADED:
                     mLoadingProgress.setVisibility(View.GONE);
                     mTextCodeView.setVisibility(View.VISIBLE);
