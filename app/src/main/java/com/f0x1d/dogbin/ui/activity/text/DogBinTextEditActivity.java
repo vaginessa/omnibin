@@ -17,14 +17,10 @@ import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.MyNote;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
+import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.WritingViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -142,15 +138,6 @@ public class DogBinTextEditActivity extends BaseActivity {
     }
 
     private void addRecordToDB(String slug) {
-        MyNote myNote = new MyNote();
-        myNote.slug = slug;
-
-        Date date = new Date(System.currentTimeMillis());
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault());
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        myNote.time = formatter.format(date);
-
-        App.getMyDatabase().myNoteDao().insert(myNote);
+        App.getMyDatabase().getMyNoteDao().insert(MyNote.createNote(slug, Utils.currentTimeToString()));
     }
 }

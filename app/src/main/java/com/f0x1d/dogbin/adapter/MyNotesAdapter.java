@@ -24,6 +24,7 @@ import java.util.List;
 public class MyNotesAdapter extends RecyclerView.Adapter<MyNotesAdapter.MyNoteViewHolder> {
 
     private List<MyNote> mMyNotes = new ArrayList<>();
+
     private Context mContext;
 
     public MyNotesAdapter(Context context) {
@@ -58,23 +59,23 @@ public class MyNotesAdapter extends RecyclerView.Adapter<MyNotesAdapter.MyNoteVi
 
     public class MyNoteViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView urlText;
-        public TextView timeText;
+        TextView mURLText;
+        TextView mTimeText;
 
         public MyNoteViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.urlText = itemView.findViewById(R.id.url_text);
-            this.timeText = itemView.findViewById(R.id.time_text);
+            this.mURLText = itemView.findViewById(R.id.url_text);
+            this.mTimeText = itemView.findViewById(R.id.time_text);
 
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(mContext, DogBinTextViewerActivity.class);
-                intent.setData(Uri.parse("https://del.dog/" + mMyNotes.get(getAdapterPosition()).slug));
+                intent.setData(Uri.parse("https://del.dog/" + mMyNotes.get(getAdapterPosition()).getSlug()));
 
                 mContext.startActivity(intent);
             });
             itemView.setOnLongClickListener(v -> {
-                String delDogUrl = "https://del.dog/" + mMyNotes.get(getAdapterPosition()).slug;
+                String delDogUrl = "https://del.dog/" + mMyNotes.get(getAdapterPosition()).getSlug();
 
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(mContext.getString(R.string.app_name), delDogUrl);
@@ -86,8 +87,8 @@ public class MyNotesAdapter extends RecyclerView.Adapter<MyNotesAdapter.MyNoteVi
         }
 
         public void bindTo(MyNote myNote) {
-            urlText.setText(myNote.slug);
-            timeText.setText(myNote.time);
+            mURLText.setText(myNote.getSlug());
+            mTimeText.setText(myNote.getTime());
         }
     }
 }

@@ -21,6 +21,9 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreferenceCompat mDarkModePreference;
@@ -29,6 +32,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreferenceCompat mProxySwitch;
     private Preference mProxyPreference;
+
+    private Preference mClearCachePreference;
+
+    private Executor mExecutor = Executors.newSingleThreadExecutor();
 
     public static SettingsFragment newInstance() {
         Bundle args = new Bundle();
@@ -80,6 +87,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mProxyPreference = findPreference("proxy");
         mProxyPreference.setOnPreferenceClickListener(preference -> {
             showProxyDialog();
+            return false;
+        });
+
+        mClearCachePreference = findPreference("cache_nuke");
+        mClearCachePreference.setOnPreferenceClickListener(preference -> {
+            mExecutor.execute(() -> App.getMyDatabase().getSavedNoteDao().nukeTable());
             return false;
         });
     }

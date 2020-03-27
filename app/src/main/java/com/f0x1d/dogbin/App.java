@@ -37,7 +37,11 @@ public class App extends Application {
         sInstance = this;
 
         sPrefsUtil = new PreferencesUtils(this);
-        sMyDatabase = Room.databaseBuilder(this, MyDatabase.class, "dogbin_database").build();
+        sMyDatabase = Room.databaseBuilder(this, MyDatabase.class, "dogbin_database")
+                .addMigrations(
+                        MyDatabase.MIGRATION_1_2
+                )
+                .build();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }

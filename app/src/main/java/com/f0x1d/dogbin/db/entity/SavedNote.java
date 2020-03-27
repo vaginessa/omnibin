@@ -5,29 +5,40 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class MyNote {
+public class SavedNote {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private long mId;
-    @ColumnInfo(name = "slug")
+    @ColumnInfo(name = "content")
+    private String mContent;
+    @ColumnInfo(name = "slug", index = true)
     private String mSlug;
     @ColumnInfo(name = "time")
     private String mTime;
 
-    public static MyNote createNote(String slug, String time) {
-        MyNote myNote = new MyNote();
-        myNote.setSlug(slug);
-        myNote.setTime(time);
-        return myNote;
+    public static SavedNote createNote(String content, String slug, String time) {
+        SavedNote savedNote = new SavedNote();
+        savedNote.setContent(content);
+        savedNote.setSlug(slug);
+        savedNote.setTime(time);
+        return savedNote;
     }
 
     public long getId() {
         return mId;
     }
 
-    public void setId(long id) {
-        this.mId = id;
+    public void setId(long mId) {
+        this.mId = mId;
+    }
+
+    public String getContent() {
+        return mContent;
+    }
+
+    public void setContent(String content) {
+        this.mContent = content;
     }
 
     public String getSlug() {

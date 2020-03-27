@@ -20,13 +20,8 @@ public class MyNotesParser {
             Pattern notePattern = Pattern.compile("<a .+?>(.+?)</a> (.+?)</p>", Pattern.DOTALL);
             Matcher noteMatcher = notePattern.matcher(notesList);
 
-            while (noteMatcher.find()) {
-                MyNote myNote = new MyNote();
-                myNote.slug = noteMatcher.group(1);
-                myNote.time = noteMatcher.group(2).replace("(", "").replace(")", "");
-
-                myNotes.add(myNote);
-            }
+            while (noteMatcher.find())
+                myNotes.add(MyNote.createNote(noteMatcher.group(1), noteMatcher.group(2).replace("(", "").replace(")", "")));
         }
 
         return myNotes;

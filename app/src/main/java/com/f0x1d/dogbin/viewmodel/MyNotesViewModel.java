@@ -1,6 +1,8 @@
 package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -8,12 +10,18 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.MyNote;
+import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.network.parser.MyNotesParser;
 import com.f0x1d.dogbin.network.retrofit.DogBinApi;
+import com.f0x1d.dogbin.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +31,9 @@ public class MyNotesViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
     private MutableLiveData<List<MyNote>> mMyNotesListData = new MutableLiveData<>();
+
+    private Executor mExecutor = Executors.newCachedThreadPool();
+    private Handler mUIHandler = new Handler(Looper.getMainLooper());
 
     public MyNotesViewModel(@NonNull Application application) {
         super(application);
@@ -41,7 +52,18 @@ public class MyNotesViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                processError(t);
+                mExecutor.execute(() -> {
+                    List<SavedNote> savedNotes = App.getMyDatabase().getSavedNoteDao().getAllSync();
+                    if (savedNotes.isEmpty()) {
+                        processError(t);
+                        return;
+                    }
+
+                    mLoadingStateData.postValue(LoadingState.LOADED);
+                    mMyNotesListData.postValue(Utils.savedNotesToMyNotes(savedNotes));
+
+                    mUIHandler.post(() -> Toast.makeText(getApplication(), R.string.loaded_cache_list, Toast.LENGTH_SHORT).show());
+                });
             }
         });
     }
@@ -49,8 +71,9 @@ public class MyNotesViewModel extends AndroidViewModel {
     private void processError(Throwable t) {
         t.printStackTrace();
 
-        mLoadingStateData.setValue(LoadingState.LOADED);
-        Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show();
+        mLoadingStateData.postValue(LoadingState.LOADED);
+        mMyNotesListData.postValue(new ArrayList<>());
+        mUIHandler.post(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show());
     }
 
     public LiveData<LoadingState> getLoadingStateData() {

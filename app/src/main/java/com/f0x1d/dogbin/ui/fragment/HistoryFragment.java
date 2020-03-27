@@ -50,7 +50,7 @@ public class HistoryFragment extends BaseFragment {
         mNotesRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         mNotesRecycler.setAdapter(mAdapter = new MyNotesAdapter(requireActivity()));
 
-        App.getMyDatabase().myNoteDao().getAll().observe(getViewLifecycleOwner(), notes -> {
+        App.getMyDatabase().getMyNoteDao().getAll().observe(getViewLifecycleOwner(), notes -> {
             mAdapter.setNotes(notes, true);
             mAdapter.notifyDataSetChanged();
         });

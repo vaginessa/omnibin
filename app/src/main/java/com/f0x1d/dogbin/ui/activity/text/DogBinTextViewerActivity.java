@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.viewmodel.DogBinTextViewModel;
@@ -91,6 +92,13 @@ public class DogBinTextViewerActivity extends BaseActivity {
                     return false;
                 });
             }
+        });
+
+        App.getMyDatabase().getSavedNoteDao().getBySlug(mDogBinTextViewModel.getSlug()).observe(this, savedNote -> {
+            if (savedNote == null)
+                return;
+
+            mTextCodeView.setSource(savedNote.getContent());
         });
     }
 

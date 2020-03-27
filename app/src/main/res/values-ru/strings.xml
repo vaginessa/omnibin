@@ -35,4 +35,8 @@
     <string name="invalid_link">Ссылка уже используется или недействительна</string>
     <string name="error">Ошибка: %s</string>
     <string name="error_during_register">Ошибка во время регистрации! Возможно пользователь с таким логином существует или ваш пароль слабый</string>
+    <string name="loaded_cache_list">Список загружен из кеша</string>
+    <string name="loaded_cache_note">Текст загружен из кеша</string>
+    <string name="cache">Кеш</string>
+    <string name="clear_cache">Очистить кеш</string>
 </resources>

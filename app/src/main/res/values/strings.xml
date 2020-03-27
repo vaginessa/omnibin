@@ -35,4 +35,8 @@
     <string name="invalid_link">Link is already in use or invalid</string>
     <string name="error">Error: %s</string>
     <string name="error_during_register">Error during registration! Maybe user with the same login exists or password is weak</string>
+    <string name="loaded_cache_list">Cached notes were loaded</string>
+    <string name="loaded_cache_note">Cached note was loaded</string>
+    <string name="cache">Cache</string>
+    <string name="clear_cache">Clear cache</string>
 </resources>
