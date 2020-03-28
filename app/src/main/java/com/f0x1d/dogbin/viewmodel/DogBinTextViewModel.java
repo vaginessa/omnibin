@@ -67,7 +67,11 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
         DogBinApi.getInstance().getService().getDocumentText(slug).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                mTextResponseData.setValue(response.body());
+                String body = response.body();
+                if (mTextResponseData.getValue() != null && mTextResponseData.getValue().equals(body))
+                    return;
+
+                mTextResponseData.setValue(body);
 
                 mExecutor.execute(DogBinTextViewModel.this::cacheNote);
             }
