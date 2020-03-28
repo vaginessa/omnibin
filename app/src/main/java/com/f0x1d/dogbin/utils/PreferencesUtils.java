@@ -17,6 +17,9 @@ public class PreferencesUtils {
     public static final String PROXY_LOGIN_NAME = "proxy_login";
     public static final String PROXY_PASSWORD_NAME = "proxy_password";
 
+    public static final String CACHE_ONLY_MY = "cache_my";
+    public static final String CACHE_AUTO_CLEAR = "auto_cache_clear";
+
     private Context mContext;
     private SharedPreferences mDefaultPreferences;
     private SharedPreferences mAppPreferences;
@@ -74,6 +77,14 @@ public class PreferencesUtils {
 
     public void setProxyEnabled(boolean value) {
         mDefaultPreferences.edit().putBoolean(PROXY_NAME, value).apply();
+    }
+
+    public boolean cacheOnlyMy() {
+        return mDefaultPreferences.getBoolean(CACHE_ONLY_MY, true);
+    }
+
+    public boolean autoClearCache() {
+        return mDefaultPreferences.getBoolean(CACHE_AUTO_CLEAR, true);
     }
 
     public SharedPreferences getAppPreferences() {

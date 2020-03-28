@@ -39,4 +39,6 @@
     <string name="loaded_cache_note">Cached note was loaded</string>
     <string name="cache">Cache</string>
     <string name="clear_cache">Clear cache</string>
+    <string name="cache_my">Cache only my notes</string>
+    <string name="auto_clear_cache">Automatically clear cache</string>
 </resources>

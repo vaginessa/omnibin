@@ -118,6 +118,7 @@ public class DogBinTextEditActivity extends BaseActivity {
 
                 Intent intent = new Intent(this, DogBinTextViewerActivity.class);
                 intent.setData(Uri.parse(delDogUrl));
+                intent.putExtra("my_note", true);
                 startActivity(intent);
             } else {
                 setResult(Activity.RESULT_OK);

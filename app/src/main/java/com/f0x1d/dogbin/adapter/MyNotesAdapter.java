@@ -71,6 +71,7 @@ public class MyNotesAdapter extends RecyclerView.Adapter<MyNotesAdapter.MyNoteVi
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(mContext, DogBinTextViewerActivity.class);
                 intent.setData(Uri.parse("https://del.dog/" + mMyNotes.get(getAdapterPosition()).getSlug()));
+                intent.putExtra("my_note", true);
 
                 mContext.startActivity(intent);
             });

@@ -30,6 +30,9 @@ public interface SavedNoteDao {
     @Insert
     void insert(SavedNote savedNote);
 
+    @Query("DELETE FROM SavedNote WHERE slug = :slug")
+    void delete(String slug);
+
     @Query("DELETE FROM SavedNote")
     void nukeTable();
 }

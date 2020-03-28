@@ -65,6 +65,18 @@
         android:title="@string/cache"
         app:icon="@drawable/ic_cache">
 
+        <SwitchPreferenceCompat
+            android:key="cache_my"
+            android:title="@string/cache_my"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="auto_cache_clear"
+            android:title="@string/auto_clear_cache"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="cache_nuke"
             android:title="@string/clear_cache"

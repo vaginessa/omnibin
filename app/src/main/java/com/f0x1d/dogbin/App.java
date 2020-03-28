@@ -5,8 +5,14 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.f0x1d.dogbin.db.MyDatabase;
+import com.f0x1d.dogbin.db.dao.SavedNoteDao;
+import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class App extends Application {
 
@@ -14,6 +20,7 @@ public class App extends Application {
     private static PreferencesUtils sPrefsUtil;
 
     private static MyDatabase sMyDatabase;
+    private Executor mExecutor = Executors.newSingleThreadExecutor();
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -44,5 +51,23 @@ public class App extends Application {
                 .build();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        mExecutor.execute(this::clearCacheIfNeeded);
+    }
+
+    private void clearCacheIfNeeded() {
+        if (!getPrefsUtil().autoClearCache())
+            return;
+
+        SavedNoteDao savedNoteDao = getMyDatabase().getSavedNoteDao();
+
+        List<SavedNote> savedNotes = savedNoteDao.getAllSync();
+        if (savedNotes.size() < 100)
+            return;
+
+        int indexesToDelete = savedNotes.size() - 100;
+        for (int i = 0; i < indexesToDelete; i++) {
+            savedNoteDao.delete(savedNotes.get(i).getSlug());
+        }
     }
 }

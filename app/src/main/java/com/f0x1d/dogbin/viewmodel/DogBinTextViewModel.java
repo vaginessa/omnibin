@@ -1,6 +1,7 @@
 package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,9 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
     private MutableLiveData<Boolean> mIsEditableData = new MutableLiveData<>();
     private MutableLiveData<String> mRedirectURLData = new MutableLiveData<>();
+
     private String mSlug;
+    private boolean mMyNote;
 
     private Executor mExecutor = Executors.newCachedThreadPool();
     private boolean mNoteCached;
@@ -37,6 +40,10 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
         super(application);
 
         DogBinApi.getInstance().registerListener(this);
+    }
+
+    public void checkMyNote(Intent intent) {
+        mMyNote = intent.getBooleanExtra("my_note", false);
     }
 
     public void load(String slug) {
@@ -88,6 +95,9 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
     }
 
     private void cacheNote() {
+        if (!mMyNote && App.getPrefsUtil().cacheOnlyMy())
+            return;
+
         SavedNote savedNote = App.getMyDatabase().getSavedNoteDao().getBySlugSync(mSlug);
         if (savedNote == null) {
             App.getMyDatabase().getSavedNoteDao().insert(SavedNote.createNote(mTextResponseData.getValue(), mSlug, Utils.currentTimeToString()));

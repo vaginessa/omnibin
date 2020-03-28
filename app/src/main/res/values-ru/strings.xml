@@ -39,4 +39,6 @@
     <string name="loaded_cache_note">Текст загружен из кеша</string>
     <string name="cache">Кеш</string>
     <string name="clear_cache">Очистить кеш</string>
+    <string name="cache_my">Кешировать только мои записи</string>
+    <string name="auto_clear_cache">Автоматически очищать кеш</string>
 </resources>
