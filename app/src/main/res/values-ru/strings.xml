@@ -41,4 +41,8 @@
     <string name="clear_cache">Очистить кеш</string>
     <string name="cache_my">Кешировать только мои записи</string>
     <string name="auto_clear_cache">Автоматически очищать кеш</string>
+    <string name="text_wrap">Перенос текста</string>
+    <string name="text_wrap_no">Без переноса</string>
+    <string name="text_wrap_word">Перенос слов</string>
+    <string name="text_wrap_break">Разрыв слова</string>
 </resources>

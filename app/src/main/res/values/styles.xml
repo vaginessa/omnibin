@@ -14,9 +14,12 @@
 
         <item name="textColor">@android:color/black</item>
         <item name="fabIconColor">@android:color/white</item>
+
+        <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
     </style>
 
     <style name="AlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorAccent">@color/pixelAccent</item>
         <item name="dialogCornerRadius">10dp</item>
         <item name="android:dialogCornerRadius" tools:targetApi="p">10dp</item>
         <item name="buttonBarPositiveButtonStyle">@style/AlertDialogStyle.Button</item>
@@ -27,6 +30,14 @@
     <style name="AlertDialogStyle.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/pixelAccent</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="PopupMenuStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <!--Just placeholder, used only in dark theme-->
+    </style>
+
+    <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@android:color/black</item>
     </style>
 
 </resources>

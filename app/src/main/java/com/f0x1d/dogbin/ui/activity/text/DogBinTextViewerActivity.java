@@ -11,10 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.viewmodel.DogBinTextViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.pddstudio.highlightjs.HighlightJsView;
 import com.pddstudio.highlightjs.models.Theme;
 
@@ -40,11 +42,12 @@ public class DogBinTextViewerActivity extends BaseActivity {
         mTextCodeView = findViewById(R.id.text_code_view);
         mLoadingProgress = findViewById(R.id.loading_progress);
 
-        mToolbar.setTitle(mDogBinTextViewModel.getSlug());
+        setupToolbar();
 
         mTextCodeView.setShowLineNumbers(true);
         mTextCodeView.setZoomSupportEnabled(true);
         mTextCodeView.setTheme(isNightTheme() ? Theme.DOGBIN_NIGHT_THEME : Theme.GOOGLECODE);
+        mTextCodeView.setTextWrap(App.getPrefsUtil().textWrap());
         if (isNightTheme())
             mTextCodeView.setBackgroundColor(getResources().getColor(R.color.dogBinBackground));
 
@@ -81,18 +84,44 @@ public class DogBinTextViewerActivity extends BaseActivity {
             finish();
         });
 
-        mDogBinTextViewModel.getIsEditableData().observe(this, isEditable -> {
-            if (isEditable) {
-                mToolbar.inflateMenu(R.menu.edit_menu);
-                mToolbar.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
-                    startActivityForResult(new Intent(DogBinTextViewerActivity.this, DogBinTextEditActivity.class)
-                            .putExtra("slug", mDogBinTextViewModel.getSlug())
-                            .putExtra(Intent.EXTRA_TEXT, mDogBinTextViewModel.getTextData().getValue())
-                            .putExtra("edit", true), 1);
-                    return false;
-                });
-            }
+        mDogBinTextViewModel.getIsEditableData().observe(this, isEditable -> mToolbar.getMenu().findItem(R.id.edit_item).setVisible(isEditable));
+    }
+
+    private void setupToolbar() {
+        mToolbar.setTitle(mDogBinTextViewModel.getSlug());
+        mToolbar.inflateMenu(R.menu.text_viewer_menu);
+        mToolbar.getMenu().findItem(R.id.text_wrap_item).setOnMenuItemClickListener(item -> {
+            showTextWrapChooseDialog();
+            return false;
         });
+        mToolbar.getMenu().findItem(R.id.edit_item).setOnMenuItemClickListener(item -> {
+            startActivityForResult(new Intent(DogBinTextViewerActivity.this, DogBinTextEditActivity.class)
+                    .putExtra("slug", mDogBinTextViewModel.getSlug())
+                    .putExtra(Intent.EXTRA_TEXT, mDogBinTextViewModel.getTextData().getValue())
+                    .putExtra("edit", true), 1);
+            return false;
+        });
+        mToolbar.getMenu().findItem(R.id.edit_item).setVisible(false);
+    }
+
+    private void showTextWrapChooseDialog() {
+        String[] items = {getString(R.string.text_wrap_no), getString(R.string.text_wrap_word), getString(R.string.text_wrap_break)};
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.text_wrap)
+                .setSingleChoiceItems(items, App.getPrefsUtil().textWrap().ordinal(), (dialog, which) -> {
+                    HighlightJsView.TextWrap textWrap = HighlightJsView.TextWrap.values()[which];
+
+                    App.getPrefsUtil().setTextWrap(which);
+
+                    mTextCodeView.setTextWrap(textWrap);
+                    mTextCodeView.refresh();
+
+                    mDogBinTextViewModel.setLoading();
+
+                    dialog.cancel();
+                })
+                .show();
     }
 
     @Override

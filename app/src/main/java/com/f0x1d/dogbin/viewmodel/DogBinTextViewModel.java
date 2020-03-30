@@ -123,6 +123,10 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
         Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show();
     }
 
+    public void setLoading() {
+        mLoadingStateData.setValue(LoadingState.LOADING);
+    }
+
     public LiveData<String> getTextData() {
         return mTextResponseData;
     }

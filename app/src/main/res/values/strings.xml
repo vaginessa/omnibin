@@ -41,4 +41,8 @@
     <string name="clear_cache">Clear cache</string>
     <string name="cache_my">Cache only my notes</string>
     <string name="auto_clear_cache">Automatically clear cache</string>
+    <string name="text_wrap">Text wrap</string>
+    <string name="text_wrap_no">No wrap</string>
+    <string name="text_wrap_word">Word wrap</string>
+    <string name="text_wrap_break">Break word</string>
 </resources>

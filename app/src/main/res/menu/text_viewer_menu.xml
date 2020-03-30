@@ -8,4 +8,9 @@
         android:title="@string/edit"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/text_wrap_item"
+        android:title="@string/text_wrap"
+        app:showAsAction="never" />
+
 </menu>

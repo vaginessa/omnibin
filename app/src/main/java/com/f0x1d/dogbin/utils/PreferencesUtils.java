@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.pddstudio.highlightjs.HighlightJsView;
+
 public class PreferencesUtils {
 
     public static final String DARK_THEME_NAME = "dark_theme";
@@ -19,6 +21,8 @@ public class PreferencesUtils {
 
     public static final String CACHE_ONLY_MY = "cache_my";
     public static final String CACHE_AUTO_CLEAR = "auto_cache_clear";
+
+    public static final String EDITOR_TEXT_WRAP = "editor_text_wrap";
 
     private Context mContext;
     private SharedPreferences mDefaultPreferences;
@@ -85,6 +89,14 @@ public class PreferencesUtils {
 
     public boolean autoClearCache() {
         return mDefaultPreferences.getBoolean(CACHE_AUTO_CLEAR, true);
+    }
+
+    public HighlightJsView.TextWrap textWrap() {
+        return HighlightJsView.TextWrap.values()[mAppPreferences.getInt(EDITOR_TEXT_WRAP, 0)];
+    }
+
+    public void setTextWrap(int ordinal) {
+        mAppPreferences.edit().putInt(EDITOR_TEXT_WRAP, ordinal).apply();
     }
 
     public SharedPreferences getAppPreferences() {
