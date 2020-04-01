@@ -61,12 +61,15 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
 
         if (App.getPrefsUtil().isProxyEnabled()) {
             builder.proxy(new Proxy(Proxy.Type.SOCKS, InetSocketAddress.createUnresolved(App.getPrefsUtil().getProxyHost(), App.getPrefsUtil().getProxyPort())));
-            builder.authenticator((route, response) -> {
-                String credential = Credentials.basic(App.getPrefsUtil().getProxyLogin(), App.getPrefsUtil().getProxyPassword());
-                return response.request().newBuilder()
-                        .header("Proxy-Authorization", credential)
-                        .build();
-            });
+
+            if (App.getPrefsUtil().isAuthForProxyRequired()) {
+                builder.authenticator((route, response) -> {
+                    String credential = Credentials.basic(App.getPrefsUtil().getProxyLogin(), App.getPrefsUtil().getProxyPassword());
+                    return response.request().newBuilder()
+                            .header("Proxy-Authorization", credential)
+                            .build();
+                });
+            }
         }
 
         Retrofit retrofit = new Retrofit.Builder()
