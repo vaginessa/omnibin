@@ -40,6 +40,12 @@
         app:icon="@drawable/ic_account_settings">
 
         <Preference
+            android:key="username"
+            android:selectable="false"
+            android:title="@string/loading"
+            app:iconSpaceReserved="false" />
+
+        <Preference
             android:key="log_in"
             android:title="@string/log_in"
             app:iconSpaceReserved="false" />
@@ -48,6 +54,12 @@
     <PreferenceCategory
         android:title="@string/network"
         app:icon="@drawable/ic_vpn_settings">
+
+        <SwitchPreferenceCompat
+            android:key="note_redirect"
+            android:title="@string/redirect_from_notes"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:key="proxy_enable"

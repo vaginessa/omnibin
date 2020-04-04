@@ -2,13 +2,13 @@ package com.f0x1d.dogbin.ui.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.MyNotesAdapter;
@@ -20,7 +20,7 @@ public class MyNotesFragment extends BaseFragment {
 
     private MaterialToolbar mToolbar;
     private RecyclerView mNotesRecycler;
-    private ProgressBar mLoadingProgress;
+    private SwipeRefreshLayout mRefreshLayout;
 
     private MyNotesAdapter mAdapter;
 
@@ -48,14 +48,12 @@ public class MyNotesFragment extends BaseFragment {
 
         mToolbar = findViewById(R.id.toolbar);
         mNotesRecycler = findViewById(R.id.my_notes_recycler);
-        mLoadingProgress = findViewById(R.id.loading_progress);
+        mRefreshLayout = findViewById(R.id.refresh_layout);
 
         mToolbar.setTitle(R.string.my_notes);
-        mToolbar.inflateMenu(R.menu.my_notes_menu);
-        mToolbar.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
-            mMyNotesViewModel.load();
-            return true;
-        });
+        mRefreshLayout.setColorSchemeResources(isNightTheme() ? R.color.dogBinAccent : R.color.pixelAccent);
+        if (isNightTheme())
+            mRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.dogBinBackground);
 
         mNotesRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         mNotesRecycler.setAdapter(mAdapter = new MyNotesAdapter(requireActivity()));
@@ -66,11 +64,11 @@ public class MyNotesFragment extends BaseFragment {
 
             switch (loadingState) {
                 case LOADING:
-                    mLoadingProgress.setVisibility(View.VISIBLE);
+                    mRefreshLayout.setRefreshing(true);
                     mNotesRecycler.setVisibility(View.GONE);
                     break;
                 case LOADED:
-                    mLoadingProgress.setVisibility(View.GONE);
+                    mRefreshLayout.setRefreshing(false);
                     mNotesRecycler.setVisibility(View.VISIBLE);
                     break;
             }
@@ -83,5 +81,7 @@ public class MyNotesFragment extends BaseFragment {
             mAdapter.setNotes(notes, false);
             mAdapter.notifyDataSetChanged();
         });
+
+        mRefreshLayout.setOnRefreshListener(() -> mMyNotesViewModel.load());
     }
 }

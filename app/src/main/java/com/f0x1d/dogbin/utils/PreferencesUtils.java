@@ -18,6 +18,7 @@ public class PreferencesUtils {
     public static final String PROXY_PORT_NAME = "proxy_port";
     public static final String PROXY_LOGIN_NAME = "proxy_login";
     public static final String PROXY_PASSWORD_NAME = "proxy_password";
+    public static final String NETWORK_REDIRECT_NOTE = "note_redirect";
 
     public static final String CACHE_ONLY_MY = "cache_my";
     public static final String CACHE_AUTO_CLEAR = "auto_cache_clear";
@@ -81,6 +82,10 @@ public class PreferencesUtils {
 
     public void setProxyEnabled(boolean value) {
         mDefaultPreferences.edit().putBoolean(PROXY_NAME, value).apply();
+    }
+
+    public boolean isRedirectFromNoteEnabled() {
+        return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE, true);
     }
 
     public boolean cacheOnlyMy() {

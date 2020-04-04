@@ -19,6 +19,7 @@ import com.f0x1d.dogbin.db.entity.MyNote;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.WritingViewModel;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.concurrent.Executor;
@@ -30,6 +31,7 @@ public class DogBinTextEditActivity extends BaseActivity {
 
     public static final String ACTION_UPLOAD_TO_DOGBIN = "com.f0x1d.dogbin.ACTION_UPLOAD_TO_DOGBIN";
 
+    private MaterialToolbar mToolbar;
     private EditText mSlugText;
     private CodeEditorLayout mWritebarText;
     private FloatingActionButton mDoneButton;
@@ -57,11 +59,13 @@ public class DogBinTextEditActivity extends BaseActivity {
 
         mWritingViewModel = new ViewModelProvider(this).get(WritingViewModel.class);
 
-        mDoneButton = findViewById(R.id.done_button);
-        mWritebarText = findViewById(R.id.writebar_text);
+        mToolbar = findViewById(R.id.toolbar);
         mSlugText = findViewById(R.id.slug_text);
+        mWritebarText = findViewById(R.id.writebar_text);
+        mDoneButton = findViewById(R.id.done_button);
 
         mWritebarText.setShowDivider(false);
+        mToolbar.setTitle(mEditingMode ? R.string.editing_note : R.string.creating_note);
 
         if (mEditingMode) {
             mSlugText.setText(mSlug);

@@ -45,4 +45,8 @@
     <string name="text_wrap_no">Без переноса</string>
     <string name="text_wrap_word">Перенос слов</string>
     <string name="text_wrap_break">Разрыв слова</string>
+    <string name="creating_note">Создать запись</string>
+    <string name="editing_note">Редактировать запись</string>
+    <string name="redirect_from_notes">Перенаправление с записи</string>
+    <string name="loading">Загрузка...</string>
 </resources>

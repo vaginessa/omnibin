@@ -2,7 +2,6 @@ package com.f0x1d.dogbin.ui.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +18,6 @@ public class HistoryFragment extends BaseFragment {
 
     private MaterialToolbar mToolbar;
     private RecyclerView mNotesRecycler;
-    private ProgressBar mLoadingProgress;
 
     private MyNotesAdapter mAdapter;
 
@@ -42,8 +40,6 @@ public class HistoryFragment extends BaseFragment {
 
         mToolbar = findViewById(R.id.toolbar);
         mNotesRecycler = findViewById(R.id.my_notes_recycler);
-        mLoadingProgress = findViewById(R.id.loading_progress);
-        mLoadingProgress.setVisibility(View.GONE);
 
         mToolbar.setTitle(R.string.history);
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -17,6 +18,7 @@ import com.f0x1d.dogbin.network.retrofit.DogBinApi;
 import com.f0x1d.dogbin.ui.activity.DogBinLoginActivity;
 import com.f0x1d.dogbin.ui.activity.MainActivity;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
+import com.f0x1d.dogbin.viewmodel.SettingsViewModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
@@ -28,6 +30,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreferenceCompat mDarkModePreference;
 
+    private Preference mUsernamePreference;
     private Preference mLoginPreference;
 
     private SwitchPreferenceCompat mProxySwitch;
@@ -35,7 +38,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private Preference mClearCachePreference;
 
+    private SettingsViewModel mSettingsViewModel;
     private Executor mExecutor = Executors.newSingleThreadExecutor();
+    private boolean mLoggedIn;
 
     public static SettingsFragment newInstance() {
         Bundle args = new Bundle();
@@ -47,6 +52,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        mSettingsViewModel = new ViewModelProvider(requireActivity()).get(SettingsViewModel.class);
+        mSettingsViewModel.load();
+
+        mLoggedIn = DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved();
+
         addPreferencesFromResource(R.xml.settings);
 
         mDarkModePreference = findPreference(PreferencesUtils.DARK_THEME_NAME);
@@ -59,12 +69,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        mUsernamePreference = findPreference("username");
+        if (!mLoggedIn)
+            mUsernamePreference.setVisible(false);
+
         mLoginPreference = findPreference("log_in");
-        if (DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved())
+        if (mLoggedIn)
             mLoginPreference.setTitle(R.string.log_out);
         mLoginPreference.setOnPreferenceClickListener(preference -> {
             if (DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved()) {
                 DogBinApi.getInstance().getCookieJar().clear();
+                DogBinApi.getInstance().getCookieJar().clearPrefs();
 
                 startActivity(new Intent(requireActivity(), MainActivity.class));
                 requireActivity().finish();
@@ -94,6 +109,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mClearCachePreference.setOnPreferenceClickListener(preference -> {
             mExecutor.execute(() -> App.getMyDatabase().getSavedNoteDao().nukeTable());
             return false;
+        });
+
+        mSettingsViewModel.getUsernameData().observe(this, username -> {
+            if (username == null)
+                return;
+
+            mUsernamePreference.setTitle(username);
         });
     }
 
