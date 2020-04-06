@@ -49,4 +49,5 @@
     <string name="editing_note">Edit note</string>
     <string name="redirect_from_notes">Redirect from notes</string>
     <string name="loading">Loading...</string>
+    <string name="source_code">Source code</string>
 </resources>
