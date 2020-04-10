@@ -102,13 +102,7 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
         if (!mMyNote && App.getPrefsUtil().cacheOnlyMy())
             return;
 
-        SavedNote savedNote = App.getMyDatabase().getSavedNoteDao().getBySlugSync(mSlug);
-        if (savedNote == null) {
-            App.getMyDatabase().getSavedNoteDao().insert(SavedNote.createNote(mTextResponseData.getValue(), mSlug, Utils.currentTimeToString()));
-            mNoteCached = true;
-        } else if (!savedNote.getContent().equals(mTextResponseData.getValue())) {
-            App.getMyDatabase().getSavedNoteDao().updateContentBySlug(mSlug, mTextResponseData.getValue(), Utils.currentTimeToString());
-        }
+        App.getMyDatabase().getSavedNoteDao().addToCache(SavedNote.createNote(mTextResponseData.getValue(), mSlug, Utils.currentTimeToString()));
     }
 
     private void processError(Throwable t) {

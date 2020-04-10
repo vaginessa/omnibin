@@ -36,6 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="@android:color/white"
         app:tint="?fabIconColor"
-        app:srcCompat="@drawable/ic_save" />
+        app:srcCompat="@drawable/ic_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,10 +15,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.db.entity.MyNote;
+import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.utils.Utils;
-import com.f0x1d.dogbin.viewmodel.WritingViewModel;
+import com.f0x1d.dogbin.viewmodel.DogBinWritingViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -36,7 +36,7 @@ public class DogBinTextEditActivity extends BaseActivity {
     private CodeEditorLayout mWritebarText;
     private FloatingActionButton mDoneButton;
 
-    private WritingViewModel mWritingViewModel;
+    private DogBinWritingViewModel mDogBinWritingViewModel;
     private Executor mExecutor = Executors.newSingleThreadExecutor();
 
     private boolean mEditingMode;
@@ -57,7 +57,7 @@ public class DogBinTextEditActivity extends BaseActivity {
         mIntentToPost = !mEditingMode && mTextFromIntent != null && getIntent().getAction() != null &&
                 (getIntent().getAction().equals(ACTION_UPLOAD_TO_DOGBIN) || getIntent().getAction().equals(Intent.ACTION_SEND));
 
-        mWritingViewModel = new ViewModelProvider(this).get(WritingViewModel.class);
+        mDogBinWritingViewModel = new ViewModelProvider(this).get(DogBinWritingViewModel.class);
 
         mToolbar = findViewById(R.id.toolbar);
         mSlugText = findViewById(R.id.slug_text);
@@ -74,7 +74,7 @@ public class DogBinTextEditActivity extends BaseActivity {
             mWritebarText.setText(mTextFromIntent);
         }
 
-        mWritingViewModel.getLoadingStateData().observe(this, loadingState -> {
+        mDogBinWritingViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
                 return;
 
@@ -92,13 +92,15 @@ public class DogBinTextEditActivity extends BaseActivity {
             }
         });
 
-        mWritingViewModel.getDocumentResponseData().observe(this, document -> {
+        mDogBinWritingViewModel.getDocumentResponseData().observe(this, document -> {
             if (document == null) {
                 mSlugText.setError(getString(R.string.invalid_link));
                 return;
             }
 
             if (!mEditingMode) {
+                mExecutor.execute(() -> addRecordToDB(document.slug, mWritebarText.getText()));
+
                 mWritebarText.setText("");
                 mSlugText.setText("");
 
@@ -111,8 +113,6 @@ public class DogBinTextEditActivity extends BaseActivity {
 
                     Toast.makeText(this, getString(R.string.copied_to_clipboard, delDogUrl), Toast.LENGTH_SHORT).show();
                 }
-
-                mExecutor.execute(() -> addRecordToDB(document.slug));
 
                 if (mIntentToPost) {
                     setResult(Activity.RESULT_OK, new Intent().setData(Uri.parse(delDogUrl)));
@@ -135,14 +135,14 @@ public class DogBinTextEditActivity extends BaseActivity {
                 mSlugText.setText(mSlug);
 
             mWritebarText.setText(mTextFromIntent);
-            mWritingViewModel.publish(mTextFromIntent, mSlug == null ? "" : mSlug);
+            mDogBinWritingViewModel.publish(mTextFromIntent, mSlug == null ? "" : mSlug);
         }
 
         mDoneButton.setOnClickListener(v ->
-                mWritingViewModel.publish(mWritebarText.getText(), mSlug == null ? mSlugText.getText().toString() : mSlug));
+                mDogBinWritingViewModel.publish(mWritebarText.getText(), mSlug == null ? mSlugText.getText().toString() : mSlug));
     }
 
-    private void addRecordToDB(String slug) {
-        App.getMyDatabase().getMyNoteDao().insert(MyNote.createNote(slug, Utils.currentTimeToString()));
+    private void addRecordToDB(String slug, String text) {
+        App.getMyDatabase().getSavedNoteDao().insert(SavedNote.createNote(text, slug, Utils.currentTimeToString()));
     }
 }

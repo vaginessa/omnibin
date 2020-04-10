@@ -6,14 +6,14 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.MyNotesAdapter;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
-import com.f0x1d.dogbin.viewmodel.MyNotesViewModel;
+import com.f0x1d.dogbin.viewmodel.DogBinMyNotesViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class MyNotesFragment extends BaseFragment {
@@ -24,7 +24,7 @@ public class MyNotesFragment extends BaseFragment {
 
     private MyNotesAdapter mAdapter;
 
-    private MyNotesViewModel mMyNotesViewModel;
+    private DogBinMyNotesViewModel mDogBinMyNotesViewModel;
 
     public static MyNotesFragment newInstance() {
         Bundle args = new Bundle();
@@ -43,8 +43,8 @@ public class MyNotesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mMyNotesViewModel = new ViewModelProvider(requireActivity()).get(MyNotesViewModel.class);
-        mMyNotesViewModel.load();
+        mDogBinMyNotesViewModel = new ViewModelProvider(requireActivity()).get(DogBinMyNotesViewModel.class);
+        mDogBinMyNotesViewModel.load();
 
         mToolbar = findViewById(R.id.toolbar);
         mNotesRecycler = findViewById(R.id.my_notes_recycler);
@@ -55,10 +55,10 @@ public class MyNotesFragment extends BaseFragment {
         if (isNightTheme())
             mRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.dogBinBackground);
 
-        mNotesRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
         mNotesRecycler.setAdapter(mAdapter = new MyNotesAdapter(requireActivity()));
 
-        mMyNotesViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
+        mDogBinMyNotesViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == null)
                 return;
 
@@ -74,7 +74,7 @@ public class MyNotesFragment extends BaseFragment {
             }
         });
 
-        mMyNotesViewModel.getMyNotesListData().observe(getViewLifecycleOwner(), notes -> {
+        mDogBinMyNotesViewModel.getMyNotesListData().observe(getViewLifecycleOwner(), notes -> {
             if (notes == null)
                 return;
 
@@ -82,6 +82,6 @@ public class MyNotesFragment extends BaseFragment {
             mAdapter.notifyDataSetChanged();
         });
 
-        mRefreshLayout.setOnRefreshListener(mMyNotesViewModel::load);
+        mRefreshLayout.setOnRefreshListener(mDogBinMyNotesViewModel::load);
     }
 }

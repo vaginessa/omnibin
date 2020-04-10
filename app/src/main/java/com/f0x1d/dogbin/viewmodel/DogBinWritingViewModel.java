@@ -17,12 +17,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WritingViewModel extends AndroidViewModel {
+public class DogBinWritingViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
     private MutableLiveData<DocumentLinkResponse> mDocumentResponseData = new MutableLiveData<>();
 
-    public WritingViewModel(@NonNull Application application) {
+    public DogBinWritingViewModel(@NonNull Application application) {
         super(application);
     }
 

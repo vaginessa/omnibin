@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import com.f0x1d.dogbin.db.entity.SavedNote;
+import com.f0x1d.dogbin.utils.Utils;
 
 import java.util.List;
 
@@ -26,6 +28,15 @@ public interface SavedNoteDao {
 
     @Query("UPDATE SavedNote SET content = :content, time = :time WHERE slug = :slug")
     void updateContentBySlug(String slug, String content, String time);
+
+    @Transaction
+    default void addToCache(SavedNote savedNote) {
+        SavedNote maybeSavedNote = getBySlugSync(savedNote.getSlug());
+        if (maybeSavedNote == null)
+            insert(savedNote);
+        else if (!maybeSavedNote.getContent().equals(savedNote.getContent()))
+            updateContentBySlug(savedNote.getSlug(), savedNote.getContent(), Utils.currentTimeToString());
+    }
 
     @Insert
     void insert(SavedNote savedNote);

@@ -46,7 +46,8 @@ public class App extends Application {
         sPrefsUtil = new PreferencesUtils(this);
         sMyDatabase = Room.databaseBuilder(this, MyDatabase.class, "dogbin_database")
                 .addMigrations(
-                        MyDatabase.MIGRATION_1_2
+                        MyDatabase.MIGRATION_1_2,
+                        MyDatabase.MIGRATION_2_3
                 )
                 .build();
 

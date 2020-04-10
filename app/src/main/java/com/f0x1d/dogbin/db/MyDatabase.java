@@ -6,12 +6,10 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.f0x1d.dogbin.db.dao.MyNoteDao;
 import com.f0x1d.dogbin.db.dao.SavedNoteDao;
-import com.f0x1d.dogbin.db.entity.MyNote;
 import com.f0x1d.dogbin.db.entity.SavedNote;
 
-@Database(entities = {MyNote.class, SavedNote.class}, version = 2)
+@Database(entities = {SavedNote.class}, version = 3)
 public abstract class MyDatabase extends RoomDatabase {
 
     public static Migration MIGRATION_1_2 = new Migration(1, 2) {
@@ -22,7 +20,12 @@ public abstract class MyDatabase extends RoomDatabase {
         }
     };
 
-    public abstract MyNoteDao getMyNoteDao();
+    public static Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("DROP TABLE IF EXISTS MyNote");
+        }
+    };
 
     public abstract SavedNoteDao getSavedNoteDao();
 }

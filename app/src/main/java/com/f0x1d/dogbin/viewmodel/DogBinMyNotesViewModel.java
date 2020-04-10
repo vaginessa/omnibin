@@ -12,13 +12,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.db.entity.MyNote;
 import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.network.parser.MyNotesParser;
 import com.f0x1d.dogbin.network.retrofit.DogBinApi;
-import com.f0x1d.dogbin.utils.Utils;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -27,15 +25,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyNotesViewModel extends AndroidViewModel {
+public class DogBinMyNotesViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
-    private MutableLiveData<List<MyNote>> mMyNotesListData = new MutableLiveData<>();
+    private MutableLiveData<List<SavedNote>> mMyNotesListData = new MutableLiveData<>();
 
     private Executor mExecutor = Executors.newCachedThreadPool();
     private Handler mUIHandler = new Handler(Looper.getMainLooper());
 
-    public MyNotesViewModel(@NonNull Application application) {
+    public DogBinMyNotesViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -60,7 +58,7 @@ public class MyNotesViewModel extends AndroidViewModel {
                     }
 
                     mLoadingStateData.postValue(LoadingState.LOADED);
-                    mMyNotesListData.postValue(Utils.savedNotesToMyNotes(savedNotes));
+                    mMyNotesListData.postValue(savedNotes);
 
                     mUIHandler.post(() -> Toast.makeText(getApplication(), R.string.loaded_cache_list, Toast.LENGTH_SHORT).show());
                 });
@@ -72,7 +70,7 @@ public class MyNotesViewModel extends AndroidViewModel {
         t.printStackTrace();
 
         mLoadingStateData.postValue(LoadingState.LOADED);
-        mMyNotesListData.postValue(new ArrayList<>());
+        mMyNotesListData.postValue(Collections.emptyList());
         mUIHandler.post(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show());
     }
 
@@ -80,7 +78,7 @@ public class MyNotesViewModel extends AndroidViewModel {
         return mLoadingStateData;
     }
 
-    public LiveData<List<MyNote>> getMyNotesListData() {
+    public LiveData<List<SavedNote>> getMyNotesListData() {
         return mMyNotesListData;
     }
 

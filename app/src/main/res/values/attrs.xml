@@ -2,4 +2,5 @@
 <resources>
     <attr name="textColor" />
     <attr name="fabIconColor" />
+    <attr name="noteCardStrokeColor" />
 </resources>

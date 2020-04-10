@@ -5,7 +5,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.f0x1d.dogbin.App;
@@ -43,10 +43,10 @@ public class HistoryFragment extends BaseFragment {
 
         mToolbar.setTitle(R.string.history);
 
-        mNotesRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        mNotesRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false));
         mNotesRecycler.setAdapter(mAdapter = new MyNotesAdapter(requireActivity()));
 
-        App.getMyDatabase().getMyNoteDao().getAll().observe(getViewLifecycleOwner(), notes -> {
+        App.getMyDatabase().getSavedNoteDao().getAll().observe(getViewLifecycleOwner(), notes -> {
             mAdapter.setNotes(notes, true);
             mAdapter.notifyDataSetChanged();
         });
