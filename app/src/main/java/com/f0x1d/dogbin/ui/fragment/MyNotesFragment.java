@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.MyNotesAdapter;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
+import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
 import com.f0x1d.dogbin.viewmodel.DogBinMyNotesViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -57,6 +58,7 @@ public class MyNotesFragment extends BaseFragment {
 
         mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
         mNotesRecycler.setAdapter(mAdapter = new MyNotesAdapter(requireActivity()));
+        mNotesRecycler.addItemDecoration(new ItemOffsetDecoration(requireContext(), 8));
 
         mDogBinMyNotesViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == null)
