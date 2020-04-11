@@ -148,9 +148,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 .setTitle(R.string.socks_proxy)
                 .setView(v)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    int port = 0;
+                    try {
+                        port = Integer.parseInt(portText.getText().toString());
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(requireContext(), R.string.invalid_port, Toast.LENGTH_SHORT).show();
+                    }
+
                     App.getPrefsUtil().saveProxy(
                             hostText.getText().toString(),
-                            Integer.parseInt(portText.getText().toString()),
+                            port,
                             loginText.getText().toString(),
                             passwordText.getText().toString()
                     );
