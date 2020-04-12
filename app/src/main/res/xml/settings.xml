@@ -35,12 +35,28 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/donate"
+        app:icon="@drawable/ic_donate">
+
+        <Preference
+            android:key="donate"
+            android:title="@string/donate"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/ui"
         app:icon="@drawable/ic_style">
 
         <SwitchPreferenceCompat
             android:key="dark_theme"
             android:title="@string/dark_theme"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:key="gold_theme"
+            android:title="@string/gold_theme"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

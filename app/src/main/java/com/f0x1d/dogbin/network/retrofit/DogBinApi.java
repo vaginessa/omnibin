@@ -41,7 +41,9 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
     }
 
     public static DogBinApi getInstance() {
-        return sInstance == null ? sInstance = new DogBinApi() : sInstance;
+        synchronized (DogBinApi.class) {
+            return sInstance == null ? sInstance = new DogBinApi() : sInstance;
+        }
     }
 
     public DogBinApiService getService() {

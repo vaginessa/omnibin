@@ -14,8 +14,10 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.network.retrofit.DogBinApi;
 import com.f0x1d.dogbin.ui.activity.DogBinLoginActivity;
+import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.MainActivity;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.f0x1d.dogbin.viewmodel.SettingsViewModel;
@@ -28,7 +30,10 @@ import java.util.concurrent.Executors;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
+    private Preference mDonatePreference;
+
     private SwitchPreferenceCompat mDarkModePreference;
+    private SwitchPreferenceCompat mGoldThemePreference;
 
     private Preference mUsernamePreference;
     private Preference mLoginPreference;
@@ -40,7 +45,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SettingsViewModel mSettingsViewModel;
     private Executor mExecutor = Executors.newSingleThreadExecutor();
-    private boolean mLoggedIn;
 
     public static SettingsFragment newInstance() {
         Bundle args = new Bundle();
@@ -55,9 +59,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mSettingsViewModel = new ViewModelProvider(requireActivity()).get(SettingsViewModel.class);
         mSettingsViewModel.load();
 
-        mLoggedIn = DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved();
+        boolean loggedIn = DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved();
 
         addPreferencesFromResource(R.xml.settings);
+
+        mDonatePreference = findPreference("donate");
+        mDonatePreference.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(requireContext(), DonateActivity.class));
+            return false;
+        });
 
         mDarkModePreference = findPreference(PreferencesUtils.DARK_THEME_NAME);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
@@ -69,12 +79,32 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        mGoldThemePreference = findPreference(PreferencesUtils.GOLD_THEME_NAME);
+        BillingManager.getInstance(requireContext()).getDonatedData().observe(this, donationStatus -> {
+            switch (donationStatus) {
+                case NOT_CONNECTED_BILLING:
+                case NOT_DONATED:
+                case PENDING:
+                    mGoldThemePreference.setSummary(R.string.donate_text_theme_lock);
+                    mGoldThemePreference.setEnabled(false);
+                    break;
+                case DONATED:
+                    mGoldThemePreference.setSummary("");
+                    mGoldThemePreference.setEnabled(true);
+                    break;
+            }
+        });
+        mGoldThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+            requireActivity().recreate();
+            return true;
+        });
+
         mUsernamePreference = findPreference("username");
-        if (!mLoggedIn)
+        if (!loggedIn)
             mUsernamePreference.setVisible(false);
 
         mLoginPreference = findPreference("log_in");
-        if (mLoggedIn)
+        if (loggedIn)
             mLoginPreference.setTitle(R.string.log_out);
         mLoginPreference.setOnPreferenceClickListener(preference -> {
             if (DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved()) {

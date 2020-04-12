@@ -2,5 +2,8 @@
 <resources>
     <color name="dogBinBackground">#263238</color>
     <color name="dogBinAccent">#f9bfd3</color>
+
     <color name="pixelAccent">#4285F4</color>
+
+    <color name="goldAccent">#e9b115</color>
 </resources>

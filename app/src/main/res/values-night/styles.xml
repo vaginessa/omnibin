@@ -42,4 +42,39 @@
         <item name="android:tint">@android:color/white</item>
     </style>
 
+
+    <style name="AppTheme.Gold" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/goldAccent</item>
+        <item name="colorPrimaryDark">@color/dogBinBackground</item>
+        <item name="colorAccent">@color/goldAccent</item>
+
+        <item name="android:statusBarColor">@color/dogBinBackground</item>
+        <item name="android:navigationBarColor">@color/dogBinBackground</item>
+
+        <item name="android:windowBackground">@color/dogBinBackground</item>
+
+        <item name="materialAlertDialogTheme">@style/AlertDialogStyle.Gold</item>
+
+        <item name="textColor">@android:color/white</item>
+        <item name="fabIconColor">@android:color/black</item>
+        <item name="noteCardStrokeColor">@android:color/darker_gray</item>
+
+        <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
+    </style>
+
+    <style name="AlertDialogStyle.Gold" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorAccent">@color/goldAccent</item>
+        <item name="dialogCornerRadius">10dp</item>
+        <item name="android:dialogCornerRadius" tools:targetApi="p">10dp</item>
+        <item name="android:background">@color/dogBinBackground</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogStyle.Button.Gold</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertDialogStyle.Button.Gold</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AlertDialogStyle.Button.Gold</item>
+    </style>
+
+    <style name="AlertDialogStyle.Button.Gold" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/goldAccent</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
 </resources>

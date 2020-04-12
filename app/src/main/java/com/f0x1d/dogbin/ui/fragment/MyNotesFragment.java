@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.MyNotesAdapter;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
@@ -52,7 +53,7 @@ public class MyNotesFragment extends BaseFragment {
         mRefreshLayout = findViewById(R.id.refresh_layout);
 
         mToolbar.setTitle(R.string.my_notes);
-        mRefreshLayout.setColorSchemeResources(isNightTheme() ? R.color.dogBinAccent : R.color.pixelAccent);
+        mRefreshLayout.setColorSchemeResources(App.getPrefsUtil().isGoldTheme() ? R.color.goldAccent : (isNightTheme() ? R.color.dogBinAccent : R.color.pixelAccent));
         if (isNightTheme())
             mRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.dogBinBackground);
 

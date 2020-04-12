@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.f0x1d.dogbin.billing.DonationStatus;
 import com.pddstudio.highlightjs.HighlightJsView;
 
 public class PreferencesUtils {
 
     public static final String DARK_THEME_NAME = "dark_theme";
+    public static final String GOLD_THEME_NAME = "gold_theme";
 
     public static final String FIRST_START_NAME = "first_start";
 
@@ -18,12 +20,14 @@ public class PreferencesUtils {
     public static final String PROXY_PORT_NAME = "proxy_port";
     public static final String PROXY_LOGIN_NAME = "proxy_login";
     public static final String PROXY_PASSWORD_NAME = "proxy_password";
-    public static final String NETWORK_REDIRECT_NOTE = "note_redirect";
+    public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
 
-    public static final String CACHE_ONLY_MY = "cache_my";
-    public static final String CACHE_AUTO_CLEAR = "auto_cache_clear";
+    public static final String CACHE_ONLY_MY_NAME = "cache_my";
+    public static final String CACHE_AUTO_CLEAR_NAME = "auto_cache_clear";
 
-    public static final String EDITOR_TEXT_WRAP = "editor_text_wrap";
+    public static final String EDITOR_TEXT_WRAP_NAME = "editor_text_wrap";
+
+    public static final String DONATE_STATUS_NAME = "donate_status";
 
     private Context mContext;
     private SharedPreferences mDefaultPreferences;
@@ -37,6 +41,10 @@ public class PreferencesUtils {
 
     public boolean isDarkTheme() {
         return mDefaultPreferences.getBoolean(DARK_THEME_NAME, false);
+    }
+
+    public boolean isGoldTheme() {
+        return mDefaultPreferences.getBoolean(GOLD_THEME_NAME, false);
     }
 
     public boolean isFirstStart() {
@@ -85,23 +93,35 @@ public class PreferencesUtils {
     }
 
     public boolean isRedirectFromNoteEnabled() {
-        return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE, true);
+        return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE_NAME, true);
     }
 
     public boolean cacheOnlyMy() {
-        return mDefaultPreferences.getBoolean(CACHE_ONLY_MY, true);
+        return mDefaultPreferences.getBoolean(CACHE_ONLY_MY_NAME, true);
     }
 
     public boolean autoClearCache() {
-        return mDefaultPreferences.getBoolean(CACHE_AUTO_CLEAR, true);
+        return mDefaultPreferences.getBoolean(CACHE_AUTO_CLEAR_NAME, true);
     }
 
     public HighlightJsView.TextWrap textWrap() {
-        return HighlightJsView.TextWrap.values()[mAppPreferences.getInt(EDITOR_TEXT_WRAP, 0)];
+        return HighlightJsView.TextWrap.values()[mAppPreferences.getInt(EDITOR_TEXT_WRAP_NAME, 0)];
     }
 
     public void setTextWrap(int ordinal) {
-        mAppPreferences.edit().putInt(EDITOR_TEXT_WRAP, ordinal).apply();
+        mAppPreferences.edit().putInt(EDITOR_TEXT_WRAP_NAME, ordinal).apply();
+    }
+
+    public DonationStatus getDonationStatus() {
+        try {
+            return DonationStatus.valueOf(mAppPreferences.getString(DONATE_STATUS_NAME, DonationStatus.NOT_DONATED.name()));
+        } catch (Exception e) {
+            return DonationStatus.NOT_DONATED;
+        }
+    }
+
+    public void setDonationStatus(DonationStatus status) {
+        mAppPreferences.edit().putString(DONATE_STATUS_NAME, status.name()).apply();
     }
 
     public SharedPreferences getAppPreferences() {

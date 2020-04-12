@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.f0x1d.dogbin.App;
+import com.f0x1d.dogbin.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -18,6 +19,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             AppCompatDelegate.setDefaultNightMode(App.getPrefsUtil().isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         }
+
+        if (App.getPrefsUtil().isGoldTheme()) {
+            setTheme(R.style.AppTheme_Gold);
+        }
+
         setupNavBarAndStatusBar();
         super.onCreate(savedInstanceState);
     }

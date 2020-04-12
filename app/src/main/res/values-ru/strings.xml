@@ -35,8 +35,6 @@
     <string name="invalid_link">Ссылка уже используется или недействительна</string>
     <string name="error">Ошибка: %s</string>
     <string name="error_during_register">Ошибка во время регистрации! Возможно пользователь с таким логином существует или ваш пароль слабый</string>
-    <string name="loaded_cache_list">Список загружен из кеша</string>
-    <string name="loaded_cache_note">Текст загружен из кеша</string>
     <string name="cache">Кеш</string>
     <string name="clear_cache">Очистить кеш</string>
     <string name="cache_my">Кешировать только мои записи</string>
@@ -51,4 +49,15 @@
     <string name="loading">Загрузка...</string>
     <string name="source_code">Исходный код</string>
     <string name="invalid_port">Неправильный порт</string>
+    <string name="gold_theme">Золотая тема</string>
+    <string name="donate">Пожертвование</string>
+    <string name="f0x1d_name">F0x1d</string>
+    <string name="f0x1d_role">Создатель dogbin mobile</string>
+    <string name="till_name">deletescape</string>
+    <string name="till_role">Создатель dogbin</string>
+    <string name="donate_text">Привет. Как вы знаете, dogbin mobile это полностью бесплатное приложение без рекламы, с открытым исходным кодом, и всегда будет таковым. Если оно вам нравится, пожалуйста, поддержите dogbin mobile путем пожертвования. Вы также получите золотую тему в подарок!</string>
+    <string name="donate_text_donated">Большое спасибо за поддержку dogbin mobile!</string>
+    <string name="donate_text_error">Не удается получить статус пожертвования. Пожалуйста убедитесь, что у вас установлены сервисы Google Play и попробуйте перезагрузить устройство.</string>
+    <string name="donate_text_pending">Ваше пожертвование в ожидании оплаты. Если оно не применится автоматически после завершения покупки, пожалуйста, перезапустите dogbin mobile.</string>
+    <string name="donate_text_theme_lock">Данная тема доступна только пользователям, поддержавшим dogbin mobile</string>
 </resources>

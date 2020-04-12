@@ -34,7 +34,6 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
     private boolean mMyNote;
 
     private Executor mExecutor = Executors.newCachedThreadPool();
-    private boolean mNoteCached;
 
     public DogBinTextViewModel(@NonNull Application application) {
         super(application);
@@ -52,8 +51,7 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
 
         mExecutor.execute(() -> {
             SavedNote savedNote = App.getMyDatabase().getSavedNoteDao().getBySlugSync(mSlug);
-            mNoteCached = savedNote != null;
-            if (!mNoteCached) {
+            if (savedNote == null) {
                 updateText(slug);
                 return;
             }
@@ -106,11 +104,6 @@ public class DogBinTextViewModel extends AndroidViewModel implements DogBinApi.N
     }
 
     private void processError(Throwable t) {
-        if (mNoteCached) {
-            Toast.makeText(getApplication(), R.string.loaded_cache_note, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         t.printStackTrace();
 
         mLoadingStateData.setValue(LoadingState.LOADED);

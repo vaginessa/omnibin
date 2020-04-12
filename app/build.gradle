@@ -13,8 +13,8 @@ android {
         applicationId "com.f0x1d.dogbin"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 14
-        versionName "1.5.3"
+        versionCode 15
+        versionName "1.5.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,6 +50,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.billingclient:billing:2.2.0'
 
     implementation 'androidx.browser:browser:1.2.0'
 

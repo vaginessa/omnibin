@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.network.retrofit.DogBinApi;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.ui.activity.text.DogBinTextEditActivity;
@@ -70,6 +71,12 @@ public class MainActivity extends BaseActivity {
         }
 
         checkUserIsFromRussia();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BillingManager.getInstance(this).loadPurchases();
     }
 
     private void checkUserIsFromRussia() {

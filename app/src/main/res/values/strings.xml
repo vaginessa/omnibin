@@ -35,8 +35,6 @@
     <string name="invalid_link">Link is already in use or invalid</string>
     <string name="error">Error: %s</string>
     <string name="error_during_register">Error during registration! Maybe user with the same login exists or password is weak</string>
-    <string name="loaded_cache_list">Cached notes were loaded</string>
-    <string name="loaded_cache_note">Cached note was loaded</string>
     <string name="cache">Cache</string>
     <string name="clear_cache">Clear cache</string>
     <string name="cache_my">Cache only my notes</string>
@@ -51,4 +49,16 @@
     <string name="loading">Loading...</string>
     <string name="source_code">Source code</string>
     <string name="invalid_port">Invalid port</string>
+    <string name="github" translatable="false">GitHub</string>
+    <string name="gold_theme">Gold theme</string>
+    <string name="donate">Donate</string>
+    <string name="f0x1d_name">F0x1d</string>
+    <string name="f0x1d_role">Creator of dogbin mobile</string>
+    <string name="till_name">deletescape</string>
+    <string name="till_role">Creator of dogbin</string>
+    <string name="donate_text">Hello. As you know, dogbin mobile is a ad-free open-source app. If you like it, please consider supporting dogbin mobile by making a little donation. You will also get the Gold theme as a gift!</string>
+    <string name="donate_text_donated">A lot of thanks for supporting dogbin mobile!</string>
+    <string name="donate_text_error">Unable to get donation status. Please make sure you have Google Play Services installed and try restarting your device.</string>
+    <string name="donate_text_pending">Your donation is pending. If it isn\'t applied automatically after you complete it, please restart dogbin mobile.</string>
+    <string name="donate_text_theme_lock">This theme is available only to users, who supported dogbin mobile</string>
 </resources>

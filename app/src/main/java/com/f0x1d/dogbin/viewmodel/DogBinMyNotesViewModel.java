@@ -59,8 +59,6 @@ public class DogBinMyNotesViewModel extends AndroidViewModel {
 
                     mLoadingStateData.postValue(LoadingState.LOADED);
                     mMyNotesListData.postValue(savedNotes);
-
-                    mUIHandler.post(() -> Toast.makeText(getApplication(), R.string.loaded_cache_list, Toast.LENGTH_SHORT).show());
                 });
             }
         });

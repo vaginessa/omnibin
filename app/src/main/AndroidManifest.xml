@@ -3,6 +3,7 @@
     package="com.f0x1d.dogbin">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:allowBackup="true"
@@ -53,6 +54,7 @@
                 <data android:mimeType="text/*" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.DonateActivity" />
     </application>
 
 </manifest>
