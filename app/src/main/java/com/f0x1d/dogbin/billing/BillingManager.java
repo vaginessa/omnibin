@@ -83,7 +83,7 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
 
         for (Purchase purchase : purchases) {
             if (purchase.getPurchaseState() == Purchase.PurchaseState.UNSPECIFIED_STATE) {
-                return;
+                continue;
             }
 
             if (purchase.getSku().equals(SKU_DONATION_NAME)) {

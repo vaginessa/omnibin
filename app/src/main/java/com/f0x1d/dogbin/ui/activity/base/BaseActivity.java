@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.utils.Utils;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -20,8 +21,22 @@ public abstract class BaseActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(App.getPrefsUtil().isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        if (App.getPrefsUtil().isGoldTheme()) {
-            setTheme(R.style.AppTheme_Gold);
+        switch (App.getPrefsUtil().selectedAccent()) {
+            case 0:
+                setTheme(R.style.AppTheme);
+                break;
+            case 1:
+                setTheme(R.style.AppTheme_Pink);
+                break;
+            case 2:
+                setTheme(R.style.AppTheme_Lime);
+                break;
+            case 3:
+                setTheme(R.style.AppTheme_Blue);
+                break;
+            case 4:
+                setTheme(R.style.AppTheme_Gold);
+                break;
         }
 
         setupNavBarAndStatusBar();
@@ -38,6 +53,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1 && lightTheme) {
             getWindow().setNavigationBarColor(Color.BLACK);
         }
+    }
+
+    protected boolean isAmoledTheme() {
+        return Utils.getBooleanFromAttr(this, R.attr.themeAmoled);
     }
 
     protected boolean isNightTheme() {

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="darkBackground">#030303</color>
+
     <color name="dogBinBackground">#263238</color>
     <color name="dogBinAccent">#f9bfd3</color>
 
     <color name="pixelAccent">#4285F4</color>
 
+    <color name="pinkAccent">#FF69B4</color>
+    <color name="limeAccent">#32CD32</color>
     <color name="goldAccent">#e9b115</color>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="textColor" />
-    <attr name="fabIconColor" />
-    <attr name="noteCardStrokeColor" />
+    <attr name="textColor" format="color" />
+    <attr name="fabIconColor" format="color" />
+    <attr name="noteCardStrokeColor" format="color" />
+    <attr name="themeAmoled" format="boolean" />
 </resources>

@@ -50,15 +50,15 @@
     <string name="source_code">Source code</string>
     <string name="invalid_port">Invalid port</string>
     <string name="github" translatable="false">GitHub</string>
-    <string name="gold_theme">Gold theme</string>
+    <string name="accent_picker">Accent picker</string>
     <string name="donate">Donate</string>
-    <string name="f0x1d_name">F0x1d</string>
-    <string name="f0x1d_role">Creator of dogbin mobile</string>
     <string name="till_name">deletescape</string>
     <string name="till_role">Creator of dogbin</string>
-    <string name="donate_text">Hello. As you know, dogbin mobile is a ad-free open-source app. If you like it, please consider supporting dogbin mobile by making a little donation. You will also get the Gold theme as a gift!</string>
-    <string name="donate_text_donated">A lot of thanks for supporting dogbin mobile!</string>
+    <string name="f0x1d_name">F0x1d</string>
+    <string name="f0x1d_role">Creator of dogbin mobile</string>
+    <string name="donate_text">Dogbin mobile is a ad-free open-source app. If you like it, please consider supporting dogbin mobile by making a little donation. You will also get access to accent picker as a gift!</string>
+    <string name="donate_text_donated">A lot of thanks for supporting dogbin mobile!\nNow you have access to accent picker!</string>
     <string name="donate_text_error">Unable to get donation status. Please make sure you have Google Play Services installed and try restarting your device.</string>
     <string name="donate_text_pending">Your donation is pending. If it isn\'t applied automatically after you complete it, please restart dogbin mobile.</string>
-    <string name="donate_text_theme_lock">This theme is available only to users, who supported dogbin mobile</string>
+    <string name="donate_text_theme_lock">This setting is available only to users, who supported dogbin mobile</string>
 </resources>

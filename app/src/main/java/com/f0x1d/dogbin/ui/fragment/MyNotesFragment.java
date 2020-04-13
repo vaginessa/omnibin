@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.MyNotesAdapter;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
+import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.DogBinMyNotesViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -53,9 +53,9 @@ public class MyNotesFragment extends BaseFragment {
         mRefreshLayout = findViewById(R.id.refresh_layout);
 
         mToolbar.setTitle(R.string.my_notes);
-        mRefreshLayout.setColorSchemeResources(App.getPrefsUtil().isGoldTheme() ? R.color.goldAccent : (isNightTheme() ? R.color.dogBinAccent : R.color.pixelAccent));
+        mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorAccent));
         if (isNightTheme())
-            mRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.dogBinBackground);
+            mRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getColorFromAttr(requireActivity(), android.R.attr.windowBackground));
 
         mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
         mNotesRecycler.setAdapter(mAdapter = new MyNotesAdapter(requireActivity()));

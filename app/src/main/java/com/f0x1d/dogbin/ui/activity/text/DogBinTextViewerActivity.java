@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
+import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.DogBinTextViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -46,10 +47,10 @@ public class DogBinTextViewerActivity extends BaseActivity {
 
         mTextCodeView.setShowLineNumbers(true);
         mTextCodeView.setZoomSupportEnabled(true);
-        mTextCodeView.setTheme(isNightTheme() ? Theme.DOGBIN_NIGHT_THEME : Theme.GOOGLECODE);
+        mTextCodeView.setTheme(isNightTheme() ? (isAmoledTheme() ? Theme.DOGBIN_AMOLED : Theme.DOGBIN_NIGHT_THEME) : Theme.GOOGLECODE);
         mTextCodeView.setTextWrap(App.getPrefsUtil().textWrap());
         if (isNightTheme())
-            mTextCodeView.setBackgroundColor(getResources().getColor(R.color.dogBinBackground));
+            mTextCodeView.setBackgroundColor(Utils.getColorFromAttr(this, android.R.attr.windowBackground));
 
         mTextCodeView.setOnContentHighlightedListener(mDogBinTextViewModel);
 

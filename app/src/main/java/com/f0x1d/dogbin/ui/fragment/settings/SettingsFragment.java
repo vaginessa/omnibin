@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -33,7 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private Preference mDonatePreference;
 
     private SwitchPreferenceCompat mDarkModePreference;
-    private SwitchPreferenceCompat mGoldThemePreference;
+    private ListPreference mGoldThemePreference;
 
     private Preference mUsernamePreference;
     private Preference mLoginPreference;
@@ -79,7 +80,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        mGoldThemePreference = findPreference(PreferencesUtils.GOLD_THEME_NAME);
+        mGoldThemePreference = findPreference(PreferencesUtils.ACCENT_NAME);
         BillingManager.getInstance(requireContext()).getDonatedData().observe(this, donationStatus -> {
             switch (donationStatus) {
                 case NOT_CONNECTED_BILLING:

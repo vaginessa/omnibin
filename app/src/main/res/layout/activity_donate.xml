@@ -124,7 +124,7 @@
                 android:text="@string/f0x1d_name"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/f0x1d_donate_button_layout"
+                app:layout_constraintEnd_toStartOf="@id/f0x1d_donate_button"
                 app:layout_constraintStart_toEndOf="@id/f0x1d_icon"
                 app:layout_constraintTop_toTopOf="@id/f0x1d_icon" />
 
@@ -138,28 +138,21 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@string/f0x1d_role"
-                app:layout_constraintEnd_toStartOf="@id/f0x1d_donate_button_layout"
+                app:layout_constraintEnd_toStartOf="@id/f0x1d_donate_button"
                 app:layout_constraintStart_toEndOf="@id/f0x1d_icon"
                 app:layout_constraintTop_toBottomOf="@id/f0x1d_name_text" />
 
-            <LinearLayout
-                android:id="@+id/f0x1d_donate_button_layout"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/f0x1d_donate_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:text="@string/github"
+                app:cornerRadius="7dp"
+                app:icon="@drawable/ic_github"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/f0x1d_donate_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/donate"
-                    app:cornerRadius="7dp"
-                    app:icon="@drawable/ic_donate" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -174,6 +167,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/f0x1d_card">
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/cat_icon"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:layout_constraintBottom_toTopOf="@id/donate_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_cat_happy" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/donate_card"
             android:layout_width="0dp"
@@ -185,7 +188,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cat_icon"
             app:strokeColor="?colorAccent"
             app:strokeWidth="1dp">
 
@@ -193,53 +196,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/heart_icon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_heart"
-                    android:tint="?colorAccent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
                     android:id="@+id/donate_status_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:text="@string/donate_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/heart_icon" />
+                    app:layout_constraintBottom_toTopOf="@id/donate_button"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/donate_button_layout"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/donate_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:text="@string/donate"
+                    app:cornerRadius="7dp"
+                    app:icon="@drawable/ic_donate"
                     android:layout_marginBottom="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/donate_status_text">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/donate_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/donate"
-                        app:cornerRadius="7dp"
-                        app:icon="@drawable/ic_donate" />
-
-                </LinearLayout>
+                    app:layout_constraintTop_toBottomOf="@id/donate_status_text" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </com.google.android.material.card.MaterialCardView>
 

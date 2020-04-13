@@ -5,13 +5,14 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.MyNotesAdapter;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
+import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class HistoryFragment extends BaseFragment {
@@ -43,8 +44,9 @@ public class HistoryFragment extends BaseFragment {
 
         mToolbar.setTitle(R.string.history);
 
-        mNotesRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false));
+        mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
         mNotesRecycler.setAdapter(mAdapter = new MyNotesAdapter(requireActivity()));
+        mNotesRecycler.addItemDecoration(new ItemOffsetDecoration(requireContext(), 8));
 
         App.getMyDatabase().getSavedNoteDao().getAll().observe(getViewLifecycleOwner(), notes -> {
             mAdapter.setNotes(notes, true);

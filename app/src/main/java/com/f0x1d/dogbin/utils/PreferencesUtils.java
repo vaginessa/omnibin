@@ -11,7 +11,7 @@ import com.pddstudio.highlightjs.HighlightJsView;
 public class PreferencesUtils {
 
     public static final String DARK_THEME_NAME = "dark_theme";
-    public static final String GOLD_THEME_NAME = "gold_theme";
+    public static final String ACCENT_NAME = "accent";
 
     public static final String FIRST_START_NAME = "first_start";
 
@@ -43,8 +43,8 @@ public class PreferencesUtils {
         return mDefaultPreferences.getBoolean(DARK_THEME_NAME, false);
     }
 
-    public boolean isGoldTheme() {
-        return mDefaultPreferences.getBoolean(GOLD_THEME_NAME, false);
+    public int selectedAccent() {
+        return Integer.parseInt(mDefaultPreferences.getString(ACCENT_NAME, "0"));
     }
 
     public boolean isFirstStart() {

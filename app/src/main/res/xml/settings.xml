@@ -54,9 +54,12 @@
             android:title="@string/dark_theme"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
-            android:key="gold_theme"
-            android:title="@string/gold_theme"
+        <ListPreference
+            android:entries="@array/accents"
+            android:entryValues="@array/accents_values"
+            android:key="accent"
+            android:title="@string/accent_picker"
+            app:defaultValue="0"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

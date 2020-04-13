@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -14,6 +13,7 @@ import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 
 public class DonateActivity extends BaseActivity {
@@ -21,16 +21,16 @@ public class DonateActivity extends BaseActivity {
     private BillingManager mBillingManager;
 
     private MaterialToolbar mToolbar;
-    private ShapeableImageView mF0x1dIcon;
     private ShapeableImageView mTillIcon;
+    private ShapeableImageView mF0x1dIcon;
 
+    private MaterialCardView mDonateCard;
     private TextView mDonationStatusText;
+    private ShapeableImageView mCatIcon;
+    private MaterialButton mDonateButton;
 
-    private ViewGroup mF0x1dDonateButtonLayout;
-    private MaterialButton mF0x1dDonateButton;
-    private ViewGroup mMainDonateButtonLayout;
-    private MaterialButton mMainDonateButton;
     private MaterialButton mTillDonateButton;
+    private MaterialButton mF0x1dDonateButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,61 +42,57 @@ public class DonateActivity extends BaseActivity {
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.donate);
 
-        mF0x1dIcon = findViewById(R.id.f0x1d_icon);
         mTillIcon = findViewById(R.id.till_icon);
+        mF0x1dIcon = findViewById(R.id.f0x1d_icon);
 
+        mDonateCard = findViewById(R.id.donate_card);
         mDonationStatusText = findViewById(R.id.donate_status_text);
+        mCatIcon = findViewById(R.id.cat_icon);
+        mDonateButton = findViewById(R.id.donate_button);
 
-        mF0x1dDonateButtonLayout = findViewById(R.id.f0x1d_donate_button_layout);
-        mF0x1dDonateButton = findViewById(R.id.f0x1d_donate_button);
-        mMainDonateButtonLayout = findViewById(R.id.donate_button_layout);
-        mMainDonateButton = findViewById(R.id.donate_button);
         mTillDonateButton = findViewById(R.id.till_donate_button);
+        mF0x1dDonateButton = findViewById(R.id.f0x1d_donate_button);
 
-        mF0x1dIcon.setShapeAppearanceModel(
-                mF0x1dIcon
-                        .getShapeAppearanceModel()
-                        .withCornerSize(20f)
-        );
         mTillIcon.setShapeAppearanceModel(
                 mTillIcon
                         .getShapeAppearanceModel()
                         .withCornerSize(20f)
         );
+        mF0x1dIcon.setShapeAppearanceModel(
+                mF0x1dIcon
+                        .getShapeAppearanceModel()
+                        .withCornerSize(20f)
+        );
 
-        View.OnClickListener donateClickListener = v -> mBillingManager.launchBillingFlow(this);
-        mF0x1dDonateButton.setOnClickListener(donateClickListener);
-        mMainDonateButton.setOnClickListener(donateClickListener);
         mTillDonateButton.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/deletescape"))));
+        mF0x1dDonateButton.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/F0x1d"))));
+        mDonateButton.setOnClickListener(v -> mBillingManager.launchBillingFlow(this));
 
         mBillingManager.getDonatedData().observe(this, donationStatus -> {
             switch (donationStatus) {
                 case NOT_CONNECTED_BILLING:
+                    mCatIcon.setImageResource(R.drawable.ic_cat_sad);
                     mDonationStatusText.setText(R.string.donate_text_error);
-                    mMainDonateButton.setEnabled(false);
-                    mF0x1dDonateButton.setEnabled(false);
+                    mDonateButton.setEnabled(false);
                     break;
                 case DONATED:
+                    mCatIcon.setImageResource(R.drawable.ic_cat_happy);
                     mDonationStatusText.setText(R.string.donate_text_donated);
-                    mMainDonateButton.setVisibility(View.GONE);
-                    mF0x1dDonateButton.setEnabled(false);
+                    mDonateButton.setVisibility(View.GONE);
                     break;
                 case PENDING:
+                    mCatIcon.setImageResource(R.drawable.ic_cat_happy);
                     mDonationStatusText.setText(R.string.donate_text_pending);
-                    mMainDonateButton.setEnabled(false);
-                    mF0x1dDonateButton.setEnabled(false);
+                    mDonateButton.setEnabled(false);
                     break;
                 case NOT_DONATED:
+                    mCatIcon.setImageResource(R.drawable.ic_cat_sad);
                     mDonationStatusText.setText(R.string.donate_text);
-                    mMainDonateButton.setEnabled(true);
-                    mF0x1dDonateButton.setEnabled(true);
+                    mDonateButton.setEnabled(true);
                     break;
             }
         });
 
-        mBillingManager.getLoadedSkuDetailsData().observe(this, loaded -> {
-            mF0x1dDonateButtonLayout.setVisibility(loaded ? View.VISIBLE : View.GONE);
-            mMainDonateButtonLayout.setVisibility(loaded ? View.VISIBLE : View.GONE);
-        });
+        mBillingManager.getLoadedSkuDetailsData().observe(this, loaded -> mDonateCard.setVisibility(loaded ? View.VISIBLE : View.INVISIBLE));
     }
 }
