@@ -22,9 +22,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class BillingManager implements PurchasesUpdatedListener, BillingClientStateListener {
+
+    public static final String SKU_DONATION_NAME = "donation";
 
     private static BillingManager sBillingManager;
 
@@ -62,9 +65,7 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
         if (purchasesResult.getBillingResult().getResponseCode() != BillingClient.BillingResponseCode.OK)
             return;
 
-        for (Purchase purchase : purchasesResult.getPurchasesList()) {
-            handlePurchase(purchase);
-        }
+        handlePurchases(purchasesResult.getPurchasesList());
     }
 
     @Override
@@ -77,19 +78,32 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
         }
     }
 
-    private void handlePurchase(Purchase purchase) {
-        if (purchase.getPurchaseState() == Purchase.PurchaseState.PENDING) {
-            setDonationStatus(DonationStatus.PENDING);
-        }
+    private void handlePurchases(Collection<Purchase> purchases) {
+        boolean hasDonationPurchase = false;
 
-        if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
-            setDonationStatus(DonationStatus.DONATED);
+        for (Purchase purchase : purchases) {
+            if (purchase.getPurchaseState() == Purchase.PurchaseState.UNSPECIFIED_STATE) {
+                return;
+            }
 
-            if (!purchase.isAcknowledged()) {
-                mBillingClient.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.getPurchaseToken()).build(),
-                        billingResult -> Log.d("dogbin", "Acknowledged purchase: " + billingResult.getResponseCode()));
+            if (purchase.getSku().equals(SKU_DONATION_NAME)) {
+                hasDonationPurchase = true;
+
+                if (purchase.getPurchaseState() == Purchase.PurchaseState.PENDING) {
+                    setDonationStatus(DonationStatus.PENDING);
+                } else if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+                    setDonationStatus(DonationStatus.DONATED);
+
+                    if (!purchase.isAcknowledged()) {
+                        mBillingClient.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.getPurchaseToken()).build(),
+                                billingResult -> Log.d("dogbin", "Acknowledged purchase: " + billingResult.getResponseCode()));
+                    }
+                }
             }
         }
+
+        if (!hasDonationPurchase)
+            setDonationStatus(DonationStatus.NOT_DONATED);
     }
 
     public void launchBillingFlow(Activity activity) {
@@ -105,7 +119,7 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
 
     private void loadProducts() {
         List<String> skuList = new ArrayList<>();
-        skuList.add("donation");
+        skuList.add(SKU_DONATION_NAME);
 
         SkuDetailsParams params = SkuDetailsParams.newBuilder()
                 .setSkusList(skuList)
