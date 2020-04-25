@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -41,6 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreferenceCompat mProxySwitch;
     private Preference mProxyPreference;
+    private EditTextPreference mDogbinDomainPreference;
 
     private Preference mClearCachePreference;
 
@@ -134,6 +136,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mProxyPreference.setOnPreferenceClickListener(preference -> {
             showProxyDialog();
             return false;
+        });
+
+        mDogbinDomainPreference = findPreference(PreferencesUtils.DOGBIN_DOMAIN_NAME);
+        mDogbinDomainPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+            String newDomain = (String) newValue;
+            if (!newDomain.matches("http(s|)://.+?")) {
+                Toast.makeText(requireContext(), R.string.domain_name_require1, Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (!newDomain.endsWith("/")) {
+                Toast.makeText(requireContext(), R.string.domain_name_require2, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            return true;
         });
 
         mClearCachePreference = findPreference("cache_nuke");

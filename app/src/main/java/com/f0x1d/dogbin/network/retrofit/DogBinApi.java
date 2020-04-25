@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.network.okhttp.badmanners.ModifiablePersistentCookieJar;
+import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
@@ -75,7 +76,7 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
         }
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://del.dog/")
+                .baseUrl(App.getPrefsUtil().getDogbinDomain())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .client(builder.build())
@@ -116,7 +117,7 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.contains("proxy")) {
+        if (key.contains("proxy") || key.equals(PreferencesUtils.DOGBIN_DOMAIN_NAME)) {
             setupService();
         }
     }

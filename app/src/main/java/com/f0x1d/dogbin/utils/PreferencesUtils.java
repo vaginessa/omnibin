@@ -15,12 +15,13 @@ public class PreferencesUtils {
 
     public static final String FIRST_START_NAME = "first_start";
 
+    public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
     public static final String PROXY_NAME = "proxy_enable";
     public static final String PROXY_HOST_NAME = "proxy_host";
     public static final String PROXY_PORT_NAME = "proxy_port";
     public static final String PROXY_LOGIN_NAME = "proxy_login";
     public static final String PROXY_PASSWORD_NAME = "proxy_password";
-    public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
+    public static final String DOGBIN_DOMAIN_NAME = "dogbin_domain";
 
     public static final String CACHE_ONLY_MY_NAME = "cache_my";
     public static final String CACHE_AUTO_CLEAR_NAME = "auto_cache_clear";
@@ -53,6 +54,10 @@ public class PreferencesUtils {
 
     public void setFirstStart(boolean firstStart) {
         mAppPreferences.edit().putBoolean(FIRST_START_NAME, firstStart).apply();
+    }
+
+    public boolean isRedirectFromNoteEnabled() {
+        return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE_NAME, true);
     }
 
     public String getProxyHost() {
@@ -88,12 +93,8 @@ public class PreferencesUtils {
         return mDefaultPreferences.getBoolean(PROXY_NAME, false);
     }
 
-    public void setProxyEnabled(boolean value) {
-        mDefaultPreferences.edit().putBoolean(PROXY_NAME, value).apply();
-    }
-
-    public boolean isRedirectFromNoteEnabled() {
-        return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE_NAME, true);
+    public String getDogbinDomain() {
+        return mDefaultPreferences.getString(DOGBIN_DOMAIN_NAME, "https://del.dog/");
     }
 
     public boolean cacheOnlyMy() {

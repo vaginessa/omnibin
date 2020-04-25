@@ -60,4 +60,8 @@
     <string name="donate_text_error">Не удается получить статус пожертвования. Пожалуйста убедитесь, что у вас установлены сервисы Google Play и попробуйте перезагрузить устройство.</string>
     <string name="donate_text_pending">Ваше пожертвование в ожидании оплаты. Если оно не применится автоматически после завершения покупки, пожалуйста, перезапустите dogbin mobile.</string>
     <string name="donate_text_theme_lock">Данная опция доступна только пользователям, поддержавшим dogbin mobile</string>
+    <string name="dogbin_domain">Домен dogbin</string>
+    <string name="no_touch">Меняйте только если вы знаете, что делает эта настройка</string>
+    <string name="domain_name_require1">Имя домена должно начинаться с \"http\"</string>
+    <string name="domain_name_require2">Имя домена должно заканчиваться на \"/\"</string>
 </resources>

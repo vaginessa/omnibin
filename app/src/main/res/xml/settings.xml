@@ -99,6 +99,13 @@
             android:key="proxy"
             android:title="@string/socks_proxy"
             app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            android:key="dogbin_domain"
+            android:summary="@string/no_touch"
+            android:title="@string/dogbin_domain"
+            app:defaultValue="https://del.dog/"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
