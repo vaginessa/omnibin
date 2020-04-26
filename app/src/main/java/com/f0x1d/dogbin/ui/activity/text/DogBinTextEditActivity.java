@@ -104,7 +104,7 @@ public class DogBinTextEditActivity extends BaseActivity {
                 mWritebarText.setText("");
                 mSlugText.setText("");
 
-                String delDogUrl = "https://del.dog/" + document.slug;
+                String delDogUrl = App.getPrefsUtil().getDogbinDomain() + document.slug;
 
                 if (mIntentToCopy) {
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);

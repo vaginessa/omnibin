@@ -64,4 +64,5 @@
     <string name="no_touch">Меняйте только если вы знаете, что делает эта настройка</string>
     <string name="domain_name_require1">Имя домена должно начинаться с \"http\"</string>
     <string name="domain_name_require2">Имя домена должно заканчиваться на \"/\"</string>
+    <string name="cookies_cleared">Cookie были очищены</string>
 </resources>

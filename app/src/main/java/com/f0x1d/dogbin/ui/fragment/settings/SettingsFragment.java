@@ -111,8 +111,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mLoginPreference.setTitle(R.string.log_out);
         mLoginPreference.setOnPreferenceClickListener(preference -> {
             if (DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved()) {
-                DogBinApi.getInstance().getCookieJar().clear();
-                DogBinApi.getInstance().getCookieJar().clearPrefs();
+                clearCookies();
 
                 startActivity(new Intent(requireActivity(), MainActivity.class));
                 requireActivity().finish();
@@ -148,6 +147,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Toast.makeText(requireContext(), R.string.domain_name_require2, Toast.LENGTH_SHORT).show();
                 return false;
             }
+
+            clearCookies();
+
+            startActivity(new Intent(requireActivity(), MainActivity.class));
+            requireActivity().finish();
+
             return true;
         });
 
@@ -211,5 +216,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     mProxySwitch.setChecked(true);
                 })
                 .show();
+    }
+
+    private void clearCookies() {
+        DogBinApi.getInstance().getCookieJar().clear();
+        DogBinApi.getInstance().getCookieJar().clearPrefs();
     }
 }

@@ -65,4 +65,5 @@
     <string name="no_touch">Change it only if you know what it is</string>
     <string name="domain_name_require1">Domain name must start with \"http\"</string>
     <string name="domain_name_require2">Domain name must end with \"/\"</string>
+    <string name="cookies_cleared">Cookies were cleared</string>
 </resources>

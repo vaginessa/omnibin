@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.ui.activity.text.DogBinTextViewerActivity;
@@ -73,13 +74,13 @@ public class MyNotesAdapter extends RecyclerView.Adapter<MyNotesAdapter.MyNoteVi
 
             mContentCard.setOnClickListener(v -> {
                 Intent intent = new Intent(mContext, DogBinTextViewerActivity.class);
-                intent.setData(Uri.parse("https://del.dog/" + mSavedNotes.get(getAdapterPosition()).getSlug()));
+                intent.setData(Uri.parse(App.getPrefsUtil().getDogbinDomain() + mSavedNotes.get(getAdapterPosition()).getSlug()));
                 intent.putExtra("my_note", true);
 
                 mContext.startActivity(intent);
             });
             mContentCard.setOnLongClickListener(v -> {
-                String delDogUrl = "https://del.dog/" + mSavedNotes.get(getAdapterPosition()).getSlug();
+                String delDogUrl = App.getPrefsUtil().getDogbinDomain() + mSavedNotes.get(getAdapterPosition()).getSlug();
 
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(mContext.getString(R.string.app_name), delDogUrl);
