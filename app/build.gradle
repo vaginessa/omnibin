@@ -13,8 +13,8 @@ android {
         applicationId "com.f0x1d.dogbin"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 16
-        versionName "1.5.4"
+        versionCode 17
+        versionName "1.5.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

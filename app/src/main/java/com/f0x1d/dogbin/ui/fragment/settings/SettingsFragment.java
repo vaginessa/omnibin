@@ -149,6 +149,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
 
             clearCookies();
+            Toast.makeText(requireContext(), R.string.cookies_cleared, Toast.LENGTH_SHORT).show();
 
             startActivity(new Intent(requireActivity(), MainActivity.class));
             requireActivity().finish();
