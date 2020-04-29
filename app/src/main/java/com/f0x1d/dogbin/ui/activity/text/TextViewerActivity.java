@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
@@ -89,6 +90,8 @@ public class TextViewerActivity extends BaseActivity {
         });
 
         mTextViewModel.getIsEditableData().observe(this, isEditable -> mToolbar.getMenu().findItem(R.id.edit_item).setVisible(isEditable));
+
+        supportApp();
     }
 
     private void setupToolbar() {
@@ -126,6 +129,24 @@ public class TextViewerActivity extends BaseActivity {
                     dialog.cancel();
                 })
                 .show();
+    }
+
+    private void supportApp() {
+        if (!App.getPrefsUtil().supportAppShowed()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setCancelable(false)
+                    .setTitle(R.string.hey)
+                    .setMessage(R.string.donate_text)
+                    .setPositiveButton(R.string.donate, (dialog, which) -> {
+                        startActivity(new Intent(TextViewerActivity.this, DonateActivity.class));
+                        App.getPrefsUtil().setSupportAppShowed(true);
+                    })
+                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                        dialog.cancel();
+                        App.getPrefsUtil().setSupportAppShowed(true);
+                    })
+                    .show();
+        }
     }
 
     @Override

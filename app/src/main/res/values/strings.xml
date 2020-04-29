@@ -69,4 +69,5 @@
     <string name="select_service">Select service</string>
     <string name="folders">Folders</string>
     <string name="module_v_old">Module SDK version is old, update it</string>
+    <string name="hey">Hey!</string>
 </resources>

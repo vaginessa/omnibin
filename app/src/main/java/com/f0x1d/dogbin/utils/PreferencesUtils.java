@@ -13,6 +13,7 @@ public class PreferencesUtils {
     public static final String DARK_THEME_NAME = "dark_theme";
     public static final String ACCENT_NAME = "accent";
 
+    public static final String SUPPORT_APP_SHOWED_NAME = "support_app_dialog";
     public static final String FIRST_START_NAME = "first_start";
 
     public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
@@ -48,6 +49,14 @@ public class PreferencesUtils {
 
     public int selectedAccent() {
         return Integer.parseInt(mDefaultPreferences.getString(ACCENT_NAME, "0"));
+    }
+
+    public boolean supportAppShowed() {
+        return mAppPreferences.getBoolean(SUPPORT_APP_SHOWED_NAME, false);
+    }
+
+    public void setSupportAppShowed(boolean showed) {
+        mAppPreferences.edit().putBoolean(SUPPORT_APP_SHOWED_NAME, showed).apply();
     }
 
     public boolean isFirstStart() {
