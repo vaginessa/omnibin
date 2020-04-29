@@ -9,12 +9,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.network.parser.UsernameParser;
-import com.f0x1d.dogbin.network.retrofit.DogBinApi;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.f0x1d.dogbin.utils.BinServiceUtils;
+import com.f0x1d.dogbin.utils.Utils;
 
 public class SettingsViewModel extends AndroidViewModel {
 
@@ -28,17 +24,14 @@ public class SettingsViewModel extends AndroidViewModel {
     public void load() {
         mLoadingStateData.setValue(LoadingState.LOADING);
 
-        DogBinApi.getInstance().getService().me().enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                mLoadingStateData.setValue(LoadingState.LOADED);
+        Utils.getExecutor().execute(() -> {
+            try {
+                String username = BinServiceUtils.getCurrentActiveService().getUsername();
 
-                mUsernameData.setValue(UsernameParser.parse(response.body()));
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                processError(t);
+                mLoadingStateData.postValue(LoadingState.LOADED);
+                mUsernameData.postValue(username);
+            } catch (Exception e) {
+                processError(e);
             }
         });
     }
@@ -46,8 +39,8 @@ public class SettingsViewModel extends AndroidViewModel {
     private void processError(Throwable t) {
         t.printStackTrace();
 
-        mLoadingStateData.setValue(LoadingState.LOADED);
-        Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show();
+        mLoadingStateData.postValue(LoadingState.LOADED);
+        Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show());
     }
 
     public LiveData<LoadingState> getLoadingStateData() {

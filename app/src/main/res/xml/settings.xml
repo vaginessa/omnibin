@@ -83,6 +83,11 @@
         android:title="@string/network"
         app:icon="@drawable/ic_vpn_settings">
 
+        <Preference
+            android:key="select_service"
+            android:title="@string/select_service"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreferenceCompat
             android:key="note_redirect"
             android:title="@string/redirect_from_notes"

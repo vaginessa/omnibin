@@ -30,6 +30,8 @@ public class PreferencesUtils {
 
     public static final String DONATE_STATUS_NAME = "donate_status";
 
+    public static final String SELECTED_SERVICE_NAME = "selected_service";
+
     private Context mContext;
     private SharedPreferences mDefaultPreferences;
     private SharedPreferences mAppPreferences;
@@ -123,6 +125,14 @@ public class PreferencesUtils {
 
     public void setDonationStatus(DonationStatus status) {
         mAppPreferences.edit().putString(DONATE_STATUS_NAME, status.name()).apply();
+    }
+
+    public String getSelectedService() {
+        return mAppPreferences.getString(SELECTED_SERVICE_NAME, null);
+    }
+
+    public void setSelectedService(String packageName) {
+        mAppPreferences.edit().putString(SELECTED_SERVICE_NAME, packageName).apply();
     }
 
     public SharedPreferences getAppPreferences() {

@@ -1,6 +1,5 @@
 package com.f0x1d.dogbin.network.okhttp.badmanners;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -87,9 +86,8 @@ public class ModifiablePersistentCookieJar implements ModifiableCookieJar {
         persistor.clear();
     }
 
-    @SuppressLint("ApplySharedPref")
     public void clearPrefs() {
-        App.getInstance().getSharedPreferences("CookiePersistence", Context.MODE_PRIVATE).edit().clear().commit();
+        App.getInstance().getSharedPreferences("CookiePersistence", Context.MODE_PRIVATE).edit().clear().apply();
     }
 
     @Override

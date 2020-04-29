@@ -35,6 +35,26 @@ public class FragmentNavigator {
         fragmentTransaction.commitNow();
     }
 
+    public void switchTo(Fragment fragment, String tag, boolean backStack) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
+
+        Fragment currentFragment = getCurrentFragment();
+        if (currentFragment != null)
+            fragmentTransaction.hide(currentFragment);
+
+        Fragment targetFragment = mFragmentManager.findFragmentByTag(tag);
+        if (targetFragment == null)
+            fragmentTransaction.add(mContainerView, fragment, tag);
+        else
+            fragmentTransaction.show(targetFragment);
+
+        if (backStack)
+            fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commit();
+    }
+
     public Fragment getCurrentFragment() {
         for (Fragment fragment : mFragmentManager.getFragments()) {
             if (fragment != null && fragment.isVisible())

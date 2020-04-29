@@ -8,19 +8,16 @@ import com.f0x1d.dogbin.db.MyDatabase;
 import com.f0x1d.dogbin.db.dao.SavedNoteDao;
 import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
+import com.f0x1d.dogbin.utils.Utils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class App extends Application {
 
     private static App sInstance;
     private static PreferencesUtils sPrefsUtil;
-
     private static MyDatabase sMyDatabase;
-    private Executor mExecutor = Executors.newSingleThreadExecutor();
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -43,6 +40,8 @@ public class App extends Application {
         super.onCreate();
         sInstance = this;
 
+        Utils.initOnUiThread();
+
         sPrefsUtil = new PreferencesUtils(this);
         sMyDatabase = Room.databaseBuilder(this, MyDatabase.class, "dogbin_database")
                 .addMigrations(
@@ -53,7 +52,7 @@ public class App extends Application {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        mExecutor.execute(this::clearCacheIfNeeded);
+        Utils.getExecutor().execute(this::clearCacheIfNeeded);
     }
 
     private void clearCacheIfNeeded() {

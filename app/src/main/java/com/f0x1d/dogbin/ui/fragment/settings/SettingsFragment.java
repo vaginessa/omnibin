@@ -17,29 +17,30 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.billing.BillingManager;
-import com.f0x1d.dogbin.network.retrofit.DogBinApi;
-import com.f0x1d.dogbin.ui.activity.DogBinLoginActivity;
+import com.f0x1d.dogbin.network.DogBinService;
 import com.f0x1d.dogbin.ui.activity.DonateActivity;
+import com.f0x1d.dogbin.ui.activity.LoginActivity;
 import com.f0x1d.dogbin.ui.activity.MainActivity;
+import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
+import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.SettingsViewModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private Preference mDonatePreference;
 
     private SwitchPreferenceCompat mDarkModePreference;
-    private ListPreference mGoldThemePreference;
+    private ListPreference mAccentPreference;
 
     private Preference mUsernamePreference;
     private Preference mLoginPreference;
 
+    private Preference mServicePreference;
+    private boolean mAskedServiceDialog = false;
     private SwitchPreferenceCompat mProxySwitch;
     private Preference mProxyPreference;
     private EditTextPreference mDogbinDomainPreference;
@@ -47,7 +48,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private Preference mClearCachePreference;
 
     private SettingsViewModel mSettingsViewModel;
-    private Executor mExecutor = Executors.newSingleThreadExecutor();
 
     public static SettingsFragment newInstance() {
         Bundle args = new Bundle();
@@ -62,7 +62,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mSettingsViewModel = new ViewModelProvider(requireActivity()).get(SettingsViewModel.class);
         mSettingsViewModel.load();
 
-        boolean loggedIn = DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved();
+        boolean loggedIn = BinServiceUtils.getCurrentActiveService().loggedIn();
 
         addPreferencesFromResource(R.xml.settings);
 
@@ -82,22 +82,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        mGoldThemePreference = findPreference(PreferencesUtils.ACCENT_NAME);
+        mAccentPreference = findPreference(PreferencesUtils.ACCENT_NAME);
         BillingManager.getInstance(requireContext()).getDonatedData().observe(this, donationStatus -> {
             switch (donationStatus) {
                 case NOT_CONNECTED_BILLING:
                 case NOT_DONATED:
                 case PENDING:
-                    mGoldThemePreference.setSummary(R.string.donate_text_theme_lock);
-                    mGoldThemePreference.setEnabled(false);
+                    mAccentPreference.setSummary(R.string.donate_text_theme_lock);
+                    mAccentPreference.setEnabled(false);
                     break;
                 case DONATED:
-                    mGoldThemePreference.setSummary("");
-                    mGoldThemePreference.setEnabled(true);
+                    mAccentPreference.setSummary("");
+                    mAccentPreference.setEnabled(true);
                     break;
             }
         });
-        mGoldThemePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+        mAccentPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             requireActivity().recreate();
             return true;
         });
@@ -110,15 +110,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (loggedIn)
             mLoginPreference.setTitle(R.string.log_out);
         mLoginPreference.setOnPreferenceClickListener(preference -> {
-            if (DogBinApi.getInstance().getCookieJar().isDoggyClientCookieSaved()) {
-                clearCookies();
+            if (BinServiceUtils.getCurrentActiveService().loggedIn()) {
+                BinServiceUtils.getCurrentActiveService().logout();
 
+                requireActivity().finish();
                 startActivity(new Intent(requireActivity(), MainActivity.class));
-                requireActivity().finish();
             } else {
-                startActivity(new Intent(requireActivity(), DogBinLoginActivity.class));
                 requireActivity().finish();
+                startActivity(new Intent(requireActivity(), LoginActivity.class));
             }
+            return false;
+        });
+
+        mServicePreference = findPreference("select_service");
+        mServicePreference.setOnPreferenceClickListener(preference -> {
+            mAskedServiceDialog = true;
+            BinServiceUtils.refreshInstalledServices();
             return false;
         });
 
@@ -148,18 +155,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return false;
             }
 
-            clearCookies();
+            DogBinService.getInstance().logout();
             Toast.makeText(requireContext(), R.string.cookies_cleared, Toast.LENGTH_SHORT).show();
 
-            startActivity(new Intent(requireActivity(), MainActivity.class));
             requireActivity().finish();
+            startActivity(new Intent(requireActivity(), MainActivity.class));
 
             return true;
         });
 
         mClearCachePreference = findPreference("cache_nuke");
         mClearCachePreference.setOnPreferenceClickListener(preference -> {
-            mExecutor.execute(() -> App.getMyDatabase().getSavedNoteDao().nukeTable());
+            Utils.getExecutor().execute(() -> App.getMyDatabase().getSavedNoteDao().nukeTable());
             return false;
         });
 
@@ -168,6 +175,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return;
 
             mUsernamePreference.setTitle(username);
+        });
+
+        BinServiceUtils.getInstalledServicesData().observe(this, services -> {
+            if (!mAskedServiceDialog)
+                return;
+
+            mAskedServiceDialog = false;
+
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.select_service)
+                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
+                        if (which == 0)
+                            App.getPrefsUtil().setSelectedService(null);
+                        else
+                            App.getPrefsUtil().setSelectedService(services.get(which - 1).packageName);
+                        BinServiceUtils.refreshCurrentService();
+
+                        requireActivity().finish();
+                        startActivity(new Intent(requireContext(), MainActivity.class));
+                    })
+                    .show();
         });
     }
 
@@ -217,10 +245,5 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     mProxySwitch.setChecked(true);
                 })
                 .show();
-    }
-
-    private void clearCookies() {
-        DogBinApi.getInstance().getCookieJar().clear();
-        DogBinApi.getInstance().getCookieJar().clearPrefs();
     }
 }

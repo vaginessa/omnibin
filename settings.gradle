@@ -1,2 +1,4 @@
 rootProject.name = 'dogbin'
 include ':app'
+include ':dm-sdk'
+include ':testservice'

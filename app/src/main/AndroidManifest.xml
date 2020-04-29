@@ -14,15 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.MainActivity">
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
-        <activity android:name=".ui.activity.text.DogBinTextViewerActivity">
+            <intent-filter>
+                <action android:name="com.f0x1d.dogbin.ACTION_TEXT_VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -38,9 +44,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.DogBinLoginActivity" />
         <activity
-            android:name=".ui.activity.text.DogBinTextEditActivity"
+            android:name=".ui.activity.text.TextEditActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -54,6 +59,9 @@
                 <data android:mimeType="text/*" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.activity.text.TextViewerActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
         <activity android:name=".ui.activity.DonateActivity" />
     </application>
 

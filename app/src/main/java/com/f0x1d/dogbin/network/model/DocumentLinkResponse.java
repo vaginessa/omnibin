@@ -5,9 +5,26 @@ import com.squareup.moshi.Json;
 public class DocumentLinkResponse {
 
     @Json(name = "isUrl")
-    public boolean isUrl;
+    private boolean mIsUrl;
 
     // Slug is a note's url
     @Json(name = "key")
-    public String slug;
+    private String mSlug;
+
+
+    public boolean isUrl() {
+        return mIsUrl;
+    }
+
+    public void setUrl(boolean url) {
+        mIsUrl = url;
+    }
+
+    public String getSlug() {
+        return mSlug;
+    }
+
+    public void setSlug(String slug) {
+        this.mSlug = slug;
+    }
 }
