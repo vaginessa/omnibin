@@ -46,5 +46,8 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
 
 Also can be used without ```onActivityResult```
 
+## Modules SDK
+Docs are available [here](https://github.com/F0x1d/dogbin-mobile/blob/master/SDK.md)
+
 ## License
 dogbin mobile is distributed under the terms of the Apache License (Version 2.0). See [license](/LICENSE) for details.
