@@ -14,7 +14,7 @@ import java.util.List;
 @Keep
 public interface BinService {
 
-    void init(Context applicationContext, SharedPreferences modulePreferences);
+    void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences);
 
     String getDomain();
 

@@ -77,7 +77,7 @@ public class BinServiceUtils {
 
         BaseDexClassLoader baseDexClassLoader = new BaseDexClassLoader(applicationInfo.sourceDir, outDir, null, App.getInstance().getClassLoader());
         BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("service")).getConstructor().newInstance();
-        binService.init(App.getInstance().createPackageContext(packageName, 0),
+        binService.init(App.getInstance().createPackageContext(packageName, 0), App.getInstance().getApplicationContext(),
                 App.getInstance().getSharedPreferences(packageName + "_module", Context.MODE_PRIVATE));
         return binService;
     }

@@ -30,7 +30,7 @@ public class DogBinService implements BinService {
     }
 
     @Override
-    public void init(Context applicationContext, SharedPreferences sharedPreferences) {
+    public void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences) {
 
     }
 

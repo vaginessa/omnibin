@@ -34,9 +34,9 @@ public class MyBinService implements BinService {
     private SharedPreferences mSharedPreferences;
 
     @Override
-    public void init(Context applicationContext, SharedPreferences sharedPreferences) {
+    public void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences) {
         mContext = applicationContext;
-        mSharedPreferences = sharedPreferences;
+        mSharedPreferences = modulePreferences;
     }
 
     @Override
