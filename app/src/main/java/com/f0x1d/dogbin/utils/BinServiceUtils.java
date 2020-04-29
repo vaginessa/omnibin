@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.f0x1d.dmsdk.BinService;
+import com.f0x1d.dmsdk.Constants;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.DogBinService;
@@ -77,6 +78,11 @@ public class BinServiceUtils {
 
         BaseDexClassLoader baseDexClassLoader = new BaseDexClassLoader(applicationInfo.sourceDir, outDir, null, App.getInstance().getClassLoader());
         BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("service")).getConstructor().newInstance();
+        if (binService.getSDKVersion() < Constants.LATEST_VERSION) {
+            Toast.makeText(App.getInstance(), R.string.module_v_old, Toast.LENGTH_SHORT).show();
+            App.getPrefsUtil().setSelectedService(null);
+            return DogBinService.getInstance();
+        }
         binService.init(App.getInstance().createPackageContext(packageName, 0), App.getInstance().getApplicationContext(),
                 App.getInstance().getSharedPreferences(packageName + "_module", Context.MODE_PRIVATE));
         return binService;

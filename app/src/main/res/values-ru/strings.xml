@@ -67,4 +67,5 @@
     <string name="cookies_cleared">Cookie были очищены</string>
     <string name="select_service">Выбрать сервис</string>
     <string name="folders">Папки</string>
+    <string name="module_v_old">Версия SDK модуля старая, обновите его</string>
 </resources>

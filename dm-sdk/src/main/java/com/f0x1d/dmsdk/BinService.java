@@ -146,4 +146,8 @@ public interface BinService {
      * @throws Exception
      */
     List<UserNote> getUserNotesForFolder(String key) throws Exception;
+
+    default int getSDKVersion() {
+        return Constants.LATEST_VERSION;
+    }
 }
