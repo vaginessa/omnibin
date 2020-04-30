@@ -33,7 +33,8 @@ public class FoldersWrapperFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mFragmentNavigator = new FragmentNavigator(getChildFragmentManager(), R.id.wrapper_container, new MyFragmentBuilder());
-        mFragmentNavigator.switchTo("folders_wrapped");
+        if (savedInstanceState == null)
+            mFragmentNavigator.switchTo("folders_wrapped");
     }
 
     public boolean onBackPressed() {
