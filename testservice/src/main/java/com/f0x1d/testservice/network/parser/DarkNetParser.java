@@ -1,4 +1,4 @@
-package com.f0x1d.testservice;
+package com.f0x1d.testservice.network.parser;
 
 import com.f0x1d.dmsdk.model.UserNote;
 

@@ -1,4 +1,4 @@
-package com.f0x1d.testservice.api;
+package com.f0x1d.testservice.network.retrofit.service;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;

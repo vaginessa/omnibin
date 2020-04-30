@@ -1,4 +1,4 @@
-package com.f0x1d.testservice.api;
+package com.f0x1d.testservice.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,8 +9,9 @@ import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.CachedNote;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserNote;
-import com.f0x1d.testservice.DarkNetParser;
 import com.f0x1d.testservice.R;
+import com.f0x1d.testservice.network.parser.DarkNetParser;
+import com.f0x1d.testservice.network.retrofit.PasteBinApi;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

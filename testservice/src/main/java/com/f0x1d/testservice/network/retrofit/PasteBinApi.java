@@ -1,4 +1,7 @@
-package com.f0x1d.testservice.api;
+package com.f0x1d.testservice.network.retrofit;
+
+import com.f0x1d.testservice.network.retrofit.service.PasteBinApiService;
+import com.f0x1d.testservice.network.retrofit.service.PasteBinRawService;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
