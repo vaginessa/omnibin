@@ -13,7 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.NotesAdapter;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
-import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
+import com.f0x1d.dogbin.utils.ListSpacingDecoration;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.DefaultNotesViewModel;
 import com.f0x1d.dogbin.viewmodel.NotesViewModel;
@@ -66,7 +66,7 @@ public class NotesFragment extends BaseFragment {
 
         mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
         mNotesRecycler.setAdapter(mAdapter = new NotesAdapter(requireActivity()));
-        mNotesRecycler.addItemDecoration(new ItemOffsetDecoration(requireContext(), 8));
+        mNotesRecycler.addItemDecoration(new ListSpacingDecoration(8));
 
         mNotesViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == null)
