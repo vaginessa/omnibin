@@ -12,7 +12,7 @@
 
         <meta-data
             android:name="service"
-            android:value="com.f0x1d.testservice.api.MyBinService" />
+            android:value="com.f0x1d.testservice.network.MyBinService" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
