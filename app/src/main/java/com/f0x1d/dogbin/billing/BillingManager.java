@@ -61,6 +61,9 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     public void loadPurchases() {
+        if (mDonatedData.getValue() == DonationStatus.NOT_CONNECTED_BILLING)
+            return;
+
         Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
         if (purchasesResult.getBillingResult().getResponseCode() != BillingClient.BillingResponseCode.OK)
             return;
@@ -107,6 +110,9 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     public void launchBillingFlow(Activity activity) {
+        if (mDonatedData.getValue() == DonationStatus.NOT_CONNECTED_BILLING)
+            return;
+
         if (mSkuDetailsProduct == null)
             return;
 
@@ -118,6 +124,9 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     private void loadProducts() {
+        if (mDonatedData.getValue() == DonationStatus.NOT_CONNECTED_BILLING)
+            return;
+
         List<String> skuList = new ArrayList<>();
         skuList.add(SKU_DONATION_NAME);
 
