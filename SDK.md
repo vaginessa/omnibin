@@ -17,7 +17,7 @@ BinService must implement list of methods, these methods are called by dogbin mo
 
 Methods, which ```throw Exception``` are run **not** on the UI thread.
 
-Methods, which dont't ```throw Exception``` are run on the UI thread (expect caching methods).
+Methods, which dont't ```throw Exception``` are run on the UI thread (except caching methods).
 
 ### Main
 
@@ -83,12 +83,13 @@ If you want to do so, then add such ```<intent-filter>``` to activity in your ma
 And add something like this in this activity:
 ```
     if (getIntent().getData() != null) {
-            Intent intent = new Intent("com.f0x1d.dogbin.ACTION_TEXT_VIEW");
-            intent.setType("text/plain");
-            intent.putExtra("module_package_name", getPackageName());
-            intent.putExtra("url", getIntent().getData().toString());
-            startActivity(intent);
-            finish();
+        Intent intent = new Intent("com.f0x1d.dogbin.ACTION_TEXT_VIEW");
+        intent.setType("text/plain");
+        intent.putExtra("module_package_name", getPackageName());
+        intent.putExtra("url", getIntent().getData().toString());
+
+        startActivity(intent);
+        finish();
     }
 ```
 

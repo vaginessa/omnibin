@@ -141,7 +141,7 @@ public class TextViewerActivity extends BaseActivity {
                         startActivity(new Intent(TextViewerActivity.this, DonateActivity.class));
                         App.getPrefsUtil().setSupportAppShowed(true);
                     })
-                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                    .setNeutralButton(android.R.string.cancel, (dialog, which) -> {
                         dialog.cancel();
                         App.getPrefsUtil().setSupportAppShowed(true);
                     })
