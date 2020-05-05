@@ -60,7 +60,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         mSettingsViewModel = new ViewModelProvider(requireActivity()).get(SettingsViewModel.class);
-        mSettingsViewModel.load();
+        if (savedInstanceState == null)
+            mSettingsViewModel.load();
 
         boolean loggedIn = BinServiceUtils.getCurrentActiveService().loggedIn();
 

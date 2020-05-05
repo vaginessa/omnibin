@@ -53,7 +53,8 @@ public class NotesFragment extends BaseFragment {
             mNotesViewModel = new ViewModelProvider(requireActivity()).get(DefaultNotesViewModel.class);
         else
             mNotesViewModel = new ViewModelProvider(requireActivity()).get(NotesViewModel.class);
-        mNotesViewModel.load(getArguments().getString("folder_key"));
+        if (savedInstanceState == null)
+            mNotesViewModel.load(getArguments().getString("folder_key"));
 
         mToolbar = findViewById(R.id.toolbar);
         mNotesRecycler = findViewById(R.id.notes_recycler);

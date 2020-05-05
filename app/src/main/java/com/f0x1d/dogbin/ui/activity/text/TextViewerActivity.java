@@ -39,9 +39,11 @@ public class TextViewerActivity extends BaseActivity {
         setContentView(R.layout.activity_text_view);
 
         mTextViewModel = new ViewModelProvider(this).get(TextViewModel.class);
-        mTextViewModel.checkMyNote(getIntent());
-        mTextViewModel.load(BinServiceUtils.getCurrentActiveService().getSlugFromLink(getIntent().getData().toString()));
-        mTextViewModel.loadEditable(mTextViewModel.getSlug());
+        if (savedInstanceState == null) {
+            mTextViewModel.checkMyNote(getIntent());
+            mTextViewModel.load(BinServiceUtils.getCurrentActiveService().getSlugFromLink(getIntent().getData().toString()));
+            mTextViewModel.loadEditable(mTextViewModel.getSlug());
+        }
 
         mToolbar = findViewById(R.id.toolbar);
         mTextCodeView = findViewById(R.id.text_code_view);

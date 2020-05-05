@@ -46,7 +46,8 @@ public class FoldersFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mFoldersViewModel = new ViewModelProvider(this).get(FoldersViewModel.class);
-        mFoldersViewModel.load();
+        if (savedInstanceState == null)
+            mFoldersViewModel.load();
 
         mToolbar = findViewById(R.id.toolbar);
         mFoldersRecycler = findViewById(R.id.folders_recycler);

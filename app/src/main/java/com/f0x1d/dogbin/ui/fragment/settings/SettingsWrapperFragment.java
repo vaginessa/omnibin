@@ -39,6 +39,7 @@ public class SettingsWrapperFragment extends BaseFragment {
         mToolbar.setTitle(R.string.settings);
 
         mFragmentNavigator = new FragmentNavigator(getChildFragmentManager(), R.id.wrapper_container, new MyFragmentBuilder());
-        mFragmentNavigator.switchTo("settings_pref");
+        if (savedInstanceState == null)
+            mFragmentNavigator.switchTo("settings_pref");
     }
 }

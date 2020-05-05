@@ -52,7 +52,8 @@ public class TextEditActivity extends BaseActivity {
                 (getIntent().getAction().equals(ACTION_UPLOAD_TO_DOGBIN) || getIntent().getAction().equals(Intent.ACTION_SEND));
 
         mWritingViewModel = new ViewModelProvider(this).get(WritingViewModel.class);
-        mWritingViewModel.setInEditingMode(mEditingMode);
+        if (savedInstanceState == null)
+            mWritingViewModel.setInEditingMode(mEditingMode);
 
         mToolbar = findViewById(R.id.toolbar);
         mSlugText = findViewById(R.id.slug_text);
