@@ -7,6 +7,7 @@ import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.okhttp.badmanners.ModifiablePersistentCookieJar;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
+import com.f0x1d.dogbin.utils.Utils;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
@@ -67,7 +68,7 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
         if (App.getPreferencesUtil().isProxyEnabled()) {
             int port = App.getPreferencesUtil().getProxyPort();
             if (port > 65535) {
-                Toast.makeText(App.getInstance(), R.string.invalid_port, Toast.LENGTH_SHORT).show();
+                Utils.runOnUiThread(() -> Toast.makeText(App.getInstance(), R.string.invalid_port, Toast.LENGTH_SHORT).show());
             } else {
                 builder.proxy(new Proxy(Proxy.Type.SOCKS, InetSocketAddress.createUnresolved(App.getPreferencesUtil().getProxyHost(), port)));
 
