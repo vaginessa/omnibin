@@ -1,8 +1,10 @@
 package com.f0x1d.dogbin.network.retrofit;
 
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.f0x1d.dogbin.App;
+import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.okhttp.badmanners.ModifiablePersistentCookieJar;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
@@ -37,8 +39,8 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
     private List<NetworkEventsListener> mNetworkEventsListenersList = new ArrayList<>();
 
     private DogBinApi() {
-        App.getPrefsUtil().getDefaultPreferences().registerOnSharedPreferenceChangeListener(this);
-        App.getPrefsUtil().getAppPreferences().registerOnSharedPreferenceChangeListener(this);
+        App.getPreferencesUtil().getDefaultPreferences().registerOnSharedPreferenceChangeListener(this);
+        App.getPreferencesUtil().getAppPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     public static DogBinApi getInstance() {
@@ -62,21 +64,26 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
                 .addNetworkInterceptor(this)
                 .cookieJar(mCookieJar);
 
-        if (App.getPrefsUtil().isProxyEnabled()) {
-            builder.proxy(new Proxy(Proxy.Type.SOCKS, InetSocketAddress.createUnresolved(App.getPrefsUtil().getProxyHost(), App.getPrefsUtil().getProxyPort())));
+        if (App.getPreferencesUtil().isProxyEnabled()) {
+            int port = App.getPreferencesUtil().getProxyPort();
+            if (port > 65535) {
+                Toast.makeText(App.getInstance(), R.string.invalid_port, Toast.LENGTH_SHORT).show();
+            } else {
+                builder.proxy(new Proxy(Proxy.Type.SOCKS, InetSocketAddress.createUnresolved(App.getPreferencesUtil().getProxyHost(), port)));
 
-            if (App.getPrefsUtil().isAuthForProxyRequired()) {
-                builder.authenticator((route, response) -> {
-                    String credential = Credentials.basic(App.getPrefsUtil().getProxyLogin(), App.getPrefsUtil().getProxyPassword());
-                    return response.request().newBuilder()
-                            .header("Proxy-Authorization", credential)
-                            .build();
-                });
+                if (App.getPreferencesUtil().isAuthForProxyRequired()) {
+                    builder.authenticator((route, response) -> {
+                        String credential = Credentials.basic(App.getPreferencesUtil().getProxyLogin(), App.getPreferencesUtil().getProxyPassword());
+                        return response.request().newBuilder()
+                                .header("Proxy-Authorization", credential)
+                                .build();
+                    });
+                }
             }
         }
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(App.getPrefsUtil().getDogbinDomain())
+                .baseUrl(App.getPreferencesUtil().getDogbinDomain())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .client(builder.build())

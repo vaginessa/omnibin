@@ -132,7 +132,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mProxySwitch = findPreference(PreferencesUtils.PROXY_NAME);
         mProxySwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-            if (App.getPrefsUtil().getProxyHost() == null) {
+            if (App.getPreferencesUtil().getProxyHost() == null) {
                 Toast.makeText(requireContext(), R.string.you_need_to_setup_proxy, Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -188,9 +188,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     .setTitle(R.string.select_service)
                     .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
                         if (which == 0)
-                            App.getPrefsUtil().setSelectedService(null);
+                            App.getPreferencesUtil().setSelectedService(null);
                         else
-                            App.getPrefsUtil().setSelectedService(services.get(which - 1).packageName);
+                            App.getPreferencesUtil().setSelectedService(services.get(which - 1).packageName);
                         BinServiceUtils.refreshCurrentService();
 
                         requireActivity().finish();
@@ -209,10 +209,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         EditText passwordText = v.findViewById(R.id.password_text);
         MaterialCheckBox authBox = v.findViewById(R.id.auth_box);
 
-        hostText.setText(App.getPrefsUtil().getProxyHost());
-        portText.setText(String.valueOf(App.getPrefsUtil().getProxyPort()));
-        loginText.setText(App.getPrefsUtil().getProxyLogin());
-        passwordText.setText(App.getPrefsUtil().getProxyPassword());
+        hostText.setText(App.getPreferencesUtil().getProxyHost());
+        portText.setText(String.valueOf(App.getPreferencesUtil().getProxyPort()));
+        loginText.setText(App.getPreferencesUtil().getProxyLogin());
+        passwordText.setText(App.getPreferencesUtil().getProxyPassword());
 
         TextInputLayout loginTextLayout = v.findViewById(R.id.login_text_layout);
         TextInputLayout passwordTextLayout = v.findViewById(R.id.password_text_layout);
@@ -236,7 +236,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         Toast.makeText(requireContext(), R.string.invalid_port, Toast.LENGTH_SHORT).show();
                     }
 
-                    App.getPrefsUtil().saveProxy(
+                    App.getPreferencesUtil().saveProxy(
                             hostText.getText().toString(),
                             port,
                             loginText.getText().toString(),

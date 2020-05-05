@@ -54,7 +54,7 @@ public class TextViewerActivity extends BaseActivity {
         mTextCodeView.setShowLineNumbers(true);
         mTextCodeView.setZoomSupportEnabled(true);
         mTextCodeView.setTheme(isNightTheme() ? (isAmoledTheme() ? Theme.DOGBIN_AMOLED : Theme.DOGBIN_NIGHT_THEME) : Theme.GOOGLECODE);
-        mTextCodeView.setTextWrap(App.getPrefsUtil().textWrap());
+        mTextCodeView.setTextWrap(App.getPreferencesUtil().textWrap());
         if (isNightTheme())
             mTextCodeView.setBackgroundColor(Utils.getColorFromAttr(this, android.R.attr.windowBackground));
 
@@ -118,10 +118,10 @@ public class TextViewerActivity extends BaseActivity {
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.text_wrap)
-                .setSingleChoiceItems(items, App.getPrefsUtil().textWrap().ordinal(), (dialog, which) -> {
+                .setSingleChoiceItems(items, App.getPreferencesUtil().textWrap().ordinal(), (dialog, which) -> {
                     HighlightJsView.TextWrap textWrap = HighlightJsView.TextWrap.values()[which];
 
-                    App.getPrefsUtil().setTextWrap(which);
+                    App.getPreferencesUtil().setTextWrap(which);
 
                     mTextCodeView.setTextWrap(textWrap);
                     mTextCodeView.refresh();
@@ -134,18 +134,18 @@ public class TextViewerActivity extends BaseActivity {
     }
 
     private void supportApp() {
-        if (!App.getPrefsUtil().supportAppShowed()) {
+        if (!App.getPreferencesUtil().supportAppShowed()) {
             new MaterialAlertDialogBuilder(this)
                     .setCancelable(false)
                     .setTitle(R.string.hey)
                     .setMessage(R.string.donate_text)
                     .setPositiveButton(R.string.donate, (dialog, which) -> {
                         startActivity(new Intent(TextViewerActivity.this, DonateActivity.class));
-                        App.getPrefsUtil().setSupportAppShowed(true);
+                        App.getPreferencesUtil().setSupportAppShowed(true);
                     })
                     .setNeutralButton(android.R.string.cancel, (dialog, which) -> {
                         dialog.cancel();
-                        App.getPrefsUtil().setSupportAppShowed(true);
+                        App.getPreferencesUtil().setSupportAppShowed(true);
                     })
                     .show();
         }

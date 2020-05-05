@@ -26,7 +26,7 @@ public class App extends Application {
         return sInstance;
     }
 
-    public static PreferencesUtils getPrefsUtil() {
+    public static PreferencesUtils getPreferencesUtil() {
         return sPrefsUtil;
     }
 
@@ -56,7 +56,7 @@ public class App extends Application {
     }
 
     private void clearCacheIfNeeded() {
-        if (!getPrefsUtil().autoClearCache())
+        if (!getPreferencesUtil().autoClearCache())
             return;
 
         SavedNoteDao savedNoteDao = getMyDatabase().getSavedNoteDao();

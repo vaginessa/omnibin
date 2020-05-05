@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity {
             BinServiceUtils.getBinServiceForPackageName(intent.getStringExtra("module_package_name"));
             startActivity(new Intent(this, TextViewerActivity.class).setData(Uri.parse(intent.getStringExtra("url"))));
         } else if (intent.getData() != null) {
-            App.getPrefsUtil().setSelectedService(null);
+            App.getPreferencesUtil().setSelectedService(null);
             BinServiceUtils.refreshCurrentService();
             startActivity(new Intent(this, TextViewerActivity.class).setData(intent.getData()));
         }
@@ -116,12 +116,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void checkUserIsFromRussia() {
-        if (App.getPrefsUtil().isFirstStart() && Locale.getDefault().getLanguage().startsWith("ru")) {
+        if (App.getPreferencesUtil().isFirstStart() && Locale.getDefault().getLanguage().startsWith("ru")) {
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.app_name)
                     .setMessage(R.string.dogbin_block_in_russia)
                     .setCancelable(false)
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> App.getPrefsUtil().setFirstStart(false))
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> App.getPreferencesUtil().setFirstStart(false))
                     .show();
         }
     }

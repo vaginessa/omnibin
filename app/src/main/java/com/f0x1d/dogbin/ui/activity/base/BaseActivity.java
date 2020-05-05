@@ -18,10 +18,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            AppCompatDelegate.setDefaultNightMode(App.getPrefsUtil().isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+            AppCompatDelegate.setDefaultNightMode(App.getPreferencesUtil().isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        switch (App.getPrefsUtil().selectedAccent()) {
+        switch (App.getPreferencesUtil().selectedAccent()) {
             case 0:
                 setTheme(R.style.AppTheme);
                 break;
@@ -44,7 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void setupNavBarAndStatusBar() {
-        boolean lightTheme = !App.getPrefsUtil().isDarkTheme();
+        boolean lightTheme = !App.getPreferencesUtil().isDarkTheme();
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && lightTheme) {
             getWindow().setStatusBarColor(Color.GRAY);

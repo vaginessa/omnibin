@@ -112,7 +112,7 @@ public class Utils {
     }
 
     public static int getSelectedService(List<ApplicationInfo> applicationInfos) {
-        String selectedPackageName = App.getPrefsUtil().getSelectedService();
+        String selectedPackageName = App.getPreferencesUtil().getSelectedService();
         for (int i = 0; i < applicationInfos.size(); i++) {
             if (applicationInfos.get(i).packageName.equals(selectedPackageName))
                 return i + 1;

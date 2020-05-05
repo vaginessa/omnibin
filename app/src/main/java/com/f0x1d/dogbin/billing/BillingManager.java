@@ -34,7 +34,7 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
     private Context mContext;
     private BillingClient mBillingClient;
 
-    private MutableLiveData<DonationStatus> mDonatedData = new MutableLiveData<>(App.getPrefsUtil().getDonationStatus());
+    private MutableLiveData<DonationStatus> mDonatedData = new MutableLiveData<>(App.getPreferencesUtil().getDonationStatus());
 
     private MutableLiveData<Boolean> mLoadedSkuDetailsData = new MutableLiveData<>(false);
     private SkuDetails mSkuDetailsProduct;
@@ -164,7 +164,7 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     private void setDonationStatus(DonationStatus status) {
-        App.getPrefsUtil().setDonationStatus(status);
+        App.getPreferencesUtil().setDonationStatus(status);
 
         mDonatedData.setValue(status);
     }

@@ -36,7 +36,7 @@ public class DogBinService implements BinService {
 
     @Override
     public String getDomain() {
-        return App.getPrefsUtil().getDogbinDomain();
+        return App.getPreferencesUtil().getDogbinDomain();
     }
 
     @Override
@@ -110,7 +110,7 @@ public class DogBinService implements BinService {
 
     @Override
     public void cacheNote(String slug, String content, boolean myNote) {
-        if (!myNote && App.getPrefsUtil().cacheOnlyMy())
+        if (!myNote && App.getPreferencesUtil().cacheOnlyMy())
             return;
 
         App.getMyDatabase().getSavedNoteDao().addToCache(SavedNote.createNote(content, slug, Utils.currentTimeToString()));

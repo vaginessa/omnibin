@@ -109,7 +109,7 @@ public class TextViewModel extends AndroidViewModel implements DogBinApi.Network
 
     @Override
     public void onRedirect(String url) {
-        if (App.getPrefsUtil().isRedirectFromNoteEnabled() && mRedirectURLData.getValue() == null)
+        if (App.getPreferencesUtil().isRedirectFromNoteEnabled() && mRedirectURLData.getValue() == null)
             mRedirectURLData.postValue(url);
     }
 

@@ -32,7 +32,7 @@ public class BinServiceUtils {
             if (sInstance == null) {
                 List<ApplicationInfo> installedServices = getInstalledServices();
 
-                String selectedService = App.getPrefsUtil().getSelectedService();
+                String selectedService = App.getPreferencesUtil().getSelectedService();
                 if (selectedService == null)
                     return sInstance = DogBinService.getInstance();
 
@@ -45,7 +45,7 @@ public class BinServiceUtils {
                 } catch (Exception e) {
                     Utils.runOnUiThread(() ->
                             Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
-                    App.getPrefsUtil().setSelectedService(null);
+                    App.getPreferencesUtil().setSelectedService(null);
                     return sInstance = DogBinService.getInstance();
                 }
             }
@@ -57,7 +57,7 @@ public class BinServiceUtils {
         synchronized (BinServiceUtils.class) {
             try {
                 sInstance = loadServiceFromApp(packageName);
-                App.getPrefsUtil().setSelectedService(packageName);
+                App.getPreferencesUtil().setSelectedService(packageName);
                 return sInstance;
             } catch (Exception e) {
                 return DogBinService.getInstance();
@@ -68,7 +68,7 @@ public class BinServiceUtils {
     private static BinService loadServiceFromApp(String packageName) throws Exception {
         ApplicationInfo applicationInfo = App.getInstance().getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA);
         if (applicationInfo.metaData == null || !App.getInstance().getPackageManager().getApplicationLabel(applicationInfo).toString().startsWith(START_TAG)) {
-            App.getPrefsUtil().setSelectedService(null);
+            App.getPreferencesUtil().setSelectedService(null);
             return DogBinService.getInstance();
         }
 
@@ -80,7 +80,7 @@ public class BinServiceUtils {
         BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("service")).getConstructor().newInstance();
         if (binService.getSDKVersion() < Constants.LATEST_VERSION) {
             Toast.makeText(App.getInstance(), R.string.module_v_old, Toast.LENGTH_SHORT).show();
-            App.getPrefsUtil().setSelectedService(null);
+            App.getPreferencesUtil().setSelectedService(null);
             return DogBinService.getInstance();
         }
         binService.init(App.getInstance().createPackageContext(packageName, 0), App.getInstance().getApplicationContext(),
