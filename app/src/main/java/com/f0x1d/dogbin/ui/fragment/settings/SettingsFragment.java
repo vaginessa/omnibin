@@ -3,8 +3,6 @@ package com.f0x1d.dogbin.ui.fragment.settings;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -25,9 +23,7 @@ import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.SettingsViewModel;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputLayout;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -41,8 +37,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private Preference mServicePreference;
     private boolean mAskedServiceDialog = false;
-    private SwitchPreferenceCompat mProxySwitch;
-    private Preference mProxyPreference;
     private EditTextPreference mDogbinDomainPreference;
 
     private Preference mClearCachePreference;
@@ -130,21 +124,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return false;
         });
 
-        mProxySwitch = findPreference(PreferencesUtils.PROXY_NAME);
-        mProxySwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-            if (App.getPreferencesUtil().getProxyHost() == null) {
-                Toast.makeText(requireContext(), R.string.you_need_to_setup_proxy, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            return true;
-        });
-
-        mProxyPreference = findPreference("proxy");
-        mProxyPreference.setOnPreferenceClickListener(preference -> {
-            showProxyDialog();
-            return false;
-        });
-
         mDogbinDomainPreference = findPreference(PreferencesUtils.DOGBIN_DOMAIN_NAME);
         mDogbinDomainPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             String newDomain = (String) newValue;
@@ -198,53 +177,5 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     })
                     .show();
         });
-    }
-
-    private void showProxyDialog() {
-        View v = getLayoutInflater().inflate(R.layout.dialog_proxy, null);
-
-        EditText hostText = v.findViewById(R.id.host_text);
-        EditText portText = v.findViewById(R.id.port_text);
-        EditText loginText = v.findViewById(R.id.login_text);
-        EditText passwordText = v.findViewById(R.id.password_text);
-        MaterialCheckBox authBox = v.findViewById(R.id.auth_box);
-
-        hostText.setText(App.getPreferencesUtil().getProxyHost());
-        portText.setText(String.valueOf(App.getPreferencesUtil().getProxyPort()));
-        loginText.setText(App.getPreferencesUtil().getProxyLogin());
-        passwordText.setText(App.getPreferencesUtil().getProxyPassword());
-
-        TextInputLayout loginTextLayout = v.findViewById(R.id.login_text_layout);
-        TextInputLayout passwordTextLayout = v.findViewById(R.id.password_text_layout);
-
-        authBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            loginTextLayout.setEnabled(isChecked);
-            passwordTextLayout.setEnabled(isChecked);
-        });
-
-        if (!loginText.getText().toString().isEmpty() && !passwordText.getText().toString().isEmpty())
-            authBox.setChecked(true);
-
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.socks_proxy)
-                .setView(v)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    int port = 0;
-                    try {
-                        port = Integer.parseInt(portText.getText().toString());
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(requireContext(), R.string.invalid_port, Toast.LENGTH_SHORT).show();
-                    }
-
-                    App.getPreferencesUtil().saveProxy(
-                            hostText.getText().toString(),
-                            port,
-                            loginText.getText().toString(),
-                            passwordText.getText().toString()
-                    );
-
-                    mProxySwitch.setChecked(true);
-                })
-                .show();
     }
 }

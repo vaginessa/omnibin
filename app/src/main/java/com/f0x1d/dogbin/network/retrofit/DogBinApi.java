@@ -1,25 +1,19 @@
 package com.f0x1d.dogbin.network.retrofit;
 
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.okhttp.badmanners.ModifiablePersistentCookieJar;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
-import com.f0x1d.dogbin.utils.Utils;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -65,24 +59,6 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
                 .addNetworkInterceptor(this)
                 .cookieJar(mCookieJar);
 
-        if (App.getPreferencesUtil().isProxyEnabled()) {
-            int port = App.getPreferencesUtil().getProxyPort();
-            if (port > 65535) {
-                Utils.runOnUiThread(() -> Toast.makeText(App.getInstance(), R.string.invalid_port, Toast.LENGTH_SHORT).show());
-            } else {
-                builder.proxy(new Proxy(Proxy.Type.SOCKS, InetSocketAddress.createUnresolved(App.getPreferencesUtil().getProxyHost(), port)));
-
-                if (App.getPreferencesUtil().isAuthForProxyRequired()) {
-                    builder.authenticator((route, response) -> {
-                        String credential = Credentials.basic(App.getPreferencesUtil().getProxyLogin(), App.getPreferencesUtil().getProxyPassword());
-                        return response.request().newBuilder()
-                                .header("Proxy-Authorization", credential)
-                                .build();
-                    });
-                }
-            }
-        }
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(App.getPreferencesUtil().getDogbinDomain())
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -125,7 +101,7 @@ public class DogBinApi implements SharedPreferences.OnSharedPreferenceChangeList
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.contains("proxy") || key.equals(PreferencesUtils.DOGBIN_DOMAIN_NAME)) {
+        if (key.equals(PreferencesUtils.DOGBIN_DOMAIN_NAME)) {
             setupService();
         }
     }

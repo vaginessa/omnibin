@@ -20,10 +20,7 @@ import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
 
@@ -46,8 +43,6 @@ public class MainActivity extends BaseActivity {
 
         setupBottomNavigation(savedInstanceState);
         mPublishButton.setOnClickListener(v -> startActivity(new Intent(this, TextEditActivity.class)));
-
-        checkUserIsFromRussia();
     }
 
     @Override
@@ -113,17 +108,6 @@ public class MainActivity extends BaseActivity {
 
         if (savedInstanceState == null)
             mBottomNavigation.setSelectedItemId(R.id.default_folder_navigation);
-    }
-
-    private void checkUserIsFromRussia() {
-        if (App.getPreferencesUtil().isFirstStart() && Locale.getDefault().getLanguage().startsWith("ru")) {
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.app_name)
-                    .setMessage(R.string.dogbin_block_in_russia)
-                    .setCancelable(false)
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> App.getPreferencesUtil().setFirstStart(false))
-                    .show();
-        }
     }
 
     @Override

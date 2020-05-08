@@ -17,11 +17,6 @@ public class PreferencesUtils {
     public static final String FIRST_START_NAME = "first_start";
 
     public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
-    public static final String PROXY_NAME = "proxy_enable";
-    public static final String PROXY_HOST_NAME = "proxy_host";
-    public static final String PROXY_PORT_NAME = "proxy_port";
-    public static final String PROXY_LOGIN_NAME = "proxy_login";
-    public static final String PROXY_PASSWORD_NAME = "proxy_password";
     public static final String DOGBIN_DOMAIN_NAME = "dogbin_domain";
 
     public static final String CACHE_ONLY_MY_NAME = "cache_my";
@@ -71,41 +66,12 @@ public class PreferencesUtils {
         return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE_NAME, true);
     }
 
-    public String getProxyHost() {
-        return mAppPreferences.getString(PROXY_HOST_NAME, null);
-    }
-
-    public int getProxyPort() {
-        return mAppPreferences.getInt(PROXY_PORT_NAME, 0);
-    }
-
-    public String getProxyLogin() {
-        return mAppPreferences.getString(PROXY_LOGIN_NAME, null);
-    }
-
-    public String getProxyPassword() {
-        return mAppPreferences.getString(PROXY_PASSWORD_NAME, null);
-    }
-
-    public boolean isAuthForProxyRequired() {
-        return getProxyLogin() != null && getProxyPassword() != null;
-    }
-
-    public void saveProxy(String host, int port, String login, String password) {
-        mAppPreferences.edit()
-                .putString(PROXY_HOST_NAME, host)
-                .putInt(PROXY_PORT_NAME, port)
-                .putString(PROXY_LOGIN_NAME, login.isEmpty() ? null : login)
-                .putString(PROXY_PASSWORD_NAME, password.isEmpty() ? null : password)
-                .apply();
-    }
-
-    public boolean isProxyEnabled() {
-        return mDefaultPreferences.getBoolean(PROXY_NAME, false);
-    }
-
     public String getDogbinDomain() {
         return mDefaultPreferences.getString(DOGBIN_DOMAIN_NAME, "https://del.dog/");
+    }
+
+    public void setDogbinDomain(String domain) {
+        mDefaultPreferences.edit().putString(DOGBIN_DOMAIN_NAME, domain).apply();
     }
 
     public boolean cacheOnlyMy() {

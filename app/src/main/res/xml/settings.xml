@@ -94,17 +94,6 @@
             app:defaultValue="true"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
-            android:key="proxy_enable"
-            android:summary="@string/use_proxy_summary"
-            android:title="@string/use_proxy"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="proxy"
-            android:title="@string/socks_proxy"
-            app:iconSpaceReserved="false" />
-
         <EditTextPreference
             android:key="dogbin_domain"
             android:summary="@string/no_touch"
