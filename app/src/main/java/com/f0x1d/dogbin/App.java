@@ -59,8 +59,10 @@ public class App extends Application {
     }
 
     private void checkUserIsFromRussia() {
-        if (getPreferencesUtil().isFirstStart() && Locale.getDefault().getLanguage().startsWith("ru")) {
-            getPreferencesUtil().setDogbinDomain("https://dogbin.f0x1d.com/");
+        if (getPreferencesUtil().isFirstStart()) {
+            if (Locale.getDefault().getLanguage().startsWith("ru"))
+                getPreferencesUtil().setDogbinDomain("https://dogbin.f0x1d.com/");
+
             getPreferencesUtil().setFirstStart(false);
         }
     }
