@@ -3,17 +3,17 @@ package com.f0x1d.dmsdk.model;
 import androidx.annotation.Keep;
 
 @Keep
-public class UserNote {
+public class UserDocument {
 
     private long mId;
     private String mSlug;
     private String mTime;
 
-    public static UserNote createNote(String slug, String time) {
-        UserNote userNote = new UserNote();
-        userNote.setSlug(slug);
-        userNote.setTime(time);
-        return userNote;
+    public static UserDocument createDocument(String slug, String time) {
+        UserDocument userDocument = new UserDocument();
+        userDocument.setSlug(slug);
+        userDocument.setTime(time);
+        return userDocument;
     }
 
     public long getId() {
@@ -42,7 +42,7 @@ public class UserNote {
 
     @Override
     public String toString() {
-        return "SavedNote{" +
+        return "SavedDocument{" +
                 "mId=" + mId +
                 ", mSlug='" + mSlug + '\'' +
                 ", mTime='" + mTime + '\'' +

@@ -60,7 +60,7 @@ public class TextViewModel extends AndroidViewModel implements DogBinApi.Network
 
             mTextResponseData.postValue(body);
 
-            BinServiceUtils.getCurrentActiveService().cacheNote(slug, body, mMyNote);
+            BinServiceUtils.getCurrentActiveService().cacheDocument(slug, body, mMyNote);
         } catch (Exception e) {
             processError(e);
         }
@@ -69,7 +69,7 @@ public class TextViewModel extends AndroidViewModel implements DogBinApi.Network
     public void loadEditable(String slug) {
         Utils.getExecutor().execute(() -> {
             try {
-                mIsEditableData.postValue(BinServiceUtils.getCurrentActiveService().isEditableNote(slug));
+                mIsEditableData.postValue(BinServiceUtils.getCurrentActiveService().isEditableDocument(slug));
             } catch (Exception e) {
                 processError(e);
             }

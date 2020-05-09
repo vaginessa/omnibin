@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.Keep;
 
-import com.f0x1d.dmsdk.model.CachedNote;
+import com.f0x1d.dmsdk.model.CachedDocument;
 import com.f0x1d.dmsdk.model.Folder;
-import com.f0x1d.dmsdk.model.UserNote;
+import com.f0x1d.dmsdk.model.UserDocument;
 
 import java.util.List;
 
@@ -100,29 +100,29 @@ public interface BinService {
 
     /**
      * @param slug
-     * @return true if note can be edited, false if not
+     * @return true if document can be edited, false if not
      * @throws Exception
      */
-    boolean isEditableNote(String slug) throws Exception;
+    boolean isEditableDocument(String slug) throws Exception;
 
     /**
-     * @return list of cached notes, empty list if there are no such
+     * @return list of cached documents, empty list if there are no such
      */
-    List<CachedNote> getNoteListFromCache();
+    List<CachedDocument> getDocumentListFromCache();
 
     /**
      * @param slug
-     * @return note's content from cache, null if there is no such
+     * @return document's content from cache, null if there is no such
      */
     String getContentFromCache(String slug);
 
     /**
-     * Caches a note
+     * Caches a document
      * @param slug
      * @param content
-     * @param myNote
+     * @param myDocument
      */
-    void cacheNote(String slug, String content, boolean myNote);
+    void cacheDocument(String slug, String content, boolean myDocument);
 
     /**
      * @return true if should show item in bottom navigation, false if not
@@ -142,10 +142,10 @@ public interface BinService {
 
     /**
      * @param key
-     * @return list of notes in folder with key
+     * @return list of documents in folder with key
      * @throws Exception
      */
-    List<UserNote> getUserNotesForFolder(String key) throws Exception;
+    List<UserDocument> getUserDocumentsForFolder(String key) throws Exception;
 
     default int getSDKVersion() {
         return Constants.LATEST_VERSION;

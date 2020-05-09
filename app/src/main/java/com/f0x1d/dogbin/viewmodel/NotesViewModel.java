@@ -32,12 +32,12 @@ public class NotesViewModel extends AndroidViewModel {
 
         Utils.getExecutor().execute(() -> {
             try {
-                List<SavedNote> savedNotes = Utils.toSavedNotes(BinServiceUtils.getCurrentActiveService().getUserNotesForFolder(folderKey));
+                List<SavedNote> savedNotes = Utils.toSavedNotes(BinServiceUtils.getCurrentActiveService().getUserDocumentsForFolder(folderKey));
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mNotesListData.postValue(savedNotes);
             } catch (Exception e) {
-                List<SavedNote> savedNotes = Utils.toCachedSavedNotes(BinServiceUtils.getCurrentActiveService().getNoteListFromCache());
+                List<SavedNote> savedNotes = Utils.toCachedSavedNotes(BinServiceUtils.getCurrentActiveService().getDocumentListFromCache());
                 if (savedNotes.isEmpty()) {
                     processError(e);
                     return;

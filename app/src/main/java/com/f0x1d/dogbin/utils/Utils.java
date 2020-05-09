@@ -8,8 +8,8 @@ import android.util.TypedValue;
 
 import androidx.annotation.AttrRes;
 
-import com.f0x1d.dmsdk.model.CachedNote;
-import com.f0x1d.dmsdk.model.UserNote;
+import com.f0x1d.dmsdk.model.CachedDocument;
+import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.db.entity.SavedNote;
 
@@ -61,41 +61,41 @@ public class Utils {
         return formatter.format(date);
     }
 
-    public static List<SavedNote> toSavedNotes(List<UserNote> userNotes) {
+    public static List<SavedNote> toSavedNotes(List<UserDocument> userDocuments) {
         List<SavedNote> savedNotes = new ArrayList<>();
 
-        for (UserNote userNote : userNotes) {
-            savedNotes.add(SavedNote.createNote("", userNote.getSlug(), userNote.getTime()));
+        for (UserDocument userDocument : userDocuments) {
+            savedNotes.add(SavedNote.createNote("", userDocument.getSlug(), userDocument.getTime()));
         }
 
         return savedNotes;
     }
 
-    public static List<UserNote> toUserNotes(List<SavedNote> savedNotes) {
-        List<UserNote> userNotes = new ArrayList<>();
+    public static List<UserDocument> toUserNotes(List<SavedNote> savedNotes) {
+        List<UserDocument> userDocuments = new ArrayList<>();
 
         for (SavedNote savedNote : savedNotes) {
-            userNotes.add(UserNote.createNote(savedNote.getSlug(), savedNote.getTime()));
+            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
         }
 
-        return userNotes;
+        return userDocuments;
     }
 
-    public static List<CachedNote> toCachedNotes(List<SavedNote> savedNotes) {
-        List<CachedNote> cachedNotes = new ArrayList<>();
+    public static List<CachedDocument> toCachedNotes(List<SavedNote> savedNotes) {
+        List<CachedDocument> cachedDocuments = new ArrayList<>();
 
         for (SavedNote savedNote : savedNotes) {
-            cachedNotes.add(CachedNote.createNote(savedNote.getContent(), savedNote.getSlug(), savedNote.getTime()));
+            cachedDocuments.add(CachedDocument.createDocument(savedNote.getContent(), savedNote.getSlug(), savedNote.getTime()));
         }
 
-        return cachedNotes;
+        return cachedDocuments;
     }
 
-    public static List<SavedNote> toCachedSavedNotes(List<CachedNote> cachedNotes) {
+    public static List<SavedNote> toCachedSavedNotes(List<CachedDocument> cachedDocuments) {
         List<SavedNote> savedNotes = new ArrayList<>();
 
-        for (CachedNote cachedNote : cachedNotes) {
-            savedNotes.add(SavedNote.createNote(cachedNote.getContent(), cachedNote.getSlug(), cachedNote.getTime()));
+        for (CachedDocument cachedDocument : cachedDocuments) {
+            savedNotes.add(SavedNote.createNote(cachedDocument.getContent(), cachedDocument.getSlug(), cachedDocument.getTime()));
         }
 
         return savedNotes;

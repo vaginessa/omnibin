@@ -3,19 +3,19 @@ package com.f0x1d.dmsdk.model;
 import androidx.annotation.Keep;
 
 @Keep
-public class CachedNote {
+public class CachedDocument {
 
     private long mId;
     private String mContent;
     private String mSlug;
     private String mTime;
 
-    public static CachedNote createNote(String content, String slug, String time) {
-        CachedNote cachedNote = new CachedNote();
-        cachedNote.setContent(content);
-        cachedNote.setSlug(slug);
-        cachedNote.setTime(time);
-        return cachedNote;
+    public static CachedDocument createDocument(String content, String slug, String time) {
+        CachedDocument cachedDocument = new CachedDocument();
+        cachedDocument.setContent(content);
+        cachedDocument.setSlug(slug);
+        cachedDocument.setTime(time);
+        return cachedDocument;
     }
 
     public long getId() {
@@ -52,7 +52,7 @@ public class CachedNote {
 
     @Override
     public String toString() {
-        return "SavedNote{" +
+        return "SavedDocument{" +
                 "mId=" + mId +
                 ", mContent='" + mContent + '\'' +
                 ", mSlug='" + mSlug + '\'' +

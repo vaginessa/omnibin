@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.f0x1d.dmsdk.BinService;
-import com.f0x1d.dmsdk.model.CachedNote;
+import com.f0x1d.dmsdk.model.CachedDocument;
 import com.f0x1d.dmsdk.model.Folder;
-import com.f0x1d.dmsdk.model.UserNote;
+import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.SavedNote;
@@ -89,13 +89,13 @@ public class DogBinService implements BinService {
     }
 
     @Override
-    public boolean isEditableNote(String slug) throws Exception {
+    public boolean isEditableDocument(String slug) throws Exception {
         String responsePage = DogBinApi.getInstance().getService().getDocumentTextHTML(slug).execute().body();
         return responsePage != null && responsePage.contains("edit action  enabled");
     }
 
     @Override
-    public List<CachedNote> getNoteListFromCache() {
+    public List<CachedDocument> getDocumentListFromCache() {
         return Utils.toCachedNotes(App.getMyDatabase().getSavedNoteDao().getAllSync());
     }
 
@@ -109,8 +109,8 @@ public class DogBinService implements BinService {
     }
 
     @Override
-    public void cacheNote(String slug, String content, boolean myNote) {
-        if (!myNote && App.getPreferencesUtil().cacheOnlyMy())
+    public void cacheDocument(String slug, String content, boolean myDocument) {
+        if (!myDocument && App.getPreferencesUtil().cacheOnlyMy())
             return;
 
         App.getMyDatabase().getSavedNoteDao().addToCache(SavedNote.createNote(content, slug, Utils.currentTimeToString()));
@@ -138,7 +138,7 @@ public class DogBinService implements BinService {
     }
 
     @Override
-    public List<UserNote> getUserNotesForFolder(String key) throws Exception {
+    public List<UserDocument> getUserDocumentsForFolder(String key) throws Exception {
         switch (key) {
             case "my_notes":
                 return Utils.toUserNotes(MyNotesParser.parse(DogBinApi.getInstance().getService().me().execute().body()));

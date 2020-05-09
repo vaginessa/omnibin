@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 import androidx.annotation.Keep;
 
 import com.f0x1d.dmsdk.BinService;
-import com.f0x1d.dmsdk.model.CachedNote;
+import com.f0x1d.dmsdk.model.CachedDocument;
 import com.f0x1d.dmsdk.model.Folder;
-import com.f0x1d.dmsdk.model.UserNote;
+import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.testservice.R;
 import com.f0x1d.testservice.network.parser.DarkNetParser;
 import com.f0x1d.testservice.network.retrofit.PasteBinApi;
@@ -135,12 +135,12 @@ public class MyBinService implements BinService {
     }
 
     @Override
-    public boolean isEditableNote(String slug) throws Exception {
+    public boolean isEditableDocument(String slug) throws Exception {
         return false;
     }
 
     @Override
-    public List<CachedNote> getNoteListFromCache() {
+    public List<CachedDocument> getDocumentListFromCache() {
         return Collections.emptyList();
     }
 
@@ -150,7 +150,7 @@ public class MyBinService implements BinService {
     }
 
     @Override
-    public void cacheNote(String slug, String content, boolean myNote) {
+    public void cacheDocument(String slug, String content, boolean myDocument) {
 
     }
 
@@ -177,7 +177,7 @@ public class MyBinService implements BinService {
     }
 
     @Override
-    public List<UserNote> getUserNotesForFolder(String key) throws Exception {
+    public List<UserDocument> getUserDocumentsForFolder(String key) throws Exception {
         switch (key) {
             case "darknet":
                 String html = PasteBinApi.getInstance().getRawService().getArchive().execute().body();
@@ -199,7 +199,7 @@ public class MyBinService implements BinService {
 
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
 
-                    List<UserNote> userNotes = new ArrayList<>();
+                    List<UserDocument> userDocuments = new ArrayList<>();
 
                     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(pastesXml.getBytes()));
                     document.normalizeDocument();
@@ -209,24 +209,24 @@ public class MyBinService implements BinService {
                         Node paste = pastes.item(i);
 
                         if (paste.hasChildNodes()) {
-                            UserNote userNote = new UserNote();
+                            UserDocument userDocument = new UserDocument();
 
                             NodeList pasteChildren = paste.getChildNodes();
                             for (int j = 0; j < pasteChildren.getLength(); j++) {
                                 Node pasteChild = pasteChildren.item(j);
 
                                 if (pasteChild.getNodeName().equals("paste_key"))
-                                    userNote.setSlug(pasteChild.getTextContent());
+                                    userDocument.setSlug(pasteChild.getTextContent());
 
                                 if (pasteChild.getNodeName().equals("paste_date"))
-                                    userNote.setTime(simpleDateFormat.format(new Date(Long.parseLong(pasteChild.getTextContent()) * 1000)));
+                                    userDocument.setTime(simpleDateFormat.format(new Date(Long.parseLong(pasteChild.getTextContent()) * 1000)));
                             }
 
-                            userNotes.add(userNote);
+                            userDocuments.add(userDocument);
                         }
                     }
 
-                    return userNotes;
+                    return userDocuments;
                 } catch (Exception e) {
                     return Collections.emptyList();
                 }
