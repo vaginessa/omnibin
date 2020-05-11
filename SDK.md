@@ -23,7 +23,7 @@ Methods, which dont't ```throw Exception``` are run on the UI thread (except cac
 
 ```void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences);``` is called when module is loaded, here you can use module application context, dogbin application context and SharedPreferences where you can store something.
 
-```String getDomain();``` must return service domain. Example: https://f0x1d.com
+```String getDomain();``` must return service domain. Example: https://f0x1d.com/
 
 ```String getSlugFromLink(String link);``` must parse link in order to get slug. Example: https://del.dog/test -> test
 
@@ -47,7 +47,7 @@ Methods, which dont't ```throw Exception``` are run on the UI thread (except cac
 
 ```String editDocument(String slug, String content) throws Exception;``` must edit a user's document with content on slug (may be empty) and return its slug, **not link, just slug**.
 
-```boolean isEditableNote(String slug) throws Exception;``` must return true if user can edit note, false if not.
+```boolean isEditableDocument(String slug) throws Exception;``` must return true if user can edit document, false if not.
 
 ### Cache
 
@@ -55,11 +55,11 @@ You don't need to implement caching if you don't want to do it.
 
 These methods are also called **not** on the UI thread.
 
-```List<CachedNote> getNoteListFromCache();``` must return list of cached notes, when user doesn't have internet connection for example. Please return empty list if there are no notes or you don't want to implement cache.
+```List<CachedDocument> getDocumentListFromCache();``` must return list of cached documents, when user doesn't have internet connection for example. Please return empty list if there are no documents or you don't want to implement cache.
 
-```String getContentFromCache(String slug);``` must return note's content from cache. Please return null if such note is not cached or you don't want to implement cache.
+```String getContentFromCache(String slug);``` must return document's content from cache. Please return null if such document is not cached or you don't want to implement cache.
 
-```void cacheNote(String slug, String content, boolean myNote);``` must cache a note with content.
+```void cacheDocument(String slug, String content, boolean myDocument);``` must cache a document with content.
 
 ### Folders
 
@@ -69,7 +69,7 @@ These methods are also called **not** on the UI thread.
 
 ```List<Folder> getAvailableFolders() throws Exception;``` must return list of available folders. Please return empty list if there are no such folders.
 
-```List<UserNote> getUserNotesForFolder(String key) throws Exception;``` must return a list of notes for folder as each folder has a key.
+```List<UserDocument> getUserDocumentsForFolder(String key) throws Exception;``` must return a list of documents for folder as each folder has a key.
 
 ### Errors
 
