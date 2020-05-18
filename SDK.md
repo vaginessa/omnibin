@@ -7,7 +7,7 @@ Modules in dogbin mobile are a very interesting idea. Module is an android appli
 ## Quick start
 
 1. Create android application project in Android Studio, application's name must start with ```dogbin.```.
-2. Add [DM-SDK](https://f0x1d.com/files/dm-sdk.aar) as dependency to the project.
+2. Add [DM-SDK](https://files.f0x1d.com/files/dm-sdk.aar) as dependency to the project.
 3. Create class and implement ```BinService``` class from SDK.
 4. In manifest add ```<meta-data android:name="service" android:value="com.your.package.to.your.BinService" />``` in ```<application``` tag.
 
