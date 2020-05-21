@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="accents">
+        <item>За замовчуванням</item>
+        <item>Рожевий (AMOLED)</item>
+        <item>Лайм (AMOLED)</item>
+        <item>Синій (AMOLED)</item>
+        <item>Золотий</item>
+    </string-array>
+</resources>
