@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.billing.BillingManager;
+import com.f0x1d.dogbin.billing.DonationStatus;
 import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
@@ -134,7 +136,7 @@ public class TextViewerActivity extends BaseActivity {
     }
 
     private void supportApp() {
-        if (!App.getPreferencesUtil().supportAppShowed()) {
+        if (!App.getPreferencesUtil().supportAppShowed() && BillingManager.getInstance(this).getDonatedData().getValue() != DonationStatus.DONATED) {
             new MaterialAlertDialogBuilder(this)
                     .setCancelable(false)
                     .setTitle(R.string.hey)

@@ -19,7 +19,7 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.f0x1d.dogbin.App;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +42,7 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
     private BillingManager(Context c) {
         mContext = c.getApplicationContext();
 
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(mContext) != ConnectionResult.SUCCESS) {
+        if (GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(mContext) != ConnectionResult.SUCCESS) {
             mDonatedData.setValue(DonationStatus.NOT_CONNECTED_BILLING);
             return;
         }

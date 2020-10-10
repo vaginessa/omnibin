@@ -1,34 +1,38 @@
 package com.f0x1d.dogbin.network.retrofit;
 
+import com.f0x1d.dogbin.network.model.ApiKeyResponse;
+import com.f0x1d.dogbin.network.model.DocumentInfoResponse;
 import com.f0x1d.dogbin.network.model.DocumentLinkResponse;
+import com.f0x1d.dogbin.network.model.DocumentResponse;
+
+import java.util.List;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface DogBinApiService {
 
-    // Somehow vzlom login
-    @POST("login")
-    Call<String> login(@Body RequestBody body);
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    @POST("api/v1/auth/login")
+    Call<ApiKeyResponse> login(@Body RequestBody body);
 
-    @GET("me")
-    Call<String> me();
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    @POST("api/v1/auth/register")
+    Call<ApiKeyResponse> register(@Body RequestBody body);
 
-    @POST("register")
-    Call<String> register(@Body RequestBody body);
+    @GET("api/v1/docs")
+    Call<List<DocumentResponse>> getMyNotes(@Header("X-Api-Key") String apiKey);
 
-
-    // Creating and reading docs
     @POST("documents")
-    Call<DocumentLinkResponse> createDocument(@Body RequestBody body);
+    Call<DocumentLinkResponse> createDocument(@Header("X-Api-Key") String apiKey, @Body RequestBody body);
 
-    @GET("raw/{slug}")
-    Call<String> getDocumentText(@Path("slug") String slug);
-
-    @GET("{slug}")
-    Call<String> getDocumentTextHTML(@Path("slug") String slug);
+    // TODO: wait for fix
+    @GET("documents/{slug}")
+    Call<DocumentInfoResponse> getDocument(@Header("XX-Api-Key") String apiKey, @Path("slug") String slug);
 }

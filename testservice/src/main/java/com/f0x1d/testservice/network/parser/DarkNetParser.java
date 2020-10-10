@@ -12,7 +12,7 @@ public class DarkNetParser {
     public static List<UserDocument> parse(String html) throws Exception {
         List<UserDocument> userDocuments = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile(".+?<tr>.+?<td><img.+? \\/><a href=\"\\/(.+?)\">(.+?)<\\/a>", Pattern.DOTALL);
+        Pattern pattern = Pattern.compile(".+?<tr>.+?<td><span.+?</span><a href=\"/(.+?)\">(.+?)</a>", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(html);
 
         while (matcher.find())

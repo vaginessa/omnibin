@@ -8,7 +8,6 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="password">Password</string>
-    <string name="invalid_login_or_password">Incorrect login or password</string>
     <string name="my_notes">My notes</string>
     <string name="update">Update</string>
     <string name="edit">Edit</string>
@@ -28,7 +27,6 @@
     <string name="dark_theme_q">System depending theme</string>
     <string name="invalid_link">Link is already in use or invalid</string>
     <string name="error">Error: %s</string>
-    <string name="error_during_register">Error during registration! Maybe user with the same login exists or password is weak</string>
     <string name="cache">Cache</string>
     <string name="clear_cache">Clear cache</string>
     <string name="cache_my">Cache only my notes</string>
@@ -59,9 +57,10 @@
     <string name="no_touch">Change it only if you know what it is</string>
     <string name="domain_name_require1">Domain name must start with \"http\"</string>
     <string name="domain_name_require2">Domain name must end with \"/\"</string>
-    <string name="cookies_cleared">Cookies were cleared</string>
     <string name="select_service">Select service</string>
     <string name="folders">Folders</string>
     <string name="module_v_old">Module SDK version is old, update it</string>
     <string name="hey">Hey!</string>
+    <string name="open">Open</string>
+    <string name="copy_link">Copy link</string>
 </resources>

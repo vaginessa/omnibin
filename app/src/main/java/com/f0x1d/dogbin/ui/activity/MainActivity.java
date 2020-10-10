@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
         mPublishButton = findViewById(R.id.publish_button);
         mBottomNavigation = findViewById(R.id.bottom_navigation);
 
-        processIntent(getIntent(), false);
+        if (savedInstanceState == null) processIntent(getIntent(), false);
 
         setupBottomNavigation(savedInstanceState);
         mPublishButton.setOnClickListener(v -> startActivity(new Intent(this, TextEditActivity.class)));

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.Keep;
 
 import com.f0x1d.dmsdk.BinService;
-import com.f0x1d.dmsdk.model.CachedDocument;
+import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.testservice.R;
@@ -56,7 +56,7 @@ public class MyBinService implements BinService {
     }
 
     @Override
-    public boolean login(String username, String password) throws Exception {
+    public void login(String username, String password) throws Exception {
         String token = PasteBinApi.getInstance().getService().login(new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("api_dev_key", "0ae8754d0ef14a23233caec62cd3055a")
@@ -68,11 +68,10 @@ public class MyBinService implements BinService {
             throw new Exception(token);
 
         setToken(token);
-        return true;
     }
 
     @Override
-    public boolean register(String username, String password) throws Exception {
+    public void register(String username, String password) throws Exception {
         throw new Exception("Registration is not supported");
     }
 
@@ -87,7 +86,7 @@ public class MyBinService implements BinService {
     }
 
     @Override
-    public String getDocumentText(String slug) throws Exception {
+    public DocumentContent getDocumentContent(String slug) throws Exception {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         builder.addFormDataPart("api_dev_key", "0ae8754d0ef14a23233caec62cd3055a");
@@ -105,7 +104,7 @@ public class MyBinService implements BinService {
                 throw new Exception(text);
         }
 
-        return text;
+        return DocumentContent.create(text, slug, false, false);
     }
 
     @Override
@@ -135,17 +134,17 @@ public class MyBinService implements BinService {
     }
 
     @Override
-    public boolean isEditableDocument(String slug) throws Exception {
-        return false;
+    public Boolean isEditableDocument(String slug) throws Exception {
+        return null;
     }
 
     @Override
-    public List<CachedDocument> getDocumentListFromCache() {
+    public List<UserDocument> getDocumentListFromCache() {
         return Collections.emptyList();
     }
 
     @Override
-    public String getContentFromCache(String slug) {
+    public DocumentContent getContentFromCache(String slug) {
         return null;
     }
 

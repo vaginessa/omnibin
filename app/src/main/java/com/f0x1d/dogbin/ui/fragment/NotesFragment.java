@@ -15,7 +15,6 @@ import com.f0x1d.dogbin.adapter.NotesAdapter;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
 import com.f0x1d.dogbin.utils.Utils;
-import com.f0x1d.dogbin.viewmodel.DefaultNotesViewModel;
 import com.f0x1d.dogbin.viewmodel.NotesViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -49,10 +48,7 @@ public class NotesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments().getBoolean("folder_default"))
-            mNotesViewModel = new ViewModelProvider(requireActivity()).get(DefaultNotesViewModel.class);
-        else
-            mNotesViewModel = new ViewModelProvider(requireActivity()).get(NotesViewModel.class);
+        mNotesViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
         if (savedInstanceState == null)
             mNotesViewModel.load(getArguments().getString("folder_key"));
 

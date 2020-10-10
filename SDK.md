@@ -8,7 +8,7 @@ Modules in dogbin mobile are a very interesting idea. Module is an android appli
 
 1. Create android application project in Android Studio, application's name must start with ```dogbin.```.
 2. Add [DM-SDK](https://files.f0x1d.com/files/dm-sdk.aar) as dependency to the project.
-3. Create class and implement ```BinService``` class from SDK.
+3. Create class and implement ```BinService``` from SDK.
 4. In manifest add ```<meta-data android:name="service" android:value="com.your.package.to.your.BinService" />``` in ```<application``` tag.
 
 ## Methods
@@ -17,7 +17,7 @@ BinService must implement list of methods, these methods are called by dogbin mo
 
 Methods, which ```throw Exception``` are run **not** on the UI thread.
 
-Methods, which dont't ```throw Exception``` are run on the UI thread (except caching methods).
+Methods, which don't ```throw Exception``` are run on the UI thread (except caching methods).
 
 ### Main
 
@@ -31,9 +31,9 @@ Methods, which dont't ```throw Exception``` are run on the UI thread (except cac
 
 ```String getUsername() throws Exception;``` must return user's username, called only when user is logged in.
 
-```boolean login(String username, String password) throws Exception;``` must return true if login is successful, false if not. Later i will implement object with error, etc.
+```void login(String username, String password) throws Exception;``` is called when user clicked log in button.
 
-```boolean register(String username, String password) throws Exception;``` same as login, but registration.
+```void register(String username, String password) throws Exception;``` same as login, but registration.
 
 ```boolean loggedIn();``` must return true if user is logged in, false if not.
 
@@ -41,13 +41,13 @@ Methods, which dont't ```throw Exception``` are run on the UI thread (except cac
 
 ### Documents
 
-```String getDocumentText(String slug) throws Exception;``` must return content for slug.
+```DocumentContent getDocumentContent(String slug) throws Exception;``` must return content for slug. Set editable as null if you return it later.
 
 ```String createDocument(String slug, String content) throws Exception;``` must create a document with content on slug (may be empty) and return its slug, **not link, just slug**.
 
 ```String editDocument(String slug, String content) throws Exception;``` must edit a user's document with content on slug (may be empty) and return its slug, **not link, just slug**.
 
-```boolean isEditableDocument(String slug) throws Exception;``` must return true if user can edit document, false if not.
+```Boolean isEditableDocument(String slug) throws Exception;``` must return true if user can edit document, false if not, null if set in DocumentContent object.
 
 ### Cache
 
@@ -55,9 +55,9 @@ You don't need to implement caching if you don't want to do it.
 
 These methods are also called **not** on the UI thread.
 
-```List<CachedDocument> getDocumentListFromCache();``` must return list of cached documents, when user doesn't have internet connection for example. Please return empty list if there are no documents or you don't want to implement cache.
+```List<UserDocument> getDocumentListFromCache();``` must return list of cached documents, when user doesn't have internet connection for example. Please return empty list if there are no documents or you don't want to implement cache.
 
-```String getContentFromCache(String slug);``` must return document's content from cache. Please return null if such document is not cached or you don't want to implement cache.
+```DocumentContent getContentFromCache(String slug);``` must return document's content from cache. Please return null if such document is not cached or you don't want to implement cache.
 
 ```void cacheDocument(String slug, String content, boolean myDocument);``` must cache a document with content.
 

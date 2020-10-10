@@ -9,14 +9,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.network.retrofit.DogBinApi;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.pddstudio.highlightjs.HighlightJsView;
 
-public class TextViewModel extends AndroidViewModel implements DogBinApi.NetworkEventsListener, HighlightJsView.OnContentHighlightedListener {
+public class TextViewModel extends AndroidViewModel implements HighlightJsView.OnContentHighlightedListener {
 
     private MutableLiveData<String> mTextResponseData = new MutableLiveData<>();
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
@@ -28,8 +28,6 @@ public class TextViewModel extends AndroidViewModel implements DogBinApi.Network
 
     public TextViewModel(@NonNull Application application) {
         super(application);
-
-        DogBinApi.getInstance().registerListener(this);
     }
 
     public void checkMyNote(Intent intent) {
@@ -38,29 +36,40 @@ public class TextViewModel extends AndroidViewModel implements DogBinApi.Network
 
     public void load(String slug) {
         this.mSlug = slug;
+
         mLoadingStateData.setValue(LoadingState.LOADING);
 
         Utils.getExecutor().execute(() -> {
-            String content = BinServiceUtils.getCurrentActiveService().getContentFromCache(mSlug);
+            DocumentContent content = BinServiceUtils.getCurrentActiveService().getContentFromCache(mSlug);
             if (content == null) {
                 updateText(slug);
                 return;
             }
 
-            mTextResponseData.postValue(content);
+            mTextResponseData.postValue(content.getContent());
+            if (content.getEditable() != null) {
+                mIsEditableData.postValue(content.getEditable());
+            }
             updateText(slug);
         });
     }
 
     private void updateText(String slug) {
         try {
-            String body = BinServiceUtils.getCurrentActiveService().getDocumentText(slug);
-            if (mTextResponseData.getValue() != null && mTextResponseData.getValue().equals(body))
+            DocumentContent body = BinServiceUtils.getCurrentActiveService().getDocumentContent(slug);
+            if (App.getPreferencesUtil().isRedirectFromNoteEnabled() && mRedirectURLData.getValue() == null && body.isUrl())
+                mRedirectURLData.postValue(body.getContent());
+
+            if (mTextResponseData.getValue() != null && mTextResponseData.getValue().equals(body.getContent()) &&
+                    mIsEditableData.getValue() != null && mIsEditableData.getValue().equals(body.getEditable()))
                 return;
 
-            mTextResponseData.postValue(body);
+            mTextResponseData.postValue(body.getContent());
+            if (body.getEditable() != null) {
+                mIsEditableData.postValue(body.getEditable());
+            }
 
-            BinServiceUtils.getCurrentActiveService().cacheDocument(slug, body, mMyNote);
+            BinServiceUtils.getCurrentActiveService().cacheDocument(slug, body.getContent(), mMyNote);
         } catch (Exception e) {
             processError(e);
         }
@@ -69,7 +78,10 @@ public class TextViewModel extends AndroidViewModel implements DogBinApi.Network
     public void loadEditable(String slug) {
         Utils.getExecutor().execute(() -> {
             try {
-                mIsEditableData.postValue(BinServiceUtils.getCurrentActiveService().isEditableDocument(slug));
+                Boolean editable = BinServiceUtils.getCurrentActiveService().isEditableDocument(slug);
+                if (editable != null) {
+                    mIsEditableData.postValue(BinServiceUtils.getCurrentActiveService().isEditableDocument(slug));
+                }
             } catch (Exception e) {
                 processError(e);
             }
@@ -108,20 +120,8 @@ public class TextViewModel extends AndroidViewModel implements DogBinApi.Network
     }
 
     @Override
-    public void onRedirect(String url) {
-        if (App.getPreferencesUtil().isRedirectFromNoteEnabled() && mRedirectURLData.getValue() == null)
-            mRedirectURLData.postValue(url);
-    }
-
-    @Override
     public void onHighlighted() {
         mLoadingStateData.postValue(LoadingState.LOADED);
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        DogBinApi.getInstance().unregisterListener(this);
     }
 
     public enum LoadingState {

@@ -16,6 +16,9 @@ public class PreferencesUtils {
     public static final String SUPPORT_APP_SHOWED_NAME = "support_app_dialog";
     public static final String FIRST_START_NAME = "first_start";
 
+    public static final String API_KEY_NAME = "api_key";
+    public static final String USERNAME_NAME = "username";
+
     public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
     public static final String DOGBIN_DOMAIN_NAME = "dogbin_domain";
 
@@ -60,6 +63,22 @@ public class PreferencesUtils {
 
     public void setFirstStart(boolean firstStart) {
         mAppPreferences.edit().putBoolean(FIRST_START_NAME, firstStart).apply();
+    }
+
+    public String getApiKey() {
+        return mAppPreferences.getString(API_KEY_NAME, null);
+    }
+
+    public void setApiKey(String apiKey) {
+        mAppPreferences.edit().putString(API_KEY_NAME, apiKey).apply();
+    }
+
+    public String getUsername() {
+        return mAppPreferences.getString(USERNAME_NAME, "");
+    }
+
+    public void setUsername(String username) {
+        mAppPreferences.edit().putString(USERNAME_NAME, username).apply();
     }
 
     public boolean isRedirectFromNoteEnabled() {

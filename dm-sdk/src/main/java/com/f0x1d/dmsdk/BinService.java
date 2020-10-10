@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.Keep;
 
-import com.f0x1d.dmsdk.model.CachedDocument;
+import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserDocument;
 
@@ -48,19 +48,17 @@ public interface BinService {
      * Login button clicked
      * @param username
      * @param password
-     * @return true if all is successful, false if not
      * @throws Exception
      */
-    boolean login(String username, String password) throws Exception;
+    void login(String username, String password) throws Exception;
 
     /**
      * Register button clicked
      * @param username
      * @param password
-     * @return true if all is successful, false if not
      * @throws Exception
      */
-    boolean register(String username, String password) throws Exception;
+    void register(String username, String password) throws Exception;
 
     /**
      * @return true if user is logged in, false if not
@@ -73,12 +71,12 @@ public interface BinService {
     void logout();
 
     /**
-     * Get document text on slug
+     * Get document content on slug
      * @param slug
-     * @return document's text
+     * @return document's content
      * @throws Exception
      */
-    String getDocumentText(String slug) throws Exception;
+    DocumentContent getDocumentContent(String slug) throws Exception;
 
     /**
      * Create document on slug (can be empty)
@@ -100,21 +98,21 @@ public interface BinService {
 
     /**
      * @param slug
-     * @return true if document can be edited, false if not
+     * @return true if document can be edited, false if not, null if you set it in DocumentContent
      * @throws Exception
      */
-    boolean isEditableDocument(String slug) throws Exception;
+    Boolean isEditableDocument(String slug) throws Exception;
 
     /**
      * @return list of cached documents, empty list if there are no such
      */
-    List<CachedDocument> getDocumentListFromCache();
+    List<UserDocument> getDocumentListFromCache();
 
     /**
      * @param slug
      * @return document's content from cache, null if there is no such
      */
-    String getContentFromCache(String slug);
+    DocumentContent getContentFromCache(String slug);
 
     /**
      * Caches a document

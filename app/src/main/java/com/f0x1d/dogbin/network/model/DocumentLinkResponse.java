@@ -1,14 +1,14 @@
 package com.f0x1d.dogbin.network.model;
 
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
 public class DocumentLinkResponse {
 
-    @Json(name = "isUrl")
+    @SerializedName("isUrl")
     private boolean mIsUrl;
 
     // Slug is a note's url
-    @Json(name = "key")
+    @SerializedName("key")
     private String mSlug;
 
 

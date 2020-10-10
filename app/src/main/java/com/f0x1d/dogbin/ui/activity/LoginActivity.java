@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -58,8 +57,6 @@ public class LoginActivity extends BaseActivity {
             if (loggedIn) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
-            } else {
-                Toast.makeText(LoginActivity.this, R.string.invalid_login_or_password, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -67,8 +64,6 @@ public class LoginActivity extends BaseActivity {
             if (isRegistered) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
-            } else {
-                Toast.makeText(LoginActivity.this, R.string.error_during_register, Toast.LENGTH_LONG).show();
             }
         });
 

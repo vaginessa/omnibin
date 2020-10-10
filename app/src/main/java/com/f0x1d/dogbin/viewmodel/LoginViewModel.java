@@ -35,10 +35,10 @@ public class LoginViewModel extends AndroidViewModel {
 
         Utils.getExecutor().execute(() -> {
             try {
-                boolean logged = BinServiceUtils.getCurrentActiveService().login(login, password);
+                BinServiceUtils.getCurrentActiveService().login(login, password);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
-                mLoggedInData.postValue(logged);
+                mLoggedInData.postValue(true);
             } catch (Exception e) {
                 processError(e);
             }
@@ -50,10 +50,10 @@ public class LoginViewModel extends AndroidViewModel {
 
         Utils.getExecutor().execute(() -> {
             try {
-                boolean registered = BinServiceUtils.getCurrentActiveService().register(login, password);
+                BinServiceUtils.getCurrentActiveService().register(login, password);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
-                mRegisteredData.postValue(registered);
+                mRegisteredData.postValue(true);
             } catch (Exception e) {
                 processError(e);
             }

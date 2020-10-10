@@ -12,10 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.google.android.material.card.MaterialCardView;
@@ -25,7 +28,7 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
-    private List<SavedNote> mSavedNotes = new ArrayList<>();
+    private List<UserDocument> mUserDocuments = new ArrayList<>();
 
     private Context mContext;
 
@@ -41,22 +44,22 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        holder.bindTo(mSavedNotes.get(position));
+        holder.bindTo(mUserDocuments.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mSavedNotes.size();
+        return mUserDocuments.size();
     }
 
-    public void setNotes(List<SavedNote> savedNotes, boolean toStart) {
-        mSavedNotes.clear();
+    public void setNotes(List<UserDocument> userDocuments, boolean toStart) {
+        mUserDocuments.clear();
         if (toStart) {
-            for (SavedNote savedNote : savedNotes) {
-                mSavedNotes.add(0, savedNote);
+            for (UserDocument userDocument : userDocuments) {
+                mUserDocuments.add(0, userDocument);
             }
         } else
-            mSavedNotes.addAll(savedNotes);
+            mUserDocuments.addAll(userDocuments);
     }
 
     class NoteViewHolder extends RecyclerView.ViewHolder {
@@ -72,28 +75,49 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             this.mURLText = itemView.findViewById(R.id.url_text);
             this.mTimeText = itemView.findViewById(R.id.time_text);
 
-            mContentCard.setOnClickListener(v -> {
-                Intent intent = new Intent(mContext, TextViewerActivity.class);
-                intent.setData(Uri.parse(BinServiceUtils.getCurrentActiveService().getDomain() + mSavedNotes.get(getAdapterPosition()).getSlug()));
-                intent.putExtra("my_note", true);
+            PopupMenu popupMenu = new PopupMenu(mContext, itemView);
+            popupMenu.inflate(R.menu.item_long_click_menu);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.open_item:
+                        openDocument();
+                        return true;
 
-                mContext.startActivity(intent);
+                    case R.id.copy_link_item:
+                        String delDogUrl = BinServiceUtils.getCurrentActiveService().getDomain() + mUserDocuments.get(getAdapterPosition()).getSlug();
+
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText(mContext.getString(R.string.app_name), delDogUrl);
+                        clipboard.setPrimaryClip(clip);
+
+                        Toast.makeText(mContext, mContext.getString(R.string.copied_to_clipboard, delDogUrl), Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    default:
+                        return false;
+                }
             });
+            MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, (MenuBuilder) popupMenu.getMenu(), itemView);
+            menuPopupHelper.setForceShowIcon(true);
+
+            mContentCard.setOnClickListener(v -> openDocument());
             mContentCard.setOnLongClickListener(v -> {
-                String delDogUrl = BinServiceUtils.getCurrentActiveService().getDomain() + mSavedNotes.get(getAdapterPosition()).getSlug();
-
-                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(mContext.getString(R.string.app_name), delDogUrl);
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(mContext, mContext.getString(R.string.copied_to_clipboard, delDogUrl), Toast.LENGTH_SHORT).show();
+                menuPopupHelper.show();
                 return true;
             });
         }
 
-        public void bindTo(SavedNote savedNote) {
-            mURLText.setText(savedNote.getSlug());
-            mTimeText.setText(savedNote.getTime());
+        public void bindTo(UserDocument userDocument) {
+            mURLText.setText(userDocument.getSlug());
+            mTimeText.setText(userDocument.getTime());
+        }
+
+        private void openDocument() {
+            Intent intent = new Intent(mContext, TextViewerActivity.class);
+            intent.setData(Uri.parse(BinServiceUtils.getCurrentActiveService().getDomain() + mUserDocuments.get(getAdapterPosition()).getSlug()));
+            intent.putExtra("my_note", true);
+
+            mContext.startActivity(intent);
         }
     }
 }

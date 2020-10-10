@@ -8,8 +8,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class NotesViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
-    private MutableLiveData<List<SavedNote>> mNotesListData = new MutableLiveData<>();
+    private MutableLiveData<List<UserDocument>> mNotesListData = new MutableLiveData<>();
     private MutableLiveData<String> mFolderKeyData = new MutableLiveData<>("");
 
     public NotesViewModel(@NonNull Application application) {
@@ -32,19 +32,20 @@ public class NotesViewModel extends AndroidViewModel {
 
         Utils.getExecutor().execute(() -> {
             try {
-                List<SavedNote> savedNotes = Utils.toSavedNotes(BinServiceUtils.getCurrentActiveService().getUserDocumentsForFolder(folderKey));
+                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().getUserDocumentsForFolder(folderKey);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
-                mNotesListData.postValue(savedNotes);
+                mNotesListData.postValue(userDocuments);
             } catch (Exception e) {
-                List<SavedNote> savedNotes = Utils.toCachedSavedNotes(BinServiceUtils.getCurrentActiveService().getDocumentListFromCache());
-                if (savedNotes.isEmpty()) {
-                    processError(e);
+                processError(e);
+
+                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().getDocumentListFromCache();
+                if (userDocuments.isEmpty()) {
                     return;
                 }
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
-                mNotesListData.postValue(savedNotes);
+                mNotesListData.postValue(userDocuments);
             }
         });
     }
@@ -65,7 +66,7 @@ public class NotesViewModel extends AndroidViewModel {
         return mLoadingStateData;
     }
 
-    public LiveData<List<SavedNote>> getNotesListData() {
+    public LiveData<List<UserDocument>> getNotesListData() {
         return mNotesListData;
     }
 

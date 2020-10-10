@@ -15,7 +15,6 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.billing.BillingManager;
-import com.f0x1d.dogbin.network.DogBinService;
 import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.LoginActivity;
 import com.f0x1d.dogbin.ui.activity.MainActivity;
@@ -53,7 +52,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        mSettingsViewModel = new ViewModelProvider(requireActivity()).get(SettingsViewModel.class);
+        mSettingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
         if (savedInstanceState == null)
             mSettingsViewModel.load();
 
@@ -134,9 +133,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Toast.makeText(requireContext(), R.string.domain_name_require2, Toast.LENGTH_SHORT).show();
                 return false;
             }
-
-            DogBinService.getInstance().logout();
-            Toast.makeText(requireContext(), R.string.cookies_cleared, Toast.LENGTH_SHORT).show();
 
             requireActivity().finish();
             startActivity(new Intent(requireActivity(), MainActivity.class));
