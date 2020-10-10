@@ -61,15 +61,24 @@ public class MainActivity extends BaseActivity {
     private void processIntent(Intent intent, boolean recreate) {
         if (intent.getAction() != null && intent.getAction().equals(TextViewerActivity.ACTION_TEXT_VIEW)) {
             BinServiceUtils.getBinServiceForPackageName(intent.getStringExtra("module_package_name"));
+
+            if (recreate) {
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+            }
+
             startActivity(new Intent(this, TextViewerActivity.class).setData(Uri.parse(intent.getStringExtra("url"))));
         } else if (intent.getData() != null) {
             App.getPreferencesUtil().setSelectedService(null);
             BinServiceUtils.refreshCurrentService();
+
+            if (recreate) {
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+            }
+
             startActivity(new Intent(this, TextViewerActivity.class).setData(intent.getData()));
         }
-
-        if (recreate)
-            recreate();
     }
 
     private void setupBottomNavigation(Bundle savedInstanceState) {
