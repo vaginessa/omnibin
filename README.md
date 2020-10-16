@@ -1,6 +1,6 @@
-# dogbin-mobile
+# omnibin
 
-Android client for [dogbin](https://del.dog/)
+Android client for different bins like [dogbin](https://del.dog/). Previous dogbin mobile.
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
@@ -8,7 +8,7 @@ Android client for [dogbin](https://del.dog/)
 
 ## Integration
 
-dogbin mobile supports integration
+omnibin supports integration
 
 ```
 @Override
@@ -22,7 +22,7 @@ protected void onCreate(Bundle savedInstanceState) {
     intent.putExtra(Intent.EXTRA_TEXT, "vzlom beb 3");
     // Slug to use (link), example: https://del.dog/{slug}
     intent.putExtra("slug", "happynewyear");
-    // dogbin mobile won't automatically copy the result link
+    // omnibin won't automatically copy the result link
     intent.putExtra("copy", false);
     intent.setType("text/plain");
     // Start intent
@@ -47,7 +47,7 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
 Also can be used without ```onActivityResult```
 
 ## Modules SDK
-Docs are available [here](https://github.com/F0x1d/dogbin-mobile/blob/master/SDK.md)
+Docs are available [here](https://github.com/F0x1d/omnibin/blob/master/SDK.md)
 
 ## License
-dogbin mobile is distributed under the terms of the Apache License (Version 2.0). See [license](/LICENSE) for details.
+omnibin is distributed under the terms of the Apache License (Version 2.0). See [license](/LICENSE) for details.

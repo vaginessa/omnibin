@@ -1,4 +1,4 @@
-package com.f0x1d.testservice.network.retrofit.service;
+package com.f0x1d.dogbin.network.retrofit.pastebin.service;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;

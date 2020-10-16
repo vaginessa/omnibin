@@ -1,17 +1,18 @@
-package com.f0x1d.testservice.network;
+package com.f0x1d.dogbin.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import androidx.annotation.Keep;
 
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserDocument;
-import com.f0x1d.testservice.R;
-import com.f0x1d.testservice.network.parser.DarkNetParser;
-import com.f0x1d.testservice.network.retrofit.PasteBinApi;
+import com.f0x1d.dogbin.App;
+import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
+import com.f0x1d.dogbin.network.parser.DarkNetParser;
+import com.f0x1d.dogbin.network.retrofit.pastebin.PasteBinApi;
+import com.f0x1d.dogbin.utils.Utils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -28,16 +29,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import okhttp3.MultipartBody;
 
-@Keep
-public class MyBinService implements BinService {
+/* Please don't read this code, i don't know under what i've written it */
+public class PasteBinService implements BinService {
 
-    private Context mContext;
-    private SharedPreferences mSharedPreferences;
+    private static PasteBinService sInstance;
+
+    public static PasteBinService getInstance() {
+        return sInstance == null ? sInstance = new PasteBinService() : sInstance;
+    }
 
     @Override
     public void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences) {
-        mContext = applicationContext;
-        mSharedPreferences = modulePreferences;
+
     }
 
     @Override
@@ -52,7 +55,7 @@ public class MyBinService implements BinService {
 
     @Override
     public String getUsername() throws Exception {
-        return "Pastebin module example";
+        return "pastebin";
     }
 
     @Override
@@ -140,17 +143,24 @@ public class MyBinService implements BinService {
 
     @Override
     public List<UserDocument> getDocumentListFromCache() {
-        return Collections.emptyList();
+        return Utils.toUserNotesPastebin(App.getMyDatabase().getPastebinSavedNoteDao().getAllSync());
     }
 
     @Override
     public DocumentContent getContentFromCache(String slug) {
-        return null;
+        PastebinSavedNote savedNote = App.getMyDatabase().getPastebinSavedNoteDao().getBySlugSync(slug);
+        if (savedNote == null)
+            return null;
+        else
+            return DocumentContent.create(savedNote.getContent(), slug, false, false);
     }
 
     @Override
     public void cacheDocument(String slug, String content, boolean myDocument) {
+        if (!myDocument && App.getPreferencesUtil().cacheOnlyMy())
+            return;
 
+        App.getMyDatabase().getPastebinSavedNoteDao().addToCache(PastebinSavedNote.createNote(content, slug, Utils.currentTimeToString()));
     }
 
     @Override
@@ -161,9 +171,9 @@ public class MyBinService implements BinService {
     @Override
     public Folder getDefaultFolder() {
         if (loggedIn())
-            return Folder.create("My pastes", mContext.getDrawable(R.drawable.account_details), "my_notes");
+            return Folder.create(App.getInstance().getString(R.string.my_notes), App.getInstance().getDrawable(R.drawable.ic_saved), "my_notes");
         else
-            return Folder.create("Go login lul", mContext.getDrawable(R.drawable.account_details), "nothing");
+            return Folder.create(App.getInstance().getString(R.string.history), App.getInstance().getDrawable(R.drawable.ic_history), "history");
     }
 
     @Override
@@ -171,7 +181,8 @@ public class MyBinService implements BinService {
         List<Folder> folders = new ArrayList<>();
         if (loggedIn())
             folders.add(getDefaultFolder());
-        folders.add(Folder.create("DarkNet", mContext.getDrawable(R.drawable.incognito), "darknet"));
+        folders.add(Folder.create("DarkNet", App.getInstance().getDrawable(R.drawable.ic_incognito), "darknet"));
+        folders.add(Folder.create(App.getInstance().getString(R.string.cache), App.getInstance().getDrawable(R.drawable.ic_history), "cache"));
         return folders;
     }
 
@@ -230,16 +241,20 @@ public class MyBinService implements BinService {
                     return Collections.emptyList();
                 }
 
+            case "history":
+            case "cache":
+                return getDocumentListFromCache();
+
             default:
                 return Collections.emptyList();
         }
     }
 
     private String getToken() {
-        return mSharedPreferences.getString("pastebin_token", null);
+        return App.getPreferencesUtil().getPastebinToken();
     }
 
     private void setToken(String token) {
-        mSharedPreferences.edit().putString("pastebin_token", token).apply();
+        App.getPreferencesUtil().setPastebinToken(token);
     }
 }

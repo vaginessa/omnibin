@@ -1,4 +1,4 @@
-package com.f0x1d.dogbin.network.retrofit;
+package com.f0x1d.dogbin.network.retrofit.dogbin;
 
 import android.content.SharedPreferences;
 

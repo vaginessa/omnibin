@@ -13,6 +13,7 @@ import com.f0x1d.dmsdk.Constants;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.DogBinService;
+import com.f0x1d.dogbin.network.PasteBinService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +23,12 @@ import dalvik.system.BaseDexClassLoader;
 
 public class BinServiceUtils {
 
-    public static final String START_TAG = "dogbin.";
+    public static final String START_TAG = "omnibin.";
+
+    public static final String DOGBIN_SERVICE = "dogbin";
+    public static final String PASTEBIN_SERVICE = "pastebin";
+
+    public static String[] IMPLEMENTED_SERVICES = new String[]{DOGBIN_SERVICE, PASTEBIN_SERVICE};
 
     private static BinService sInstance;
     private static MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>();
@@ -33,8 +39,17 @@ public class BinServiceUtils {
                 List<ApplicationInfo> installedServices = getInstalledServices();
 
                 String selectedService = App.getPreferencesUtil().getSelectedService();
-                if (selectedService == null)
-                    return sInstance = DogBinService.getInstance();
+                if (selectedService == null) {
+                    selectedService = DOGBIN_SERVICE;
+                    App.getPreferencesUtil().setSelectedService(selectedService);
+                }
+
+                switch (selectedService) {
+                    case DOGBIN_SERVICE:
+                        return sInstance = DogBinService.getInstance();
+                    case PASTEBIN_SERVICE:
+                        return sInstance = PasteBinService.getInstance();
+                }
 
                 try {
                     for (ApplicationInfo installedService : installedServices) {
@@ -45,7 +60,7 @@ public class BinServiceUtils {
                 } catch (Exception e) {
                     Utils.runOnUiThread(() ->
                             Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
-                    App.getPreferencesUtil().setSelectedService(null);
+                    App.getPreferencesUtil().setSelectedService(DOGBIN_SERVICE);
                     return sInstance = DogBinService.getInstance();
                 }
             }
@@ -68,7 +83,7 @@ public class BinServiceUtils {
     private static BinService loadServiceFromApp(String packageName) throws Exception {
         ApplicationInfo applicationInfo = App.getInstance().getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA);
         if (applicationInfo.metaData == null || !App.getInstance().getPackageManager().getApplicationLabel(applicationInfo).toString().startsWith(START_TAG)) {
-            App.getPreferencesUtil().setSelectedService(null);
+            App.getPreferencesUtil().setSelectedService(DOGBIN_SERVICE);
             return DogBinService.getInstance();
         }
 
@@ -80,7 +95,7 @@ public class BinServiceUtils {
         BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("service")).getConstructor().newInstance();
         if (binService.getSDKVersion() < Constants.LATEST_VERSION) {
             Toast.makeText(App.getInstance(), R.string.module_v_old, Toast.LENGTH_SHORT).show();
-            App.getPreferencesUtil().setSelectedService(null);
+            App.getPreferencesUtil().setSelectedService(DOGBIN_SERVICE);
             return DogBinService.getInstance();
         }
         binService.init(App.getInstance().createPackageContext(packageName, 0), App.getInstance().getApplicationContext(),
@@ -101,6 +116,13 @@ public class BinServiceUtils {
         sInstalledServicesData.postValue(installedPlugins);
 
         return installedPlugins;
+    }
+
+    public static String getInbuiltServiceForUrl(String url) {
+        if (url.contains("del.dog") || url.contains("dogbin.f0x1d.com")) return DOGBIN_SERVICE;
+        else if (url.contains("pastebin.com")) return PASTEBIN_SERVICE;
+
+        else return DOGBIN_SERVICE;
     }
 
     public static void refreshInstalledServices() {

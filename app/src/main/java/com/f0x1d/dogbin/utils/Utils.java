@@ -10,7 +10,8 @@ import androidx.annotation.AttrRes;
 
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.db.entity.SavedNote;
+import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
+import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -66,10 +67,20 @@ public class Utils {
         return formatter.format(date);
     }
 
-    public static List<UserDocument> toUserNotes(List<SavedNote> savedNotes) {
+    public static List<UserDocument> toUserNotes(List<DogbinSavedNote> savedNotes) {
         List<UserDocument> userDocuments = new ArrayList<>();
 
-        for (SavedNote savedNote : savedNotes) {
+        for (DogbinSavedNote savedNote : savedNotes) {
+            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
+        }
+
+        return userDocuments;
+    }
+
+    public static List<UserDocument> toUserNotesPastebin(List<PastebinSavedNote> savedNotes) {
+        List<UserDocument> userDocuments = new ArrayList<>();
+
+        for (PastebinSavedNote savedNote : savedNotes) {
             userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
         }
 
@@ -77,20 +88,31 @@ public class Utils {
     }
 
     public static String[] getInstalledServices(List<ApplicationInfo> applicationInfos) {
-        String[] applicationsArray = new String[applicationInfos.size() + 1];
-        applicationsArray[0] = "dogbin";
+        int implementedServicesCount = BinServiceUtils.IMPLEMENTED_SERVICES.length;
+
+        String[] applicationsArray = new String[applicationInfos.size() + implementedServicesCount];
+        System.arraycopy(BinServiceUtils.IMPLEMENTED_SERVICES, 0, applicationsArray, 0, implementedServicesCount);
         for (int i = 0; i < applicationInfos.size(); i++) {
-            applicationsArray[i + 1] = String.valueOf(App.getInstance().getPackageManager().getApplicationLabel(applicationInfos.get(i)))
-                    .replace(BinServiceUtils.START_TAG, "");
+            applicationsArray[i + implementedServicesCount] =
+                    String.valueOf(App.getInstance().getPackageManager().getApplicationLabel(applicationInfos.get(i))).replace(BinServiceUtils.START_TAG, "");
         }
+
         return applicationsArray;
     }
 
     public static int getSelectedService(List<ApplicationInfo> applicationInfos) {
         String selectedPackageName = App.getPreferencesUtil().getSelectedService();
+
+        switch (selectedPackageName) {
+            case BinServiceUtils.DOGBIN_SERVICE:
+                return 0;
+            case BinServiceUtils.PASTEBIN_SERVICE:
+                return 1;
+        }
+
         for (int i = 0; i < applicationInfos.size(); i++) {
             if (applicationInfos.get(i).packageName.equals(selectedPackageName))
-                return i + 1;
+                return i + BinServiceUtils.IMPLEMENTED_SERVICES.length;
         }
         return 0;
     }

@@ -5,13 +5,10 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.f0x1d.dogbin.db.MyDatabase;
-import com.f0x1d.dogbin.db.dao.SavedNoteDao;
-import com.f0x1d.dogbin.db.entity.SavedNote;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.List;
 import java.util.Locale;
 
 public class App extends Application {
@@ -47,13 +44,12 @@ public class App extends Application {
         sMyDatabase = Room.databaseBuilder(this, MyDatabase.class, "dogbin_database")
                 .addMigrations(
                         MyDatabase.MIGRATION_1_2,
-                        MyDatabase.MIGRATION_2_3
+                        MyDatabase.MIGRATION_2_3,
+                        MyDatabase.MIGRATION_3_4
                 )
                 .build();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        Utils.getExecutor().execute(this::clearCacheIfNeeded);
 
         checkUserIsFromRussia();
     }
@@ -64,22 +60,6 @@ public class App extends Application {
                 getPreferencesUtil().setDogbinDomain("https://dogbin.f0x1d.com/");
 
             getPreferencesUtil().setFirstStart(false);
-        }
-    }
-
-    private void clearCacheIfNeeded() {
-        if (!getPreferencesUtil().autoClearCache())
-            return;
-
-        SavedNoteDao savedNoteDao = getMyDatabase().getSavedNoteDao();
-
-        List<SavedNote> savedNotes = savedNoteDao.getAllSync();
-        if (savedNotes.size() < 100)
-            return;
-
-        int indexesToDelete = savedNotes.size() - 100;
-        for (int i = 0; i < indexesToDelete; i++) {
-            savedNoteDao.delete(savedNotes.get(i).getSlug());
         }
     }
 }

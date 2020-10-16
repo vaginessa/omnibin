@@ -1,4 +1,4 @@
-package com.f0x1d.testservice.network.parser;
+package com.f0x1d.dogbin.network.parser;
 
 import com.f0x1d.dmsdk.model.UserDocument;
 

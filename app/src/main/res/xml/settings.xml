@@ -12,7 +12,7 @@
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://t.me/dogbin_android" />
+                android:data="https://t.me/omnibin" />
         </Preference>
 
         <Preference
@@ -30,7 +30,7 @@
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/F0x1d/dogbin-mobile" />
+                android:data="https://github.com/F0x1d/omnibin" />
         </Preference>
     </PreferenceCategory>
 
@@ -109,12 +109,6 @@
         <SwitchPreferenceCompat
             android:key="cache_my"
             android:title="@string/cache_my"
-            app:defaultValue="true"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:key="auto_cache_clear"
-            android:title="@string/auto_clear_cache"
             app:defaultValue="true"
             app:iconSpaceReserved="false" />
 

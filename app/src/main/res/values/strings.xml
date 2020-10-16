@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">dogbin</string>
+    <string name="app_name">omnibin</string>
     <string name="publish">Publish</string>
     <string name="custom_url">Custom URL</string>
     <string name="your_text">Your text</string>
@@ -30,7 +30,6 @@
     <string name="cache">Cache</string>
     <string name="clear_cache">Clear cache</string>
     <string name="cache_my">Cache only my notes</string>
-    <string name="auto_clear_cache">Automatically clear cache</string>
     <string name="text_wrap">Text wrap</string>
     <string name="text_wrap_no">No wrap</string>
     <string name="text_wrap_word">Word wrap</string>
@@ -47,12 +46,12 @@
     <string name="till_name">deletescape</string>
     <string name="till_role">Creator of dogbin</string>
     <string name="f0x1d_name">F0x1d</string>
-    <string name="f0x1d_role">Creator of dogbin mobile</string>
-    <string name="donate_text">Dogbin mobile is a ad-free open-source app. If you like it, please consider supporting dogbin mobile by making a little donation. You will also get access to accent picker as a gift!</string>
-    <string name="donate_text_donated">A lot of thanks for supporting dogbin mobile!\nNow you have access to accent picker!</string>
+    <string name="f0x1d_role">Creator of omnibin</string>
+    <string name="donate_text">Omnibin is a ad-free open-source app. If you like it, please consider supporting omnibin by making a little donation. You will also get access to accent picker as a gift!</string>
+    <string name="donate_text_donated">A lot of thanks for supporting omnibin!\nNow you have access to accent picker!</string>
     <string name="donate_text_error">Unable to get donation status. Please make sure you have Google Play Services installed and try restarting your device.</string>
-    <string name="donate_text_pending">Your donation is pending. If it isn\'t applied automatically after you complete it, please restart dogbin mobile.</string>
-    <string name="donate_text_theme_lock">This setting is available only to users, who supported dogbin mobile</string>
+    <string name="donate_text_pending">Your donation is pending. If it isn\'t applied automatically after you complete it, please restart omnibin.</string>
+    <string name="donate_text_theme_lock">This setting is available only to users, who supported omnibin</string>
     <string name="dogbin_domain">Dogbin instance domain</string>
     <string name="no_touch">Change it only if you know what it is</string>
     <string name="domain_name_require1">Domain name must start with \"http\"</string>

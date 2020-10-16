@@ -1,10 +1,10 @@
-package com.f0x1d.testservice.network.retrofit;
+package com.f0x1d.dogbin.network.retrofit.pastebin;
 
-import com.f0x1d.testservice.network.retrofit.service.PasteBinApiService;
-import com.f0x1d.testservice.network.retrofit.service.PasteBinRawService;
+import com.f0x1d.dogbin.network.retrofit.pastebin.service.PasteBinApiService;
+import com.f0x1d.dogbin.network.retrofit.pastebin.service.PasteBinRawService;
 
 import retrofit2.Retrofit;
-import retrofit2.converter.moshi.MoshiConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PasteBinApi {
@@ -23,7 +23,7 @@ public class PasteBinApi {
             mService = new Retrofit.Builder()
                     .baseUrl("https://pastebin.com/api/")
                     .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(MoshiConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build()
                     .create(PasteBinApiService.class);
         }

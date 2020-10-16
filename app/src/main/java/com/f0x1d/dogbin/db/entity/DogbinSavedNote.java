@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class SavedNote {
+public class DogbinSavedNote {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -17,8 +17,8 @@ public class SavedNote {
     @ColumnInfo(name = "time")
     private String mTime;
 
-    public static SavedNote createNote(String content, String slug, String time) {
-        SavedNote savedNote = new SavedNote();
+    public static DogbinSavedNote createNote(String content, String slug, String time) {
+        DogbinSavedNote savedNote = new DogbinSavedNote();
         savedNote.setContent(content);
         savedNote.setSlug(slug);
         savedNote.setTime(time);

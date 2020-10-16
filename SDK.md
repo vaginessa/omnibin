@@ -1,19 +1,17 @@
 # SDK Documentation
 
-Modules in dogbin mobile are a very interesting idea. Module is an android application from which dogbin mobile loads code.
-
-[Here](https://github.com/F0x1d/dogbin-mobile/tree/master/testservice) you can the example of the module.
+Modules in omnibin are a very interesting idea. Module is an android application from which omnibin loads code.
 
 ## Quick start
 
-1. Create android application project in Android Studio, application's name must start with ```dogbin.```.
+1. Create android application project in Android Studio, application's name must start with ```omnibin.```.
 2. Add [DM-SDK](https://files.f0x1d.com/files/dm-sdk.aar) as dependency to the project.
 3. Create class and implement ```BinService``` from SDK.
 4. In manifest add ```<meta-data android:name="service" android:value="com.your.package.to.your.BinService" />``` in ```<application``` tag.
 
 ## Methods
 
-BinService must implement list of methods, these methods are called by dogbin mobile.
+BinService must implement list of methods, these methods are called by omnibin.
 
 Methods, which ```throw Exception``` are run **not** on the UI thread.
 
@@ -73,7 +71,7 @@ These methods are also called **not** on the UI thread.
 
 ### Errors
 
-You can ```throw Exception``` in methods, where you are allowed to do so, then dogbin mobile will display a Toast with such text: ```Error: Exception.getLocalizedMessage()```.
+You can ```throw Exception``` in methods, where you are allowed to do so, then omnibin will display a Toast with such text: ```Error: Exception.getLocalizedMessage()```.
 
 
 ## Viewing text from links

@@ -1,4 +1,4 @@
-package com.f0x1d.dogbin.network.retrofit;
+package com.f0x1d.dogbin.network.retrofit.dogbin;
 
 import com.f0x1d.dogbin.network.model.ApiKeyResponse;
 import com.f0x1d.dogbin.network.model.DocumentInfoResponse;

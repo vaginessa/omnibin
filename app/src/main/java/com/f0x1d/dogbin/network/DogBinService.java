@@ -9,7 +9,7 @@ import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.db.entity.SavedNote;
+import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
 import com.f0x1d.dogbin.network.model.ApiKeyResponse;
 import com.f0x1d.dogbin.network.model.AuthRequest;
 import com.f0x1d.dogbin.network.model.DocumentInfoResponse;
@@ -17,7 +17,7 @@ import com.f0x1d.dogbin.network.model.DocumentLinkResponse;
 import com.f0x1d.dogbin.network.model.DocumentResponse;
 import com.f0x1d.dogbin.network.model.ErrorResponse;
 import com.f0x1d.dogbin.network.okhttp.NetworkUtils;
-import com.f0x1d.dogbin.network.retrofit.DogBinApi;
+import com.f0x1d.dogbin.network.retrofit.dogbin.DogBinApi;
 import com.f0x1d.dogbin.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -63,13 +63,13 @@ public class DogBinService implements BinService {
 
     @Override
     public void login(String username, String password) throws Exception {
-        AuthRequest authRequest = AuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "dogbin mobile");
+        AuthRequest authRequest = AuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "omnibin");
         doAuth(DogBinApi.getInstance().getService().login(NetworkUtils.getAuthBody(authRequest)).execute());
     }
 
     @Override
     public void register(String username, String password) throws Exception {
-        AuthRequest authRequest = AuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "dogbin mobile");
+        AuthRequest authRequest = AuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "omnibin");
         doAuth(DogBinApi.getInstance().getService().register(NetworkUtils.getAuthBody(authRequest)).execute());
     }
 
@@ -123,12 +123,12 @@ public class DogBinService implements BinService {
 
     @Override
     public List<UserDocument> getDocumentListFromCache() {
-        return Utils.toUserNotes(App.getMyDatabase().getSavedNoteDao().getAllSync());
+        return Utils.toUserNotes(App.getMyDatabase().getDogbinSavedNoteDao().getAllSync());
     }
 
     @Override
     public DocumentContent getContentFromCache(String slug) {
-        SavedNote savedNote = App.getMyDatabase().getSavedNoteDao().getBySlugSync(slug);
+        DogbinSavedNote savedNote = App.getMyDatabase().getDogbinSavedNoteDao().getBySlugSync(slug);
         if (savedNote == null)
             return null;
         else
@@ -140,7 +140,7 @@ public class DogBinService implements BinService {
         if (!myDocument && App.getPreferencesUtil().cacheOnlyMy())
             return;
 
-        App.getMyDatabase().getSavedNoteDao().addToCache(SavedNote.createNote(content, slug, Utils.currentTimeToString()));
+        App.getMyDatabase().getDogbinSavedNoteDao().addToCache(DogbinSavedNote.createNote(content, slug, Utils.currentTimeToString()));
     }
 
     @Override
@@ -180,7 +180,7 @@ public class DogBinService implements BinService {
                 return userDocuments;
             case "history":
             case "cache":
-                return Utils.toUserNotes(App.getMyDatabase().getSavedNoteDao().getAllSync());
+                return getDocumentListFromCache();
 
             default:
                 return Collections.emptyList();

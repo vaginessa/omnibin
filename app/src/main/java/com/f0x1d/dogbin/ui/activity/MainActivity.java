@@ -60,7 +60,8 @@ public class MainActivity extends BaseActivity {
 
     private void processIntent(Intent intent, boolean recreate) {
         if (intent.getAction() != null && intent.getAction().equals(TextViewerActivity.ACTION_TEXT_VIEW)) {
-            BinServiceUtils.getBinServiceForPackageName(intent.getStringExtra("module_package_name"));
+            String modulePackageName = intent.getStringExtra("module_package_name");
+            BinServiceUtils.getBinServiceForPackageName(modulePackageName == null ? BinServiceUtils.DOGBIN_SERVICE : modulePackageName);
 
             if (recreate) {
                 finish();
@@ -69,7 +70,7 @@ public class MainActivity extends BaseActivity {
 
             startActivity(new Intent(this, TextViewerActivity.class).setData(Uri.parse(intent.getStringExtra("url"))));
         } else if (intent.getData() != null) {
-            App.getPreferencesUtil().setSelectedService(null);
+            App.getPreferencesUtil().setSelectedService(BinServiceUtils.getInbuiltServiceForUrl(intent.getData().toString()));
             BinServiceUtils.refreshCurrentService();
 
             if (recreate) {

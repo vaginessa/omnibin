@@ -142,7 +142,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mClearCachePreference = findPreference("cache_nuke");
         mClearCachePreference.setOnPreferenceClickListener(preference -> {
-            Utils.getExecutor().execute(() -> App.getMyDatabase().getSavedNoteDao().nukeTable());
+            Utils.getExecutor().execute(() -> App.getMyDatabase().getDogbinSavedNoteDao().nukeTable());
             return false;
         });
 
@@ -162,10 +162,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.select_service)
                     .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
-                        if (which == 0)
-                            App.getPreferencesUtil().setSelectedService(null);
-                        else
-                            App.getPreferencesUtil().setSelectedService(services.get(which - 1).packageName);
+                        switch (which) {
+                            case 0:
+                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.DOGBIN_SERVICE);
+                                break;
+                            case 1:
+                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.PASTEBIN_SERVICE);
+                                break;
+                            default:
+                                App.getPreferencesUtil().setSelectedService(services.get(which - BinServiceUtils.IMPLEMENTED_SERVICES.length).packageName);
+                        }
                         BinServiceUtils.refreshCurrentService();
 
                         requireActivity().finish();

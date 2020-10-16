@@ -14,7 +14,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 22
-        versionName "1.6.3"
+        versionName "1.7.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,7 +55,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':dm-sdk')
-
+    
     implementation 'com.android.billingclient:billing:3.0.1'
 
     implementation 'androidx.browser:browser:1.2.0'

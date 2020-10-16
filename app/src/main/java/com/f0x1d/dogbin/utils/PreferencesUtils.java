@@ -19,11 +19,12 @@ public class PreferencesUtils {
     public static final String API_KEY_NAME = "api_key";
     public static final String USERNAME_NAME = "username";
 
+    public static final String PASTEBIN_TOKEN = "pastebin_token";
+
     public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
     public static final String DOGBIN_DOMAIN_NAME = "dogbin_domain";
 
     public static final String CACHE_ONLY_MY_NAME = "cache_my";
-    public static final String CACHE_AUTO_CLEAR_NAME = "auto_cache_clear";
 
     public static final String EDITOR_TEXT_WRAP_NAME = "editor_text_wrap";
 
@@ -81,6 +82,14 @@ public class PreferencesUtils {
         mAppPreferences.edit().putString(USERNAME_NAME, username).apply();
     }
 
+    public String getPastebinToken() {
+        return mAppPreferences.getString(PASTEBIN_TOKEN, null);
+    }
+
+    public void setPastebinToken(String token) {
+        mAppPreferences.edit().putString(PASTEBIN_TOKEN, token).apply();
+    }
+
     public boolean isRedirectFromNoteEnabled() {
         return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE_NAME, true);
     }
@@ -95,10 +104,6 @@ public class PreferencesUtils {
 
     public boolean cacheOnlyMy() {
         return mDefaultPreferences.getBoolean(CACHE_ONLY_MY_NAME, true);
-    }
-
-    public boolean autoClearCache() {
-        return mDefaultPreferences.getBoolean(CACHE_AUTO_CLEAR_NAME, true);
     }
 
     public HighlightJsView.TextWrap textWrap() {
@@ -122,7 +127,7 @@ public class PreferencesUtils {
     }
 
     public String getSelectedService() {
-        return mAppPreferences.getString(SELECTED_SERVICE_NAME, null);
+        return mAppPreferences.getString(SELECTED_SERVICE_NAME, BinServiceUtils.DOGBIN_SERVICE);
     }
 
     public void setSelectedService(String packageName) {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">dogbin</string>
+    <string name="app_name">omnibin</string>
     <string name="publish">Опубликовать</string>
     <string name="custom_url">Пользовательский URL</string>
     <string name="your_text">Ваш текст</string>
@@ -30,7 +30,6 @@
     <string name="cache">Кеш</string>
     <string name="clear_cache">Очистить кеш</string>
     <string name="cache_my">Кешировать только мои записи</string>
-    <string name="auto_clear_cache">Автоматически очищать кеш</string>
     <string name="text_wrap">Перенос текста</string>
     <string name="text_wrap_no">Без переноса</string>
     <string name="text_wrap_word">Перенос слов</string>
@@ -46,12 +45,12 @@
     <string name="till_name">deletescape</string>
     <string name="till_role">Создатель dogbin</string>
     <string name="f0x1d_name">F0x1d</string>
-    <string name="f0x1d_role">Создатель dogbin mobile</string>
-    <string name="donate_text">Dogbin mobile - это полностью бесплатное приложение без рекламы, с открытым исходным кодом. Если оно вам нравится, пожалуйста, поддержите dogbin mobile путем пожертвования. Вы также получите доступ к выбору акцента в подарок!</string>
-    <string name="donate_text_donated">Большое спасибо за поддержку dogbin mobile!\nТеперь у вас есть доступ к выбору акцента!</string>
+    <string name="f0x1d_role">Создатель omnibin</string>
+    <string name="donate_text">Omnibin - это полностью бесплатное приложение без рекламы, с открытым исходным кодом. Если оно вам нравится, пожалуйста, поддержите omnibin путем пожертвования. Вы также получите доступ к выбору акцента в подарок!</string>
+    <string name="donate_text_donated">Большое спасибо за поддержку omnibin!\nТеперь у вас есть доступ к выбору акцента!</string>
     <string name="donate_text_error">Не удается получить статус пожертвования. Пожалуйста убедитесь, что у вас установлены сервисы Google Play и попробуйте перезагрузить устройство.</string>
-    <string name="donate_text_pending">Ваше пожертвование в ожидании оплаты. Если оно не применится автоматически после завершения покупки, пожалуйста, перезапустите dogbin mobile.</string>
-    <string name="donate_text_theme_lock">Данная опция доступна только пользователям, поддержавшим dogbin mobile</string>
+    <string name="donate_text_pending">Ваше пожертвование в ожидании оплаты. Если оно не применится автоматически после завершения покупки, пожалуйста, перезапустите omnibin.</string>
+    <string name="donate_text_theme_lock">Данная опция доступна только пользователям, поддержавшим omnibin</string>
     <string name="dogbin_domain">Домен dogbin</string>
     <string name="no_touch">Меняйте только если вы знаете, что делает эта настройка</string>
     <string name="domain_name_require1">Имя домена должно начинаться с \"http\"</string>
