@@ -7,11 +7,13 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.f0x1d.dogbin.db.dao.DogbinSavedNoteDao;
+import com.f0x1d.dogbin.db.dao.FoxBinSavedNoteDao;
 import com.f0x1d.dogbin.db.dao.PastebinSavedNoteDao;
 import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
+import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
 
-@Database(entities = {DogbinSavedNote.class, PastebinSavedNote.class}, version = 4)
+@Database(entities = {DogbinSavedNote.class, PastebinSavedNote.class, FoxBinSavedNote.class}, version = 5)
 public abstract class MyDatabase extends RoomDatabase {
 
     public static Migration MIGRATION_1_2 = new Migration(1, 2) {
@@ -41,6 +43,15 @@ public abstract class MyDatabase extends RoomDatabase {
         }
     };
 
+    public static Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE FoxBinSavedNote(id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL, content TEXT, slug TEXT, time TEXT)");
+            database.execSQL("CREATE INDEX index_FoxBinSavedNote_slug ON FoxBinSavedNote(slug)");
+        }
+    };
+
     public abstract DogbinSavedNoteDao getDogbinSavedNoteDao();
     public abstract PastebinSavedNoteDao getPastebinSavedNoteDao();
+    public abstract FoxBinSavedNoteDao getFoxBinSavedNoteDao();
 }

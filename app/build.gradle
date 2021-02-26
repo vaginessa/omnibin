@@ -7,14 +7,14 @@ localProperties.load(project.rootProject.file('local.properties').newDataInputSt
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.f0x1d.dogbin"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 22
-        versionName "1.7.0"
+        versionCode 24
+        versionName "1.7.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,12 +56,12 @@ dependencies {
 
     implementation project(':dm-sdk')
     
-    implementation 'com.android.billingclient:billing:3.0.1'
+    implementation 'com.android.billingclient:billing:3.0.2'
 
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.browser:browser:1.3.0'
 
-    implementation 'com.google.firebase:firebase-analytics:17.6.0'
-    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:18.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.1'
 
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
@@ -69,9 +69,9 @@ dependencies {
     implementation 'com.github.markusressel:KodeEditor:v2.1.1'
     implementation 'com.github.F0x1d:highlightjs-android:1.6.6'
 
-    implementation "com.google.android.material:material:1.3.0-alpha03"
+    implementation "com.google.android.material:material:1.3.0"
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
     implementation "androidx.preference:preference:1.1.1"
 

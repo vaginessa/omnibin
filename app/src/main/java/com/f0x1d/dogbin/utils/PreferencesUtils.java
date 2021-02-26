@@ -19,7 +19,10 @@ public class PreferencesUtils {
     public static final String API_KEY_NAME = "api_key";
     public static final String USERNAME_NAME = "username";
 
-    public static final String PASTEBIN_TOKEN = "pastebin_token";
+    public static final String FOXBIN_TOKEN_NAME = "foxbin_token";
+    public static final String FOXBIN_USERNAME_NAME = "foxbin_username";
+
+    public static final String PASTEBIN_TOKEN_NAME = "pastebin_token";
 
     public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
     public static final String DOGBIN_DOMAIN_NAME = "dogbin_domain";
@@ -32,9 +35,9 @@ public class PreferencesUtils {
 
     public static final String SELECTED_SERVICE_NAME = "selected_service";
 
-    private Context mContext;
-    private SharedPreferences mDefaultPreferences;
-    private SharedPreferences mAppPreferences;
+    private final Context mContext;
+    private final SharedPreferences mDefaultPreferences;
+    private final SharedPreferences mAppPreferences;
 
     public PreferencesUtils(Context c) {
         this.mContext = c.getApplicationContext();
@@ -82,12 +85,28 @@ public class PreferencesUtils {
         mAppPreferences.edit().putString(USERNAME_NAME, username).apply();
     }
 
+    public String getFoxBinToken() {
+        return mAppPreferences.getString(FOXBIN_TOKEN_NAME, null);
+    }
+
+    public void setFoxBinToken(String token) {
+        mAppPreferences.edit().putString(FOXBIN_TOKEN_NAME, token).apply();
+    }
+
+    public String getFoxBinUsername() {
+        return mAppPreferences.getString(FOXBIN_USERNAME_NAME, "");
+    }
+
+    public void setFoxBinUsername(String username) {
+        mAppPreferences.edit().putString(FOXBIN_USERNAME_NAME, username).apply();
+    }
+
     public String getPastebinToken() {
-        return mAppPreferences.getString(PASTEBIN_TOKEN, null);
+        return mAppPreferences.getString(PASTEBIN_TOKEN_NAME, null);
     }
 
     public void setPastebinToken(String token) {
-        mAppPreferences.edit().putString(PASTEBIN_TOKEN, token).apply();
+        mAppPreferences.edit().putString(PASTEBIN_TOKEN_NAME, token).apply();
     }
 
     public boolean isRedirectFromNoteEnabled() {

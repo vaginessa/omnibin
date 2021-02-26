@@ -11,24 +11,21 @@ import androidx.annotation.AttrRes;
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
+import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
 import com.google.gson.Gson;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class Utils {
 
     private static Handler sUiHandler;
-    private static Executor sExecutor = Executors.newCachedThreadPool();
-    private static Gson sGson = new Gson();
+    private static final Executor sExecutor = Executors.newCachedThreadPool();
+    private static final Gson sGson = new Gson();
 
     public static Executor getExecutor() {
         return sExecutor;
@@ -60,11 +57,11 @@ public class Utils {
     }
 
     public static String currentTimeToString() {
-        Date date = new Date(System.currentTimeMillis());
+        /*Date date = new Date(System.currentTimeMillis());
         DateFormat formatter = new SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault());
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));*/
 
-        return formatter.format(date);
+        return new Date(System.currentTimeMillis()).toLocaleString();
     }
 
     public static List<UserDocument> toUserNotes(List<DogbinSavedNote> savedNotes) {
@@ -81,6 +78,16 @@ public class Utils {
         List<UserDocument> userDocuments = new ArrayList<>();
 
         for (PastebinSavedNote savedNote : savedNotes) {
+            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
+        }
+
+        return userDocuments;
+    }
+
+    public static List<UserDocument> toUserNotesFoxBin(List<FoxBinSavedNote> savedNotes) {
+        List<UserDocument> userDocuments = new ArrayList<>();
+
+        for (FoxBinSavedNote savedNote : savedNotes) {
             userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
         }
 
@@ -108,6 +115,8 @@ public class Utils {
                 return 0;
             case BinServiceUtils.PASTEBIN_SERVICE:
                 return 1;
+            case BinServiceUtils.FOXBIN_SERVICE:
+                return 2;
         }
 
         for (int i = 0; i < applicationInfos.size(); i++) {

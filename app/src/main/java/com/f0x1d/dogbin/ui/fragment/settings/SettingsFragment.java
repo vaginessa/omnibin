@@ -169,6 +169,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             case 1:
                                 App.getPreferencesUtil().setSelectedService(BinServiceUtils.PASTEBIN_SERVICE);
                                 break;
+                            case 2:
+                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.FOXBIN_SERVICE);
+                                break;
                             default:
                                 App.getPreferencesUtil().setSelectedService(services.get(which - BinServiceUtils.IMPLEMENTED_SERVICES.length).packageName);
                         }

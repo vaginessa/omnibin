@@ -10,12 +10,12 @@ import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
-import com.f0x1d.dogbin.network.model.ApiKeyResponse;
-import com.f0x1d.dogbin.network.model.AuthRequest;
-import com.f0x1d.dogbin.network.model.DocumentInfoResponse;
-import com.f0x1d.dogbin.network.model.DocumentLinkResponse;
-import com.f0x1d.dogbin.network.model.DocumentResponse;
-import com.f0x1d.dogbin.network.model.ErrorResponse;
+import com.f0x1d.dogbin.network.model.dogbin.DogBinApiKeyResponse;
+import com.f0x1d.dogbin.network.model.dogbin.DogBinAuthRequest;
+import com.f0x1d.dogbin.network.model.dogbin.DogBinDocumentInfoResponse;
+import com.f0x1d.dogbin.network.model.dogbin.DogBinDocumentLinkResponse;
+import com.f0x1d.dogbin.network.model.dogbin.DogBinDocumentResponse;
+import com.f0x1d.dogbin.network.model.dogbin.DogBinErrorResponse;
 import com.f0x1d.dogbin.network.okhttp.NetworkUtils;
 import com.f0x1d.dogbin.network.retrofit.dogbin.DogBinApi;
 import com.f0x1d.dogbin.utils.Utils;
@@ -27,12 +27,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class DogBinService implements BinService {
 
-    private static SimpleDateFormat sDogbinDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault());
+    private static final SimpleDateFormat sDogbinDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault());
 
     private static DogBinService sInstance;
 
@@ -63,23 +62,23 @@ public class DogBinService implements BinService {
 
     @Override
     public void login(String username, String password) throws Exception {
-        AuthRequest authRequest = AuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "omnibin");
-        doAuth(DogBinApi.getInstance().getService().login(NetworkUtils.getAuthBody(authRequest)).execute());
+        DogBinAuthRequest dogBinAuthRequest = DogBinAuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "omnibin");
+        doAuth(DogBinApi.getInstance().getService().login(NetworkUtils.getBody(dogBinAuthRequest)).execute());
     }
 
     @Override
     public void register(String username, String password) throws Exception {
-        AuthRequest authRequest = AuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "omnibin");
-        doAuth(DogBinApi.getInstance().getService().register(NetworkUtils.getAuthBody(authRequest)).execute());
+        DogBinAuthRequest dogBinAuthRequest = DogBinAuthRequest.create(username, password, Arrays.asList("list", "create", "update", "delete"), "omnibin");
+        doAuth(DogBinApi.getInstance().getService().register(NetworkUtils.getBody(dogBinAuthRequest)).execute());
     }
 
-    private void doAuth(Response<ApiKeyResponse> response) throws Exception {
+    private void doAuth(Response<DogBinApiKeyResponse> response) throws Exception {
         checkResponseForError(response);
 
-        ApiKeyResponse apiKeyResponse = response.body();
+        DogBinApiKeyResponse dogBinApiKeyResponse = response.body();
 
-        App.getPreferencesUtil().setApiKey(apiKeyResponse.getApiKey());
-        App.getPreferencesUtil().setUsername(apiKeyResponse.getUsername());
+        App.getPreferencesUtil().setApiKey(dogBinApiKeyResponse.getApiKey());
+        App.getPreferencesUtil().setUsername(dogBinApiKeyResponse.getUsername());
     }
 
     @Override
@@ -94,17 +93,17 @@ public class DogBinService implements BinService {
 
     @Override
     public DocumentContent getDocumentContent(String slug) throws Exception {
-        Response<DocumentInfoResponse> response = DogBinApi.getInstance().getService().getDocument(App.getPreferencesUtil().getApiKey(), slug).execute();
+        Response<DogBinDocumentInfoResponse> response = DogBinApi.getInstance().getService().getDocument(App.getPreferencesUtil().getApiKey(), slug).execute();
         checkResponseForError(response);
 
-        DocumentInfoResponse documentInfoResponse = response.body();
-        return DocumentContent.create(documentInfoResponse.getContent(), documentInfoResponse.getKey(), documentInfoResponse.isEditable(),
-                !documentInfoResponse.getType().equals("PASTE"));
+        DogBinDocumentInfoResponse dogBinDocumentInfoResponse = response.body();
+        return DocumentContent.create(dogBinDocumentInfoResponse.getContent(), dogBinDocumentInfoResponse.getKey(), dogBinDocumentInfoResponse.isEditable(),
+                !dogBinDocumentInfoResponse.getType().equals("PASTE"));
     }
 
     @Override
     public String createDocument(String slug, String content) throws Exception {
-        Response<DocumentLinkResponse> response = DogBinApi.getInstance().getService().createDocument(App.getPreferencesUtil().getApiKey(),
+        Response<DogBinDocumentLinkResponse> response = DogBinApi.getInstance().getService().createDocument(App.getPreferencesUtil().getApiKey(),
                 NetworkUtils.getDocumentBody(content, slug)).execute();
         checkResponseForError(response);
 
@@ -168,12 +167,12 @@ public class DogBinService implements BinService {
     public List<UserDocument> getUserDocumentsForFolder(String key) throws Exception {
         switch (key) {
             case "my_notes":
-                Response<List<DocumentResponse>> response = DogBinApi.getInstance().getService().getMyNotes(App.getPreferencesUtil().getApiKey()).execute();
+                Response<List<DogBinDocumentResponse>> response = DogBinApi.getInstance().getService().getMyNotes(App.getPreferencesUtil().getApiKey()).execute();
                 checkResponseForError(response);
 
-                List<DocumentResponse> documents = response.body();
+                List<DogBinDocumentResponse> documents = response.body();
                 List<UserDocument> userDocuments = new ArrayList<>();
-                for (DocumentResponse document : documents) {
+                for (DogBinDocumentResponse document : documents) {
                     userDocuments.add(UserDocument.createDocument(document.getSlug(), sDogbinDateFormat.parse(document.getCreatedTime()).toLocaleString()));
                 }
 
@@ -188,14 +187,6 @@ public class DogBinService implements BinService {
     }
 
     private void checkResponseForError(Response response) throws Exception {
-        ResponseBody responseBody = response.errorBody();
-        if (responseBody == null)
-            return;
-
-        ErrorResponse errorResponse = Utils.getGson().fromJson(responseBody.string(), ErrorResponse.class);
-        if (errorResponse == null) {
-            throw new Exception(response.toString());
-        }
-        throw new Exception(errorResponse.getMessage());
+        NetworkUtils.checkResponseForError(response, DogBinErrorResponse.class);
     }
 }

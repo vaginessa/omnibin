@@ -67,7 +67,7 @@ public class PasteBinService implements BinService {
                 .addFormDataPart("api_user_password", password)
                 .build()).execute().body();
 
-        if (token.contains("Bad API request"))
+        if (!isResponseOk(token))
             throw new Exception(token);
 
         setToken(token);
@@ -100,10 +100,10 @@ public class PasteBinService implements BinService {
 
         String text = PasteBinApi.getInstance().getService().getText(builder.build()).execute().body();
 
-        if (text.contains("Bad API request")) {
+        if (!isResponseOk(text)) {
             text = PasteBinApi.getInstance().getRawService().getContent(slug).execute().body();
 
-            if (text.contains("Bad API request"))
+            if (!isResponseOk(text))
                 throw new Exception(text);
         }
 
@@ -125,7 +125,7 @@ public class PasteBinService implements BinService {
 
         String url = PasteBinApi.getInstance().getService().paste(builder.build()).execute().body();
 
-        if (url.contains("Bad API request"))
+        if (!isResponseOk(url))
             throw new Exception(url);
 
         return url.replace("https://pastebin.com/", "");
@@ -201,7 +201,7 @@ public class PasteBinService implements BinService {
                         .addFormDataPart("api_option", "list")
                         .build()).execute().body();
 
-                if (pastesXml.contains("Bad API request"))
+                if (!isResponseOk(pastesXml))
                     throw new Exception(pastesXml);
 
                 try {
@@ -248,6 +248,10 @@ public class PasteBinService implements BinService {
             default:
                 return Collections.emptyList();
         }
+    }
+
+    private boolean isResponseOk(String text) {
+        return text != null && !text.contains("Bad API request");
     }
 
     private String getToken() {

@@ -1,8 +1,8 @@
-package com.f0x1d.dogbin.network.model;
+package com.f0x1d.dogbin.network.model.dogbin;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DocumentResponse {
+public class DogBinDocumentResponse {
 
     @SerializedName("slug")
     private String mSlug;

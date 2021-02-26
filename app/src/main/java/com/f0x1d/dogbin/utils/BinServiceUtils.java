@@ -13,6 +13,7 @@ import com.f0x1d.dmsdk.Constants;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.DogBinService;
+import com.f0x1d.dogbin.network.FoxBinService;
 import com.f0x1d.dogbin.network.PasteBinService;
 
 import java.io.File;
@@ -27,11 +28,12 @@ public class BinServiceUtils {
 
     public static final String DOGBIN_SERVICE = "dogbin";
     public static final String PASTEBIN_SERVICE = "pastebin";
+    public static final String FOXBIN_SERVICE = "foxbin";
 
-    public static String[] IMPLEMENTED_SERVICES = new String[]{DOGBIN_SERVICE, PASTEBIN_SERVICE};
+    public static String[] IMPLEMENTED_SERVICES = new String[]{DOGBIN_SERVICE, PASTEBIN_SERVICE, FOXBIN_SERVICE};
 
     private static BinService sInstance;
-    private static MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>();
+    private static final MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>();
 
     public static BinService getCurrentActiveService() {
         synchronized (BinServiceUtils.class) {
@@ -40,7 +42,7 @@ public class BinServiceUtils {
 
                 String selectedService = App.getPreferencesUtil().getSelectedService();
                 if (selectedService == null) {
-                    selectedService = DOGBIN_SERVICE;
+                    selectedService = DOGBIN_SERVICE /* FOXBIN_SERVICE in future */;
                     App.getPreferencesUtil().setSelectedService(selectedService);
                 }
 
@@ -49,6 +51,8 @@ public class BinServiceUtils {
                         return sInstance = DogBinService.getInstance();
                     case PASTEBIN_SERVICE:
                         return sInstance = PasteBinService.getInstance();
+                    case FOXBIN_SERVICE:
+                        return sInstance = FoxBinService.getInstance();
                 }
 
                 try {
@@ -121,6 +125,7 @@ public class BinServiceUtils {
     public static String getInbuiltServiceForUrl(String url) {
         if (url.contains("del.dog") || url.contains("dogbin.f0x1d.com")) return DOGBIN_SERVICE;
         else if (url.contains("pastebin.com")) return PASTEBIN_SERVICE;
+        else if (url.contains("f0x1d.com/foxbin")) return FOXBIN_SERVICE;
 
         else return DOGBIN_SERVICE;
     }

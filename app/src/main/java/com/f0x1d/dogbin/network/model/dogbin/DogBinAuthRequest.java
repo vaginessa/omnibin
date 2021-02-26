@@ -1,10 +1,10 @@
-package com.f0x1d.dogbin.network.model;
+package com.f0x1d.dogbin.network.model.dogbin;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class AuthRequest {
+public class DogBinAuthRequest {
 
     @SerializedName("username")
     private String mUsername;
@@ -18,13 +18,13 @@ public class AuthRequest {
     @SerializedName("application")
     private String mApplicationName;
 
-    public static AuthRequest create(String username, String password, List<String> permissions, String applicationName) {
-        AuthRequest authRequest = new AuthRequest();
-        authRequest.setUsername(username);
-        authRequest.setPassword(password);
-        authRequest.setPermissions(permissions);
-        authRequest.setApplicationName(applicationName);
-        return authRequest;
+    public static DogBinAuthRequest create(String username, String password, List<String> permissions, String applicationName) {
+        DogBinAuthRequest dogBinAuthRequest = new DogBinAuthRequest();
+        dogBinAuthRequest.setUsername(username);
+        dogBinAuthRequest.setPassword(password);
+        dogBinAuthRequest.setPermissions(permissions);
+        dogBinAuthRequest.setApplicationName(applicationName);
+        return dogBinAuthRequest;
     }
 
     public void setUsername(String username) {

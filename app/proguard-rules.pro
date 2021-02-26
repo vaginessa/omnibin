@@ -20,5 +20,6 @@
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 
--keep class com.f0x1d.dogbin.network.model.* { *; }
+-keep class com.f0x1d.dogbin.network.model.dogbin.* { *; }
+-keep class com.f0x1d.dogbin.network.model.foxbin.* { *; }
 -keep class com.f0x1d.dogbin.db.entity.* { *; }
