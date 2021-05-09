@@ -98,6 +98,7 @@
             android:key="dogbin_domain"
             android:summary="@string/no_touch"
             android:title="@string/dogbin_domain"
+            app:isPreferenceVisible="false"
             app:defaultValue="https://del.dog/"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>

@@ -118,11 +118,10 @@ public class TextEditActivity extends BaseActivity {
                 intent.setData(Uri.parse(resultUrl));
                 intent.putExtra("my_note", true);
                 startActivity(intent);
-                finish();
-            } else {
+            } else
                 setResult(Activity.RESULT_OK);
-                finish();
-            }
+
+            finish();
         });
 
         if (mIntentToPost) {

@@ -114,7 +114,7 @@ public class PreferencesUtils {
     }
 
     public String getDogbinDomain() {
-        return mDefaultPreferences.getString(DOGBIN_DOMAIN_NAME, "https://del.dog/");
+        return "https://del.dog/";//mDefaultPreferences.getString(DOGBIN_DOMAIN_NAME, "https://del.dog/");
     }
 
     public void setDogbinDomain(String domain) {
@@ -146,7 +146,7 @@ public class PreferencesUtils {
     }
 
     public String getSelectedService() {
-        return mAppPreferences.getString(SELECTED_SERVICE_NAME, BinServiceUtils.DOGBIN_SERVICE);
+        return mAppPreferences.getString(SELECTED_SERVICE_NAME, BinServiceUtils.FOXBIN_SERVICE);
     }
 
     public void setSelectedService(String packageName) {

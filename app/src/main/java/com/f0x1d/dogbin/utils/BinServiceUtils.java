@@ -42,7 +42,7 @@ public class BinServiceUtils {
 
                 String selectedService = App.getPreferencesUtil().getSelectedService();
                 if (selectedService == null) {
-                    selectedService = DOGBIN_SERVICE /* FOXBIN_SERVICE in future */;
+                    selectedService = FOXBIN_SERVICE /* FOXBIN_SERVICE in future */;
                     App.getPreferencesUtil().setSelectedService(selectedService);
                 }
 
@@ -64,8 +64,8 @@ public class BinServiceUtils {
                 } catch (Exception e) {
                     Utils.runOnUiThread(() ->
                             Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
-                    App.getPreferencesUtil().setSelectedService(DOGBIN_SERVICE);
-                    return sInstance = DogBinService.getInstance();
+                    App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
+                    return sInstance = FoxBinService.getInstance();
                 }
             }
             return sInstance;
@@ -79,7 +79,7 @@ public class BinServiceUtils {
                 App.getPreferencesUtil().setSelectedService(packageName);
                 return sInstance;
             } catch (Exception e) {
-                return DogBinService.getInstance();
+                return FoxBinService.getInstance();
             }
         }
     }
@@ -87,8 +87,8 @@ public class BinServiceUtils {
     private static BinService loadServiceFromApp(String packageName) throws Exception {
         ApplicationInfo applicationInfo = App.getInstance().getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA);
         if (applicationInfo.metaData == null || !App.getInstance().getPackageManager().getApplicationLabel(applicationInfo).toString().startsWith(START_TAG)) {
-            App.getPreferencesUtil().setSelectedService(DOGBIN_SERVICE);
-            return DogBinService.getInstance();
+            App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
+            return FoxBinService.getInstance();
         }
 
         File outDir = new File("/data/data/" + App.getInstance().getPackageName() + "/files/" + applicationInfo.packageName);
@@ -99,8 +99,8 @@ public class BinServiceUtils {
         BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("service")).getConstructor().newInstance();
         if (binService.getSDKVersion() < Constants.LATEST_VERSION) {
             Toast.makeText(App.getInstance(), R.string.module_v_old, Toast.LENGTH_SHORT).show();
-            App.getPreferencesUtil().setSelectedService(DOGBIN_SERVICE);
-            return DogBinService.getInstance();
+            App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
+            return FoxBinService.getInstance();
         }
         binService.init(App.getInstance().createPackageContext(packageName, 0), App.getInstance().getApplicationContext(),
                 App.getInstance().getSharedPreferences(packageName + "_module", Context.MODE_PRIVATE));
@@ -127,7 +127,7 @@ public class BinServiceUtils {
         else if (url.contains("pastebin.com")) return PASTEBIN_SERVICE;
         else if (url.contains("f0x1d.com/foxbin")) return FOXBIN_SERVICE;
 
-        else return DOGBIN_SERVICE;
+        else return FOXBIN_SERVICE;
     }
 
     public static void refreshInstalledServices() {

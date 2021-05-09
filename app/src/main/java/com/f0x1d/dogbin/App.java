@@ -9,8 +9,6 @@ import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.Locale;
-
 public class App extends Application {
 
     private static App sInstance;
@@ -51,16 +49,5 @@ public class App extends Application {
                 .build();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        checkUserIsFromRussia();
-    }
-
-    private void checkUserIsFromRussia() {
-        if (getPreferencesUtil().isFirstStart()) {
-            if (Locale.getDefault().getLanguage().startsWith("ru"))
-                getPreferencesUtil().setDogbinDomain("https://dogbin.f0x1d.com/");
-
-            getPreferencesUtil().setFirstStart(false);
-        }
     }
 }
