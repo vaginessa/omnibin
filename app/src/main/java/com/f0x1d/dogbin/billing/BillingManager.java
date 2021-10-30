@@ -89,7 +89,7 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
                 continue;
             }
 
-            if (purchase.getSku().equals(SKU_DONATION_NAME)) {
+            if (purchase.getSkus().contains(SKU_DONATION_NAME)) {
                 hasDonationPurchase = true;
 
                 if (purchase.getPurchaseState() == Purchase.PurchaseState.PENDING) {

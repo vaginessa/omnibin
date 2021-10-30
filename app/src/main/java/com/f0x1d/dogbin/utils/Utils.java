@@ -1,18 +1,26 @@
 package com.f0x1d.dogbin.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.AttrRes;
 
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
+import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -37,6 +45,23 @@ public class Utils {
 
     public static void initOnUiThread() {
         sUiHandler = new Handler();
+    }
+
+    public static int statusBarHeight() {
+        int result = 0;
+        int resourceId = Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = Resources.getSystem().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    public static void applyToolbarShit(View view, String title) {
+        CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle(title);
+
+        MaterialToolbar materialToolbar = view.findViewById(R.id.toolbar);
+        ((ViewGroup.MarginLayoutParams) materialToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
     }
 
     public static Gson getGson() {
@@ -111,12 +136,10 @@ public class Utils {
         String selectedPackageName = App.getPreferencesUtil().getSelectedService();
 
         switch (selectedPackageName) {
-            case BinServiceUtils.DOGBIN_SERVICE:
-                return 0;
             case BinServiceUtils.PASTEBIN_SERVICE:
-                return 1;
+                return 0;
             case BinServiceUtils.FOXBIN_SERVICE:
-                return 2;
+                return 1;
         }
 
         for (int i = 0; i < applicationInfos.size(); i++) {

@@ -2,9 +2,8 @@
 <resources>
     <string-array name="accents">
         <item>По умолчанию</item>
-        <item>Розовый (AMOLED)</item>
-        <item>Лайм (AMOLED)</item>
-        <item>Синий (AMOLED)</item>
+        <item>Розовый</item>
+        <item>Лайм</item>
         <item>Золотой</item>
     </string-array>
 </resources>

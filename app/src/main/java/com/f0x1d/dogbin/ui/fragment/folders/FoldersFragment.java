@@ -2,6 +2,7 @@ package com.f0x1d.dogbin.ui.fragment.folders;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,17 +17,15 @@ import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.FoldersViewModel;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class FoldersFragment extends BaseFragment {
+public class FoldersFragment extends BaseFragment<FoldersViewModel> {
 
-    private MaterialToolbar mToolbar;
     private RecyclerView mFoldersRecycler;
     private SwipeRefreshLayout mRefreshLayout;
 
     private FoldersAdapter mAdapter;
-
-    private FoldersViewModel mFoldersViewModel;
 
     public static FoldersFragment newInstance() {
         Bundle args = new Bundle();
@@ -42,20 +41,20 @@ public class FoldersFragment extends BaseFragment {
     }
 
     @Override
+    protected Class<FoldersViewModel> viewModel() {
+        return FoldersViewModel.class;
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mFoldersViewModel = new ViewModelProvider(this).get(FoldersViewModel.class);
-        if (savedInstanceState == null)
-            mFoldersViewModel.load();
-
-        mToolbar = findViewById(R.id.toolbar);
         mFoldersRecycler = findViewById(R.id.folders_recycler);
         mRefreshLayout = findViewById(R.id.refresh_layout);
 
-        mToolbar.setTitle(R.string.folders);
+        Utils.applyToolbarShit(view, getString(R.string.folders));
 
-        mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorAccent));
+        mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorPrimary));
         if (isNightTheme())
             mRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getColorFromAttr(requireActivity(), android.R.attr.windowBackground));
 
@@ -64,7 +63,7 @@ public class FoldersFragment extends BaseFragment {
                 ((FoldersWrapperFragment) getParentFragment()).getFragmentNavigator().switchTo(
                         NotesFragment.newInstance(folder.getTitle(), folder.getKey(), false), folder.getKey() + "_notes", true)));
 
-        mFoldersViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
+        mViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == null)
                 return;
 
@@ -81,7 +80,7 @@ public class FoldersFragment extends BaseFragment {
             }
         });
 
-        mFoldersViewModel.getFoldersData().observe(getViewLifecycleOwner(), folders -> {
+        mViewModel.getFoldersData().observe(getViewLifecycleOwner(), folders -> {
             if (folders == null)
                 return;
 
@@ -89,6 +88,6 @@ public class FoldersFragment extends BaseFragment {
             mAdapter.notifyDataSetChanged();
         });
 
-        mRefreshLayout.setOnRefreshListener(mFoldersViewModel::load);
+        mRefreshLayout.setOnRefreshListener(mViewModel::load);
     }
 }

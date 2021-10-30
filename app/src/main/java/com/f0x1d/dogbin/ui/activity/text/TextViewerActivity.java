@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
@@ -25,7 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.pddstudio.highlightjs.HighlightJsView;
 import com.pddstudio.highlightjs.models.Theme;
 
-public class TextViewerActivity extends BaseActivity {
+public class TextViewerActivity extends BaseActivity<TextViewModel> {
 
     public static final String ACTION_TEXT_VIEW = "com.f0x1d.dogbin.ACTION_TEXT_VIEW";
 
@@ -34,6 +35,11 @@ public class TextViewerActivity extends BaseActivity {
     private MaterialToolbar mToolbar;
     private HighlightJsView mTextCodeView;
     private ProgressBar mLoadingProgress;
+
+    @Override
+    protected Class<TextViewModel> viewModel() {
+        return TextViewModel.class;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class TextViewerActivity extends BaseActivity {
         }
 
         mToolbar = findViewById(R.id.toolbar);
+        ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
         mTextCodeView = findViewById(R.id.text_code_view);
         mLoadingProgress = findViewById(R.id.loading_progress);
 
@@ -55,10 +62,9 @@ public class TextViewerActivity extends BaseActivity {
 
         mTextCodeView.setShowLineNumbers(true);
         mTextCodeView.setZoomSupportEnabled(true);
-        mTextCodeView.setTheme(isNightTheme() ? (isAmoledTheme() ? Theme.DOGBIN_AMOLED : Theme.DOGBIN_NIGHT_THEME) : Theme.GOOGLECODE);
+        mTextCodeView.setTheme(isNightTheme() ? Theme.DOGBIN_AMOLED : Theme.GOOGLECODE);
         mTextCodeView.setTextWrap(App.getPreferencesUtil().textWrap());
-        if (isNightTheme())
-            mTextCodeView.setBackgroundColor(Utils.getColorFromAttr(this, android.R.attr.windowBackground));
+        mTextCodeView.setBackgroundColor(getWindow().getStatusBarColor());
 
         mTextCodeView.setOnContentHighlightedListener(mTextViewModel);
 

@@ -7,8 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dmsdk.model.UserDocument;
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
@@ -18,21 +21,37 @@ import java.util.List;
 
 public class NotesViewModel extends AndroidViewModel {
 
-    private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
-    private MutableLiveData<List<UserDocument>> mNotesListData = new MutableLiveData<>();
-    private MutableLiveData<String> mFolderKeyData = new MutableLiveData<>("");
+    public static class NotesViewModelFactory implements ViewModelProvider.Factory {
 
-    public NotesViewModel(@NonNull Application application) {
-        super(application);
+        private String folderKey;
+
+        public NotesViewModelFactory(String folderKey) {
+            this.folderKey = folderKey;
+        }
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new NotesViewModel(App.getInstance(), folderKey);
+        }
     }
 
-    public void load(String folderKey) {
-        mFolderKeyData.setValue(folderKey);
+    private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
+    private MutableLiveData<List<UserDocument>> mNotesListData = new MutableLiveData<>();
+    private String mFolderKey;
+
+    public NotesViewModel(@NonNull Application application, String folderKey) {
+        super(application);
+        this.mFolderKey = folderKey;
+        load();
+    }
+
+    public void load() {
         mLoadingStateData.setValue(LoadingState.LOADING);
 
         Utils.getExecutor().execute(() -> {
             try {
-                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().getUserDocumentsForFolder(folderKey);
+                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().getUserDocumentsForFolder(mFolderKey);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mNotesListData.postValue(userDocuments);
@@ -48,10 +67,6 @@ public class NotesViewModel extends AndroidViewModel {
                 mNotesListData.postValue(userDocuments);
             }
         });
-    }
-
-    public void load() {
-        load(mFolderKeyData.getValue());
     }
 
     private void processError(Throwable t) {

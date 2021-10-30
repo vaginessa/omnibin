@@ -2,9 +2,8 @@
 <resources>
     <string-array name="accents">
         <item>Default</item>
-        <item>Pink (AMOLED)</item>
-        <item>Lime (AMOLED)</item>
-        <item>Blue (AMOLED)</item>
+        <item>Pink</item>
+        <item>Lime</item>
         <item>Gold</item>
     </string-array>
 
@@ -13,6 +12,5 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
-        <item>4</item>
     </string-array>
 </resources>

@@ -4,19 +4,33 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.Utils;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity<T extends AndroidViewModel> extends AppCompatActivity {
+
+    protected T mViewModel;
+
+    protected abstract Class<T> viewModel();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) ->
+                ViewCompat.onApplyWindowInsets(getWindow().getDecorView(),
+                        insets.replaceSystemWindowInsets(0, 0, 0, insets.getSystemWindowInsetBottom())));
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             AppCompatDelegate.setDefaultNightMode(App.getPreferencesUtil().isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         }
@@ -32,15 +46,25 @@ public abstract class BaseActivity extends AppCompatActivity {
                 setTheme(R.style.AppTheme_Lime);
                 break;
             case 3:
-                setTheme(R.style.AppTheme_Blue);
-                break;
-            case 4:
                 setTheme(R.style.AppTheme_Gold);
                 break;
         }
 
         setupNavBarAndStatusBar();
         super.onCreate(savedInstanceState);
+
+        Class<T> viewModelClass = viewModel();
+        if (viewModelClass != null) {
+            ViewModelProvider.Factory factory = buildFactory();
+            if (factory == null)
+                mViewModel = new ViewModelProvider(this).get(viewModelClass);
+            else
+                mViewModel = new ViewModelProvider(this, factory).get(viewModelClass);
+        }
+    }
+
+    protected ViewModelProvider.Factory buildFactory() {
+        return null;
     }
 
     private void setupNavBarAndStatusBar() {
@@ -53,10 +77,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1 && lightTheme) {
             getWindow().setNavigationBarColor(Color.BLACK);
         }
-    }
-
-    protected boolean isAmoledTheme() {
-        return Utils.getBooleanFromAttr(this, R.attr.themeAmoled);
     }
 
     protected boolean isNightTheme() {

@@ -17,10 +17,10 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_main);
 
     // Creating intent
-    Intent intent = new Intent("com.f0x1d.dogbin.ACTION_UPLOAD_TO_DOGBIN");
+    Intent intent = new Intent("com.f0x1d.dogbin.ACTION_UPLOAD_TO_FOXBIN");
     // Text to publish
     intent.putExtra(Intent.EXTRA_TEXT, "vzlom beb 3");
-    // Slug to use (link), example: https://del.dog/{slug}
+    // Slug to use (link), example: https://some.domain/{slug}
     intent.putExtra("slug", "happynewyear");
     // omnibin won't automatically copy the result link
     intent.putExtra("copy", false);

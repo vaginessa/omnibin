@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,28 +17,32 @@ import androidx.lifecycle.ViewModelProvider;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
+import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.WritingViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.markusressel.kodeeditor.library.view.CodeEditorLayout;
 
-public class TextEditActivity extends BaseActivity {
+public class TextEditActivity extends BaseActivity<WritingViewModel> {
 
-    public static final String ACTION_UPLOAD_TO_DOGBIN = "com.f0x1d.dogbin.ACTION_UPLOAD_TO_DOGBIN";
+    public static final String ACTION_UPLOAD_TO_FOXBIN = "com.f0x1d.dogbin.ACTION_UPLOAD_TO_FOXBIN";
 
     private MaterialToolbar mToolbar;
     private EditText mSlugText;
     private CodeEditorLayout mWritebarText;
     private FloatingActionButton mDoneButton;
 
-    private WritingViewModel mWritingViewModel;
-
     private boolean mEditingMode;
     private String mSlug;
     private String mTextFromIntent;
     private boolean mIntentToPost = false;
     private boolean mIntentToCopy = true;
+
+    @Override
+    protected Class<WritingViewModel> viewModel() {
+        return WritingViewModel.class;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,13 +54,11 @@ public class TextEditActivity extends BaseActivity {
         mTextFromIntent = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         mIntentToCopy = getIntent().getBooleanExtra("copy", true);
         mIntentToPost = !mEditingMode && mTextFromIntent != null && getIntent().getAction() != null &&
-                (getIntent().getAction().equals(ACTION_UPLOAD_TO_DOGBIN) || getIntent().getAction().equals(Intent.ACTION_SEND));
-
-        mWritingViewModel = new ViewModelProvider(this).get(WritingViewModel.class);
-        if (savedInstanceState == null)
-            mWritingViewModel.setInEditingMode(mEditingMode);
+                (getIntent().getAction().equals(ACTION_UPLOAD_TO_FOXBIN) || getIntent().getAction().equals(Intent.ACTION_SEND));
 
         mToolbar = findViewById(R.id.toolbar);
+        ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
+
         mSlugText = findViewById(R.id.slug_text);
         mWritebarText = findViewById(R.id.writebar_text);
         mDoneButton = findViewById(R.id.done_button);
@@ -70,7 +73,7 @@ public class TextEditActivity extends BaseActivity {
             mWritebarText.setText(mTextFromIntent);
         }
 
-        mWritingViewModel.getLoadingStateData().observe(this, loadingState -> {
+        mViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
                 return;
 
@@ -88,7 +91,7 @@ public class TextEditActivity extends BaseActivity {
             }
         });
 
-        mWritingViewModel.getResultSlugData().observe(this, resultSlug -> {
+        mViewModel.getResultSlugData().observe(this, resultSlug -> {
             if (resultSlug == null) {
                 mSlugText.setError(getString(R.string.invalid_link));
                 return;
@@ -129,10 +132,15 @@ public class TextEditActivity extends BaseActivity {
                 mSlugText.setText(mSlug);
 
             mWritebarText.setText(mTextFromIntent);
-            mWritingViewModel.publish(mTextFromIntent, mSlug == null ? "" : mSlug);
+            mViewModel.publish(mTextFromIntent, mSlug == null ? "" : mSlug);
         }
 
         mDoneButton.setOnClickListener(v ->
-                mWritingViewModel.publish(mWritebarText.getText(), mSlug == null ? mSlugText.getText().toString() : mSlug));
+                mViewModel.publish(mWritebarText.getText(), mSlug == null ? mSlugText.getText().toString() : mSlug));
+    }
+
+    @Override
+    protected ViewModelProvider.Factory buildFactory() {
+        return new WritingViewModel.WritingViewModelFactory(getIntent().getBooleanExtra("edit", false));
     }
 }

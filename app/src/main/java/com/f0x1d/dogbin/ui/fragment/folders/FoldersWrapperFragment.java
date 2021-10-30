@@ -5,13 +5,14 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
 
-public class FoldersWrapperFragment extends BaseFragment {
+public class FoldersWrapperFragment extends BaseFragment<AndroidViewModel> {
 
     private FragmentNavigator mFragmentNavigator;
 
@@ -26,6 +27,11 @@ public class FoldersWrapperFragment extends BaseFragment {
     @Override
     protected int layoutId() {
         return R.layout.fragment_folders_wrapper;
+    }
+
+    @Override
+    protected Class<AndroidViewModel> viewModel() {
+        return null;
     }
 
     @Override

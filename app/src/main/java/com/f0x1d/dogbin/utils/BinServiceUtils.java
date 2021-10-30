@@ -26,11 +26,10 @@ public class BinServiceUtils {
 
     public static final String START_TAG = "omnibin.";
 
-    public static final String DOGBIN_SERVICE = "dogbin";
     public static final String PASTEBIN_SERVICE = "pastebin";
     public static final String FOXBIN_SERVICE = "foxbin";
 
-    public static String[] IMPLEMENTED_SERVICES = new String[]{DOGBIN_SERVICE, PASTEBIN_SERVICE, FOXBIN_SERVICE};
+    public static String[] IMPLEMENTED_SERVICES = new String[]{PASTEBIN_SERVICE, FOXBIN_SERVICE};
 
     private static BinService sInstance;
     private static final MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>();
@@ -42,13 +41,11 @@ public class BinServiceUtils {
 
                 String selectedService = App.getPreferencesUtil().getSelectedService();
                 if (selectedService == null) {
-                    selectedService = FOXBIN_SERVICE /* FOXBIN_SERVICE in future */;
+                    selectedService = FOXBIN_SERVICE;
                     App.getPreferencesUtil().setSelectedService(selectedService);
                 }
 
                 switch (selectedService) {
-                    case DOGBIN_SERVICE:
-                        return sInstance = DogBinService.getInstance();
                     case PASTEBIN_SERVICE:
                         return sInstance = PasteBinService.getInstance();
                     case FOXBIN_SERVICE:
@@ -123,8 +120,7 @@ public class BinServiceUtils {
     }
 
     public static String getInbuiltServiceForUrl(String url) {
-        if (url.contains("del.dog") || url.contains("dogbin.f0x1d.com")) return DOGBIN_SERVICE;
-        else if (url.contains("pastebin.com")) return PASTEBIN_SERVICE;
+        if (url.contains("pastebin.com")) return PASTEBIN_SERVICE;
         else if (url.contains("f0x1d.com/foxbin")) return FOXBIN_SERVICE;
 
         else return FOXBIN_SERVICE;

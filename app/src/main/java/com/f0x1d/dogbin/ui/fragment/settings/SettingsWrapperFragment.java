@@ -5,18 +5,18 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
+import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class SettingsWrapperFragment extends BaseFragment {
+public class SettingsWrapperFragment extends BaseFragment<AndroidViewModel> {
 
     private FragmentNavigator mFragmentNavigator;
-
-    private MaterialToolbar mToolbar;
 
     public static SettingsWrapperFragment newInstance() {
         Bundle args = new Bundle();
@@ -32,11 +32,15 @@ public class SettingsWrapperFragment extends BaseFragment {
     }
 
     @Override
+    protected Class<AndroidViewModel> viewModel() {
+        return null;
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mToolbar = findViewById(R.id.toolbar);
-        mToolbar.setTitle(R.string.settings);
+        Utils.applyToolbarShit(view, getString(R.string.settings));
 
         mFragmentNavigator = new FragmentNavigator(getChildFragmentManager(), R.id.wrapper_container, new MyFragmentBuilder());
         if (savedInstanceState == null)

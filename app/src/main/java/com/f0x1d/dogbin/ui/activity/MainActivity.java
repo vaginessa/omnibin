@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.App;
@@ -21,13 +22,19 @@ import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.shape.MaterialShapeDrawable;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<AndroidViewModel> {
 
     private FragmentNavigator mFragmentNavigator;
 
     private FloatingActionButton mPublishButton;
     private BottomNavigationView mBottomNavigation;
+
+    @Override
+    protected Class<AndroidViewModel> viewModel() {
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,7 @@ public class MainActivity extends BaseActivity {
     private void processIntent(Intent intent, boolean recreate) {
         if (intent.getAction() != null && intent.getAction().equals(TextViewerActivity.ACTION_TEXT_VIEW)) {
             String modulePackageName = intent.getStringExtra("module_package_name");
-            BinServiceUtils.getBinServiceForPackageName(modulePackageName == null ? BinServiceUtils.DOGBIN_SERVICE : modulePackageName);
+            BinServiceUtils.getBinServiceForPackageName(modulePackageName == null ? BinServiceUtils.FOXBIN_SERVICE : modulePackageName);
 
             if (recreate) {
                 finish();
@@ -115,6 +122,7 @@ public class MainActivity extends BaseActivity {
                     return false;
             }
         });
+        getWindow().setNavigationBarColor(((MaterialShapeDrawable) mBottomNavigation.getBackground()).getResolvedTintColor());
 
         if (savedInstanceState == null)
             mBottomNavigation.setSelectedItemId(R.id.default_folder_navigation);

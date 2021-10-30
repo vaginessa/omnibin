@@ -23,6 +23,7 @@ public class FoldersViewModel extends AndroidViewModel {
 
     public FoldersViewModel(@NonNull Application application) {
         super(application);
+        load();
     }
 
     public void load() {

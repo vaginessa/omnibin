@@ -7,24 +7,39 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
 
 public class WritingViewModel extends AndroidViewModel {
 
+    public static class WritingViewModelFactory implements ViewModelProvider.Factory {
+
+        private boolean editingMode;
+
+        public WritingViewModelFactory(boolean editingMode) {
+            this.editingMode = editingMode;
+        }
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new WritingViewModel(App.getInstance(), editingMode);
+        }
+    }
+
     private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
     private MutableLiveData<String> mResultSlugData = new MutableLiveData<>();
 
-    private boolean mInEditingMode = false;
+    private final boolean mInEditingMode;
 
-    public WritingViewModel(@NonNull Application application) {
+    public WritingViewModel(@NonNull Application application, boolean editingMode) {
         super(application);
-    }
-
-    public void setInEditingMode(boolean inEditingMode) {
-        this.mInEditingMode = inEditingMode;
+        mInEditingMode = editingMode;
     }
 
     public void publish(String text, String slug) {

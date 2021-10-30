@@ -36,7 +36,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private Preference mServicePreference;
     private boolean mAskedServiceDialog = false;
-    private EditTextPreference mDogbinDomainPreference;
 
     private Preference mClearCachePreference;
 
@@ -123,23 +122,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return false;
         });
 
-        mDogbinDomainPreference = findPreference(PreferencesUtils.DOGBIN_DOMAIN_NAME);
-        mDogbinDomainPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            String newDomain = (String) newValue;
-            if (!newDomain.matches("http(s|)://.+?")) {
-                Toast.makeText(requireContext(), R.string.domain_name_require1, Toast.LENGTH_SHORT).show();
-                return false;
-            } else if (!newDomain.endsWith("/")) {
-                Toast.makeText(requireContext(), R.string.domain_name_require2, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            requireActivity().finish();
-            startActivity(new Intent(requireActivity(), MainActivity.class));
-
-            return true;
-        });
-
         mClearCachePreference = findPreference("cache_nuke");
         mClearCachePreference.setOnPreferenceClickListener(preference -> {
             Utils.getExecutor().execute(() -> App.getMyDatabase().getDogbinSavedNoteDao().nukeTable());
@@ -164,12 +146,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
                         switch (which) {
                             case 0:
-                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.DOGBIN_SERVICE);
-                                break;
-                            case 1:
                                 App.getPreferencesUtil().setSelectedService(BinServiceUtils.PASTEBIN_SERVICE);
                                 break;
-                            case 2:
+                            case 1:
                                 App.getPreferencesUtil().setSelectedService(BinServiceUtils.FOXBIN_SERVICE);
                                 break;
                             default:
