@@ -33,12 +33,6 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
     private CodeEditorLayout mWritebarText;
     private FloatingActionButton mDoneButton;
 
-    private boolean mEditingMode;
-    private String mSlug;
-    private String mTextFromIntent;
-    private boolean mIntentToPost = false;
-    private boolean mIntentToCopy = true;
-
     @Override
     protected Class<WritingViewModel> viewModel() {
         return WritingViewModel.class;
@@ -49,13 +43,6 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_edit);
 
-        mEditingMode = getIntent().getBooleanExtra("edit", false);
-        mSlug = getIntent().getStringExtra("slug");
-        mTextFromIntent = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-        mIntentToCopy = getIntent().getBooleanExtra("copy", true);
-        mIntentToPost = !mEditingMode && mTextFromIntent != null && getIntent().getAction() != null &&
-                (getIntent().getAction().equals(ACTION_UPLOAD_TO_FOXBIN) || getIntent().getAction().equals(Intent.ACTION_SEND));
-
         mToolbar = findViewById(R.id.toolbar);
         ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
 
@@ -64,13 +51,13 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
         mDoneButton = findViewById(R.id.done_button);
 
         mWritebarText.setShowDivider(false);
-        mToolbar.setTitle(mEditingMode ? R.string.editing_note : R.string.creating_note);
+        mToolbar.setTitle(mViewModel.isInEditingMode() ? R.string.editing_note : R.string.creating_note);
 
-        if (mEditingMode) {
-            mSlugText.setText(mSlug);
+        if (mViewModel.isInEditingMode()) {
+            mSlugText.setText(mViewModel.getSlug());
             mSlugText.setEnabled(false);
 
-            mWritebarText.setText(mTextFromIntent);
+            mWritebarText.setText(mViewModel.getTextFromIntent());
         }
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
@@ -79,39 +66,29 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
 
             switch (loadingState) {
                 case LOADING:
-                    if (!mEditingMode) mSlugText.setEnabled(false);
+                    if (!mViewModel.isInEditingMode()) mSlugText.setEnabled(false);
                     mDoneButton.setEnabled(false);
                     mWritebarText.setEditable(false);
                     break;
                 case LOADED:
-                    if (!mEditingMode) mSlugText.setEnabled(true);
+                    if (!mViewModel.isInEditingMode()) mSlugText.setEnabled(true);
                     mDoneButton.setEnabled(true);
                     mWritebarText.setEditable(true);
                     break;
             }
         });
 
-        mViewModel.getResultSlugData().observe(this, resultSlug -> {
-            if (resultSlug == null) {
+        mViewModel.getResultUrlData().observe(this, resultUrl -> {
+            if (resultUrl == null) {
                 mSlugText.setError(getString(R.string.invalid_link));
                 return;
             }
 
-            if (!mEditingMode) {
+            if (!mViewModel.isInEditingMode()) {
                 mWritebarText.setText("");
                 mSlugText.setText("");
 
-                String resultUrl = BinServiceUtils.getCurrentActiveService().getDomain() + resultSlug;
-
-                if (mIntentToCopy) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText(getString(R.string.app_name), resultUrl);
-                    clipboard.setPrimaryClip(clip);
-
-                    Toast.makeText(this, getString(R.string.copied_to_clipboard, resultUrl), Toast.LENGTH_SHORT).show();
-                }
-
-                if (mIntentToPost) {
+                if (mViewModel.isIntentToPost()) {
                     setResult(Activity.RESULT_OK, new Intent().setData(Uri.parse(resultUrl)));
                     finish();
                     return;
@@ -127,20 +104,20 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
             finish();
         });
 
-        if (mIntentToPost) {
-            if (mSlug != null)
-                mSlugText.setText(mSlug);
+        if (mViewModel.isIntentToPost()) {
+            if (mViewModel.getSlug() != null)
+                mSlugText.setText(mViewModel.getSlug());
 
-            mWritebarText.setText(mTextFromIntent);
-            mViewModel.publish(mTextFromIntent, mSlug == null ? "" : mSlug);
+            mWritebarText.setText(mViewModel.getTextFromIntent());
+            mViewModel.publish(mViewModel.getTextFromIntent(), mViewModel.getSlug() == null ? "" : mViewModel.getSlug());
         }
 
         mDoneButton.setOnClickListener(v ->
-                mViewModel.publish(mWritebarText.getText(), mSlug == null ? mSlugText.getText().toString() : mSlug));
+                mViewModel.publish(mWritebarText.getText(), mViewModel.getSlug() == null ? mSlugText.getText().toString() : mViewModel.getSlug()));
     }
 
     @Override
     protected ViewModelProvider.Factory buildFactory() {
-        return new WritingViewModel.WritingViewModelFactory(getIntent().getBooleanExtra("edit", false));
+        return new WritingViewModel.WritingViewModelFactory(getIntent());
     }
 }

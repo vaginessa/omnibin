@@ -11,19 +11,16 @@ import androidx.lifecycle.MutableLiveData;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
+import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
-public class LoginViewModel extends AndroidViewModel {
+public class LoginViewModel extends BaseViewModel {
 
-    private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> mRegisteredData = new MutableLiveData<>();
-
-    private MutableLiveData<Boolean> mIsInLoginModeData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mIsInLoginModeData = new MutableLiveData<>(true);
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
-
-        mIsInLoginModeData.setValue(true);
     }
 
     public void switchMode() {
@@ -31,11 +28,22 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     public void login(String login, String password) {
+        doAuth(login, password, false);
+    }
+
+    public void register(String login, String password) {
+        doAuth(login, password, true);
+    }
+
+    private void doAuth(String login, String password, boolean register) {
         mLoadingStateData.setValue(LoadingState.LOADING);
 
         Utils.getExecutor().execute(() -> {
             try {
-                BinServiceUtils.getCurrentActiveService().login(login, password);
+                if (register)
+                    BinServiceUtils.getCurrentActiveService().register(login, password);
+                else
+                    BinServiceUtils.getCurrentActiveService().login(login, password);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mLoggedInData.postValue(true);
@@ -45,45 +53,11 @@ public class LoginViewModel extends AndroidViewModel {
         });
     }
 
-    public void register(String login, String password) {
-        mLoadingStateData.setValue(LoadingState.LOADING);
-
-        Utils.getExecutor().execute(() -> {
-            try {
-                BinServiceUtils.getCurrentActiveService().register(login, password);
-
-                mLoadingStateData.postValue(LoadingState.LOADED);
-                mRegisteredData.postValue(true);
-            } catch (Exception e) {
-                processError(e);
-            }
-        });
-    }
-
-    private void processError(Throwable t) {
-        t.printStackTrace();
-
-        mLoadingStateData.postValue(LoadingState.LOADED);
-        Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show());
-    }
-
-    public LiveData<LoadingState> getLoadingStateData() {
-        return mLoadingStateData;
-    }
-
     public LiveData<Boolean> getLoggedInData() {
         return mLoggedInData;
     }
 
-    public LiveData<Boolean> getRegisteredData() {
-        return mRegisteredData;
-    }
-
     public LiveData<Boolean> getIsInLoginModeData() {
         return mIsInLoginModeData;
-    }
-
-    public enum LoadingState {
-        LOADING, LOADED
     }
 }

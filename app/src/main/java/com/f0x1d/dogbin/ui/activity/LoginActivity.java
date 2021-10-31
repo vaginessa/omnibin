@@ -37,9 +37,6 @@ public class LoginActivity extends BaseActivity<LoginViewModel> {
         mSwitchStateButton = findViewById(R.id.switch_state_button);
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
-            if (loadingState == null)
-                return;
-
             switch (loadingState) {
                 case LOADING:
                     mLoginText.setEnabled(false);
@@ -56,13 +53,6 @@ public class LoginActivity extends BaseActivity<LoginViewModel> {
 
         mViewModel.getLoggedInData().observe(this, loggedIn -> {
             if (loggedIn) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-            }
-        });
-
-        mViewModel.getRegisteredData().observe(this, isRegistered -> {
-            if (isRegistered) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             }

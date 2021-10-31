@@ -3,7 +3,10 @@ package com.f0x1d.dogbin.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Pair;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,11 +23,12 @@ import com.f0x1d.dogbin.ui.fragment.folders.FoldersWrapperFragment;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
+import com.f0x1d.dogbin.viewmodel.MainViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.shape.MaterialShapeDrawable;
 
-public class MainActivity extends BaseActivity<AndroidViewModel> {
+public class MainActivity extends BaseActivity<MainViewModel> {
 
     private FragmentNavigator mFragmentNavigator;
 
@@ -32,8 +36,8 @@ public class MainActivity extends BaseActivity<AndroidViewModel> {
     private BottomNavigationView mBottomNavigation;
 
     @Override
-    protected Class<AndroidViewModel> viewModel() {
-        return null;
+    protected Class<MainViewModel> viewModel() {
+        return MainViewModel.class;
     }
 
     @Override
@@ -46,7 +50,14 @@ public class MainActivity extends BaseActivity<AndroidViewModel> {
         mPublishButton = findViewById(R.id.publish_button);
         mBottomNavigation = findViewById(R.id.bottom_navigation);
 
-        if (savedInstanceState == null) processIntent(getIntent(), false);
+        mViewModel.getEventsData().observe(this, event -> {
+            if (event.isConsumed()) return;
+            if (event.type().equals(MainViewModel.EVENT_VIEW_TEXT)) {
+                startActivity(new Intent(this, TextViewerActivity.class).setData(event.consume()));
+            }
+        });
+        if (savedInstanceState == null)
+            mViewModel.processIntent(getIntent());
 
         setupBottomNavigation(savedInstanceState);
         mPublishButton.setOnClickListener(v -> startActivity(new Intent(this, TextEditActivity.class)));
@@ -58,50 +69,10 @@ public class MainActivity extends BaseActivity<AndroidViewModel> {
         BillingManager.getInstance(this).loadPurchases();
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        processIntent(intent, true);
-    }
-
-    private void processIntent(Intent intent, boolean recreate) {
-        if (intent.getAction() != null && intent.getAction().equals(TextViewerActivity.ACTION_TEXT_VIEW)) {
-            String modulePackageName = intent.getStringExtra("module_package_name");
-            BinServiceUtils.getBinServiceForPackageName(modulePackageName == null ? BinServiceUtils.FOXBIN_SERVICE : modulePackageName);
-
-            if (recreate) {
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-            }
-
-            startActivity(new Intent(this, TextViewerActivity.class).setData(Uri.parse(intent.getStringExtra("url"))));
-        } else if (intent.getData() != null) {
-            App.getPreferencesUtil().setSelectedService(BinServiceUtils.getInbuiltServiceForUrl(intent.getData().toString()));
-            BinServiceUtils.refreshCurrentService();
-
-            if (recreate) {
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-            }
-
-            startActivity(new Intent(this, TextViewerActivity.class).setData(intent.getData()));
-        }
-    }
-
     private void setupBottomNavigation(Bundle savedInstanceState) {
-        Folder defaultFolderData = BinServiceUtils.getCurrentActiveService().getDefaultFolder();
+        mBottomNavigation.setOnItemSelectedListener(item -> {
+            Folder defaultFolderData = mViewModel.getDefaultFolderData().getValue();
 
-        MenuItem defaultFolderItem = mBottomNavigation.getMenu().findItem(R.id.default_folder_navigation);
-        defaultFolderItem.setTitle(defaultFolderData.getTitle());
-        defaultFolderItem.setIcon(defaultFolderData.getIcon());
-
-        if (BinServiceUtils.getCurrentActiveService().loggedIn())
-            mBottomNavigation.getMenu().findItem(R.id.login_navigation).setVisible(false);
-        if (!BinServiceUtils.getCurrentActiveService().showFoldersItem())
-            mBottomNavigation.getMenu().findItem(R.id.folders_navigation).setVisible(false);
-
-        mBottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.settings_navigation:
                     mFragmentNavigator.switchTo("settings");
@@ -124,8 +95,22 @@ public class MainActivity extends BaseActivity<AndroidViewModel> {
         });
         getWindow().setNavigationBarColor(((MaterialShapeDrawable) mBottomNavigation.getBackground()).getResolvedTintColor());
 
-        if (savedInstanceState == null)
-            mBottomNavigation.setSelectedItemId(R.id.default_folder_navigation);
+        mViewModel.getDefaultFolderData().observe(this, defaultFolderData -> {
+            if (savedInstanceState == null) {
+                mBottomNavigation.setSelectedItemId(R.id.default_folder_navigation);
+            }
+
+            MenuItem defaultFolderItem = mBottomNavigation.getMenu().findItem(R.id.default_folder_navigation);
+            defaultFolderItem.setTitle(defaultFolderData.getTitle());
+            defaultFolderItem.setIcon(defaultFolderData.getIcon());
+
+            mBottomNavigation.setVisibility(View.VISIBLE);
+        });
+
+        mViewModel.getLoggedInData().observe(this, loggedIn ->
+                mBottomNavigation.getMenu().findItem(R.id.login_navigation).setVisible(!loggedIn));
+        mViewModel.getShowFoldersItemData().observe(this, showFolders ->
+                mBottomNavigation.getMenu().findItem(R.id.folders_navigation).setVisible(showFolders));
     }
 
     @Override

@@ -11,14 +11,16 @@ import androidx.lifecycle.MutableLiveData;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
+import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
-public class SettingsViewModel extends AndroidViewModel {
+public class SettingsViewModel extends BaseViewModel {
 
-    private MutableLiveData<LoadingState> mLoadingStateData = new MutableLiveData<>();
     private MutableLiveData<String> mUsernameData = new MutableLiveData<>();
 
     public SettingsViewModel(@NonNull Application application) {
         super(application);
+        load();
     }
 
     public void load() {
@@ -36,22 +38,7 @@ public class SettingsViewModel extends AndroidViewModel {
         });
     }
 
-    private void processError(Throwable t) {
-        t.printStackTrace();
-
-        mLoadingStateData.postValue(LoadingState.LOADED);
-        Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show());
-    }
-
-    public LiveData<LoadingState> getLoadingStateData() {
-        return mLoadingStateData;
-    }
-
     public LiveData<String> getUsernameData() {
         return mUsernameData;
-    }
-
-    public enum LoadingState {
-        LOADING, LOADED
     }
 }

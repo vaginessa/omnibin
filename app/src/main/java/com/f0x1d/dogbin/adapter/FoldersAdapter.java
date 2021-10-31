@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.f0x1d.dmsdk.model.Folder;
@@ -87,7 +88,7 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
                 return;
 
             mFolderTitleText.setTextColor(color);
-            mFolderTitleText.setCompoundDrawableTintList(ColorStateList.valueOf(color));
+            TextViewCompat.setCompoundDrawableTintList(mFolderTitleText, ColorStateList.valueOf(color));
             mContentCard.setStrokeColor(color);
         }
     }

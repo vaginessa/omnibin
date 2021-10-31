@@ -18,7 +18,6 @@ import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.billing.DonationStatus;
 import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.TextViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -29,8 +28,6 @@ import com.pddstudio.highlightjs.models.Theme;
 public class TextViewerActivity extends BaseActivity<TextViewModel> {
 
     public static final String ACTION_TEXT_VIEW = "com.f0x1d.dogbin.ACTION_TEXT_VIEW";
-
-    private TextViewModel mTextViewModel;
 
     private MaterialToolbar mToolbar;
     private HighlightJsView mTextCodeView;
@@ -46,13 +43,6 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_view);
 
-        mTextViewModel = new ViewModelProvider(this).get(TextViewModel.class);
-        if (savedInstanceState == null) {
-            mTextViewModel.checkMyNote(getIntent());
-            mTextViewModel.load(BinServiceUtils.getCurrentActiveService().getSlugFromLink(getIntent().getData().toString()));
-            mTextViewModel.loadEditable(mTextViewModel.getSlug());
-        }
-
         mToolbar = findViewById(R.id.toolbar);
         ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
         mTextCodeView = findViewById(R.id.text_code_view);
@@ -66,9 +56,9 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
         mTextCodeView.setTextWrap(App.getPreferencesUtil().textWrap());
         mTextCodeView.setBackgroundColor(getWindow().getStatusBarColor());
 
-        mTextCodeView.setOnContentHighlightedListener(mTextViewModel);
+        mTextCodeView.setOnContentHighlightedListener(mViewModel);
 
-        mTextViewModel.getLoadingStateData().observe(this, loadingState -> {
+        mViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
                 return;
 
@@ -84,14 +74,14 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
             }
         });
 
-        mTextViewModel.getTextData().observe(this, text -> {
+        mViewModel.getTextData().observe(this, text -> {
             if (text == null)
                 return;
 
             mTextCodeView.setSource(text);
         });
 
-        mTextViewModel.getIsRedirectData().observe(this, redirectURL -> {
+        mViewModel.getIsRedirectData().observe(this, redirectURL -> {
             if (redirectURL == null)
                 return;
 
@@ -99,13 +89,13 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
             finish();
         });
 
-        mTextViewModel.getIsEditableData().observe(this, isEditable -> mToolbar.getMenu().findItem(R.id.edit_item).setVisible(isEditable));
+        mViewModel.getIsEditableData().observe(this, isEditable -> mToolbar.getMenu().findItem(R.id.edit_item).setVisible(isEditable));
 
         supportApp();
     }
 
     private void setupToolbar() {
-        mToolbar.setTitle(mTextViewModel.getSlug());
+        mViewModel.getSlugData().observe(this, slug -> mToolbar.setTitle(slug));
         mToolbar.inflateMenu(R.menu.text_viewer_menu);
         mToolbar.getMenu().findItem(R.id.text_wrap_item).setOnMenuItemClickListener(item -> {
             showTextWrapChooseDialog();
@@ -113,8 +103,8 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
         });
         mToolbar.getMenu().findItem(R.id.edit_item).setOnMenuItemClickListener(item -> {
             startActivityForResult(new Intent(TextViewerActivity.this, TextEditActivity.class)
-                    .putExtra("slug", mTextViewModel.getSlug())
-                    .putExtra(Intent.EXTRA_TEXT, mTextViewModel.getTextData().getValue())
+                    .putExtra("slug", mViewModel.getSlugData().getValue())
+                    .putExtra(Intent.EXTRA_TEXT, mViewModel.getTextData().getValue())
                     .putExtra("edit", true), 1);
             return false;
         });
@@ -134,7 +124,7 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
                     mTextCodeView.setTextWrap(textWrap);
                     mTextCodeView.refresh();
 
-                    mTextViewModel.setLoading();
+                    mViewModel.setLoading();
 
                     dialog.cancel();
                 })
@@ -160,11 +150,16 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
     }
 
     @Override
+    protected ViewModelProvider.Factory buildFactory() {
+        return new TextViewModel.TextViewModelFactory(getIntent());
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            mTextViewModel.load(mTextViewModel.getSlug());
+            mViewModel.load();
         }
     }
 }

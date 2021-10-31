@@ -7,7 +7,7 @@
 
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/pixelAccent</item>
-        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">?colorPrimary</item>
         <item name="colorOnSecondary">@android:color/white</item>
 
@@ -46,7 +46,7 @@
         <item name="colorPrimary">@color/goldAccent</item>
         <item name="colorOnPrimary">@android:color/black</item>
         <item name="colorSecondary">?colorPrimary</item>
-        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorOnSecondary">@android:color/black</item>
 
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
@@ -57,7 +57,7 @@
         <item name="alertDialogTheme">@style/AlertDialogStyle.Gold</item>
 
         <item name="textColor">@android:color/black</item>
-        <item name="fabIconColor">@android:color/white</item>
+        <item name="fabIconColor">@android:color/black</item>
         <item name="noteCardStrokeColor">@android:color/darker_gray</item>
 
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
@@ -80,7 +80,7 @@
 
     <style name="AppTheme.Pink" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/pinkAccent</item>
-        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">?colorPrimary</item>
         <item name="colorOnSecondary">@android:color/white</item>
 
@@ -118,7 +118,7 @@
         <item name="colorPrimary">@color/limeAccent</item>
         <item name="colorOnPrimary">@android:color/black</item>
         <item name="colorSecondary">?colorPrimary</item>
-        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorOnSecondary">@android:color/black</item>
 
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
@@ -129,7 +129,7 @@
         <item name="alertDialogTheme">@style/AlertDialogStyle.Lime</item>
 
         <item name="textColor">@android:color/black</item>
-        <item name="fabIconColor">@android:color/white</item>
+        <item name="fabIconColor">@android:color/black</item>
         <item name="noteCardStrokeColor">@android:color/darker_gray</item>
 
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
