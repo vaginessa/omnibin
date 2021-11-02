@@ -53,14 +53,27 @@ public class MainActivity extends BaseActivity<MainViewModel> {
         mViewModel.getEventsData().observe(this, event -> {
             if (event.isConsumed()) return;
             if (event.type().equals(MainViewModel.EVENT_VIEW_TEXT)) {
-                startActivity(new Intent(this, TextViewerActivity.class).setData(event.consume()));
+                Pair<Uri, Boolean> data = event.consume();
+
+                if (data.second) { // not the best solution ofc, but i had to think about it a lot of time before
+                    finish();
+                    startActivity(new Intent(this, MainActivity.class));
+                }
+
+                startActivity(new Intent(this, TextViewerActivity.class).setData(data.first));
             }
         });
         if (savedInstanceState == null)
-            mViewModel.processIntent(getIntent());
+            mViewModel.processIntent(getIntent(), false);
 
         setupBottomNavigation(savedInstanceState);
         mPublishButton.setOnClickListener(v -> startActivity(new Intent(this, TextEditActivity.class)));
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mViewModel.processIntent(intent, true);
     }
 
     @Override

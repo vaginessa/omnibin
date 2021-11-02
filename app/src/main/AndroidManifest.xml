@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,19 +38,26 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="pastebin.com"
+                    android:host="f0x1d.com"
+                    android:pathPrefix="/foxbin"
                     android:scheme="http" />
                 <data
-                    android:host="pastebin.com"
+                    android:host="f0x1d.com"
+                    android:pathPrefix="/foxbin"
                     android:scheme="https" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="f0x1d.com"
-                    android:pathPrefix="/foxbin"
+                    android:host="pastebin.com"
                     android:scheme="http" />
                 <data
-                    android:host="f0x1d.com"
-                    android:pathPrefix="/foxbin"
+                    android:host="pastebin.com"
                     android:scheme="https" />
             </intent-filter>
         </activity>

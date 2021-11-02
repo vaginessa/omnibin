@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.utils.Utils;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -21,13 +23,12 @@ public class DonateActivity extends BaseActivity<AndroidViewModel> {
 
     private BillingManager mBillingManager;
 
+    private MaterialToolbar mToolbar;
     private ShapeableImageView mF0x1dIcon;
-
     private MaterialCardView mDonateCard;
     private TextView mDonationStatusText;
     private ShapeableImageView mCatIcon;
     private MaterialButton mDonateButton;
-
     private MaterialButton mF0x1dDonateButton;
 
     @Override
@@ -42,7 +43,9 @@ public class DonateActivity extends BaseActivity<AndroidViewModel> {
 
         mBillingManager = BillingManager.getInstance(this);
 
-        Utils.applyToolbarShit(findViewById(android.R.id.content), getString(R.string.donate));
+        mToolbar = findViewById(R.id.toolbar);
+        ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
+        mToolbar.setTitle(R.string.donate);
 
         mF0x1dIcon = findViewById(R.id.f0x1d_icon);
 

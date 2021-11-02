@@ -44,24 +44,24 @@ public class MainViewModel extends BaseViewModel {
         });
     }
 
-    public void processIntent(Intent intent) {
+    public void processIntent(Intent intent, boolean recreate) {
         mExecutor.execute(() -> {
             if (intent.getAction() != null && intent.getAction().equals(TextViewerActivity.ACTION_TEXT_VIEW)) {
                 String modulePackageName = intent.getStringExtra("module_package_name");
                 BinServiceUtils.getBinServiceForPackageName(modulePackageName == null ? BinServiceUtils.FOXBIN_SERVICE : modulePackageName);
 
-                mEventsData.postValue(buildNewActivityEvent(Uri.parse(intent.getStringExtra("url"))));
+                mEventsData.postValue(buildNewActivityEvent(Uri.parse(intent.getStringExtra("url")), recreate));
             } else if (intent.getData() != null) {
                 App.getPreferencesUtil().setSelectedService(BinServiceUtils.getInbuiltServiceForUrl(intent.getData().toString()));
                 BinServiceUtils.refreshCurrentService();
 
-                mEventsData.postValue(buildNewActivityEvent(intent.getData()));
+                mEventsData.postValue(buildNewActivityEvent(intent.getData(), recreate));
             }
         });
     }
 
-    private Event buildNewActivityEvent(Uri uri) {
-        return new Event(EVENT_VIEW_TEXT, uri);
+    private Event buildNewActivityEvent(Uri uri, boolean recreate) {
+        return new Event(EVENT_VIEW_TEXT, new Pair<>(uri, recreate));
     }
 
     public LiveData<Boolean> getLoggedInData() {
