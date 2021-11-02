@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.ui.activity.MainActivity;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Event;
@@ -24,6 +23,7 @@ import java.util.concurrent.Executors;
 public class MainViewModel extends BaseViewModel {
 
     public static final String EVENT_VIEW_TEXT = "view_text";
+    public static final String EVENT_TOASTER_DIALOG = "toaster_dialog";
 
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
 
@@ -38,9 +38,13 @@ public class MainViewModel extends BaseViewModel {
 
     private void load() {
         Utils.getExecutor().execute(() -> {
-            mLoggedInData.postValue(BinServiceUtils.getCurrentActiveService().loggedIn()); // synchronized anyway
+            mLoggedInData.postValue(BinServiceUtils.getCurrentActiveService().loggedIn());
             mShowFoldersItemData.postValue(BinServiceUtils.getCurrentActiveService().showFoldersItem());
             mDefaultFolderData.postValue(BinServiceUtils.getCurrentActiveService().getDefaultFolder());
+
+            if (!App.getPreferencesUtil().toasterShowed() && Utils.isPackageInstalled("com.vtosters.android", getApplication().getPackageManager())) {
+                mEventsData.postValue(new Event(EVENT_TOASTER_DIALOG, true));
+            }
         });
     }
 

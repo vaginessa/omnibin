@@ -2,10 +2,8 @@ package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
 import android.content.Intent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;

@@ -14,6 +14,7 @@ public class PreferencesUtils {
     public static final String ACCENT_NAME = "accent";
 
     public static final String SUPPORT_APP_SHOWED_NAME = "support_app_dialog";
+    public static final String TOASTER_SHOWED_NAME = "toaster_dialog";
     public static final String FIRST_START_NAME = "first_start";
 
     public static final String API_KEY_NAME = "api_key";
@@ -59,6 +60,14 @@ public class PreferencesUtils {
 
     public void setSupportAppShowed(boolean showed) {
         mAppPreferences.edit().putBoolean(SUPPORT_APP_SHOWED_NAME, showed).apply();
+    }
+
+    public boolean toasterShowed() {
+        return mAppPreferences.getBoolean(TOASTER_SHOWED_NAME, false);
+    }
+
+    public void setToasterShowed(boolean showed) {
+        mAppPreferences.edit().putBoolean(TOASTER_SHOWED_NAME, showed).apply();
     }
 
     public boolean isFirstStart() {

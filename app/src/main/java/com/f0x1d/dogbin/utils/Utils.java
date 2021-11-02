@@ -1,8 +1,8 @@
 package com.f0x1d.dogbin.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -18,7 +18,6 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
@@ -66,6 +65,15 @@ public class Utils {
 
     public static Gson getGson() {
         return sGson;
+    }
+
+    public static boolean isPackageInstalled(String packageName, PackageManager packageManager) {
+        try {
+            packageManager.getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     public static boolean getBooleanFromAttr(Context c, @AttrRes int attrId) {
@@ -126,7 +134,7 @@ public class Utils {
         System.arraycopy(BinServiceUtils.IMPLEMENTED_SERVICES, 0, applicationsArray, 0, implementedServicesCount);
         for (int i = 0; i < applicationInfos.size(); i++) {
             applicationsArray[i + implementedServicesCount] =
-                    String.valueOf(App.getInstance().getPackageManager().getApplicationLabel(applicationInfos.get(i))).replace(BinServiceUtils.START_TAG, "");
+                    String.valueOf(App.getInstance().getPackageManager().getApplicationLabel(applicationInfos.get(i)));
         }
 
         return applicationsArray;

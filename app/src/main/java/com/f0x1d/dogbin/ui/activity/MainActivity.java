@@ -3,13 +3,11 @@ package com.f0x1d.dogbin.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.AndroidViewModel;
 
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.App;
@@ -20,11 +18,11 @@ import com.f0x1d.dogbin.ui.activity.text.TextEditActivity;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.folders.FoldersWrapperFragment;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
 import com.f0x1d.dogbin.viewmodel.MainViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.shape.MaterialShapeDrawable;
 
@@ -61,6 +59,13 @@ public class MainActivity extends BaseActivity<MainViewModel> {
                 }
 
                 startActivity(new Intent(this, TextViewerActivity.class).setData(data.first));
+            } else if (event.type().equals(MainViewModel.EVENT_TOASTER_DIALOG)) {
+                new MaterialAlertDialogBuilder(this)
+                        .setCancelable(false)
+                        .setTitle(R.string.vtosters)
+                        .setMessage(R.string.toaster_dialog)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> App.getPreferencesUtil().setToasterShowed(event.consume()))
+                        .show();
             }
         });
         if (savedInstanceState == null)

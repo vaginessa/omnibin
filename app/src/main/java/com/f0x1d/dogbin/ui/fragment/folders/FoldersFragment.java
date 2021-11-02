@@ -2,11 +2,9 @@ package com.f0x1d.dogbin.ui.fragment.folders;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -17,8 +15,6 @@ import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.FoldersViewModel;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class FoldersFragment extends BaseFragment<FoldersViewModel> {
 

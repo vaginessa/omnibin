@@ -3,10 +3,8 @@ package com.f0x1d.dogbin.ui.fragment.settings;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;

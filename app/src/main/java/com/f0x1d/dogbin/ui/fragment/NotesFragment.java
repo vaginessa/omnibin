@@ -2,7 +2,6 @@ package com.f0x1d.dogbin.ui.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +16,6 @@ import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.NotesViewModel;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class NotesFragment extends BaseFragment<NotesViewModel> {
 

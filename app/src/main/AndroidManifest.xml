@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.f0x1d.dogbin">
 
+    <queries>
+        <package android:name="com.vtosters.android" />
+        <intent>
+            <action android:name="com.f0x1d.dogbin.VISIBILITY"/>
+        </intent>
+    </queries>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

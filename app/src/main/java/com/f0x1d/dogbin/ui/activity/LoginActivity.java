@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;

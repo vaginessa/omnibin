@@ -12,7 +12,6 @@ import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class SettingsWrapperFragment extends BaseFragment<AndroidViewModel> {
 

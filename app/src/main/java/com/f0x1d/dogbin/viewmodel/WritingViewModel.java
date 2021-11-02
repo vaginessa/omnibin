@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

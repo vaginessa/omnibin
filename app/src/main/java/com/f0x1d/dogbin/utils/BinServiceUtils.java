@@ -12,7 +12,6 @@ import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.Constants;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.network.DogBinService;
 import com.f0x1d.dogbin.network.FoxBinService;
 import com.f0x1d.dogbin.network.PasteBinService;
 
@@ -23,8 +22,6 @@ import java.util.List;
 import dalvik.system.BaseDexClassLoader;
 
 public class BinServiceUtils {
-
-    public static final String START_TAG = "omnibin.";
 
     public static final String PASTEBIN_SERVICE = "pastebin";
     public static final String FOXBIN_SERVICE = "foxbin";
@@ -83,7 +80,7 @@ public class BinServiceUtils {
 
     private static BinService loadServiceFromApp(String packageName) throws Exception {
         ApplicationInfo applicationInfo = App.getInstance().getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-        if (applicationInfo.metaData == null || !App.getInstance().getPackageManager().getApplicationLabel(applicationInfo).toString().startsWith(START_TAG)) {
+        if (applicationInfo.metaData == null || applicationInfo.metaData.getString("binservice") == null) {
             App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
             return FoxBinService.getInstance();
         }
@@ -93,7 +90,7 @@ public class BinServiceUtils {
             outDir.mkdirs();
 
         BaseDexClassLoader baseDexClassLoader = new BaseDexClassLoader(applicationInfo.sourceDir, outDir, null, App.getInstance().getClassLoader());
-        BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("service")).getConstructor().newInstance();
+        BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("binservice")).getConstructor().newInstance();
         if (binService.getSDKVersion() < Constants.LATEST_VERSION) {
             Toast.makeText(App.getInstance(), R.string.module_v_old, Toast.LENGTH_SHORT).show();
             App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
@@ -110,7 +107,7 @@ public class BinServiceUtils {
             if ((installedApplication.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
                 continue;
 
-            if (App.getInstance().getPackageManager().getApplicationLabel(installedApplication).toString().startsWith(START_TAG))
+            if (installedApplication.metaData != null && installedApplication.metaData.getString("binservice") != null)
                 installedPlugins.add(installedApplication);
         }
 

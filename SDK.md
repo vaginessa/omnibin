@@ -1,13 +1,14 @@
 # SDK Documentation
 
-Modules in omnibin are a very interesting idea. Module is an android application from which omnibin loads code.
+Module is an android application from which omnibin loads code.
 
 ## Quick start
 
-1. Create android application project in Android Studio, application's name must start with ```omnibin.```.
+1. Create android application project in Android Studio.
 2. Add [DM-SDK](https://files.f0x1d.com/files/dm-sdk.aar) as dependency to the project.
 3. Create class and implement ```BinService``` from SDK.
-4. In manifest add ```<meta-data android:name="service" android:value="com.your.package.to.your.BinService" />``` in ```<application``` tag.
+4. In manifest add ```<meta-data android:name="binservice" android:value="com.your.package.to.your.BinService" />``` in ```<application``` tag.
+5. Android 11 is cool, also add ```<intent-filter>``` with ```<action android:name="com.f0x1d.dogbin.VISIBILITY"/>``` in ```<activity``` tag.
 
 ## Methods
 
@@ -16,6 +17,7 @@ BinService must implement list of methods, these methods are called by omnibin.
 Methods, which ```throw Exception``` are run **not** on the UI thread.
 
 Methods, which don't ```throw Exception``` are run on the UI thread (except caching methods).
+Not all are run straight on the UI thread, idea is not to request smth from net (for example) in them.
 
 ### Main
 
@@ -45,7 +47,7 @@ Methods, which don't ```throw Exception``` are run on the UI thread (except cach
 
 ```String editDocument(String slug, String content) throws Exception;``` must edit a user's document with content on slug (may be empty) and return its slug, **not link, just slug**.
 
-```Boolean isEditableDocument(String slug) throws Exception;``` must return true if user can edit document, false if not, null if set in DocumentContent object.
+```Boolean isEditableDocument(String slug) throws Exception;``` must return true if user can edit document, false if not, null if set in ```DocumentContent``` object.
 
 ### Cache
 
@@ -57,13 +59,13 @@ These methods are also called **not** on the UI thread.
 
 ```DocumentContent getContentFromCache(String slug);``` must return document's content from cache. Please return null if such document is not cached or you don't want to implement cache.
 
-```void cacheDocument(String slug, String content, boolean myDocument);``` must cache a document with content.
+```void cacheDocument(String slug, String content, boolean myDocument);``` cache a document with content.
 
 ### Folders
 
 ```boolean showFoldersItem();``` must return true if folders item should be showed in bottom navigation, false if not.
 
-```Folder getDefaultFolder();``` must return default folder, which should be showed in bottom navigation near folder item.
+```Folder getDefaultFolder();``` must return default folder, which should be showed in bottom navigation near settings item.
 
 ```List<Folder> getAvailableFolders() throws Exception;``` must return list of available folders. Please return empty list if there are no such folders.
 
@@ -76,7 +78,7 @@ You can ```throw Exception``` in methods, where you are allowed to do so, then o
 
 ## Viewing text from links
 
-If you want to do so, then add such ```<intent-filter>``` to activity in your manifest.
+If you want to do so, then add your ```<intent-filter>``` to activity in your manifest.
 
 And add something like this in this activity:
 ```
