@@ -58,9 +58,10 @@ public class BinServiceUtils {
                 } catch (Exception e) {
                     Utils.runOnUiThread(() ->
                             Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
-                    App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
-                    return sInstance = FoxBinService.getInstance();
                 }
+
+                App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
+                return sInstance = FoxBinService.getInstance();
             }
             return sInstance;
         }
