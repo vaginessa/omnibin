@@ -36,7 +36,7 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
     if (requestCode == 0 && resultCode == RESULT_OK) {
         // Text is published and all is ok, let's display the link
         TextView textView = new TextView(this);
-        // data.getData().toString() will return result link, example: https://del.dog/vzlom
+        // data.getData().toString() will return result link, example: https://some.domain/vzlom
         textView.setText(data.getData().toString());
 
         setContentView(textView);

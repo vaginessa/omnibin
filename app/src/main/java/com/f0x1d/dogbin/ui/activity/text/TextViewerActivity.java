@@ -44,6 +44,7 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
         setContentView(R.layout.activity_text_view);
 
         mToolbar = findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
         ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
         mTextCodeView = findViewById(R.id.text_code_view);
         mLoadingProgress = findViewById(R.id.loading_progress);

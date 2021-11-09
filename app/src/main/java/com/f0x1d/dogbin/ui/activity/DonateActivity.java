@@ -46,6 +46,7 @@ public class DonateActivity extends BaseActivity<AndroidViewModel> {
         mToolbar = findViewById(R.id.toolbar);
         ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
         mToolbar.setTitle(R.string.donate);
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         mF0x1dIcon = findViewById(R.id.f0x1d_icon);
 
