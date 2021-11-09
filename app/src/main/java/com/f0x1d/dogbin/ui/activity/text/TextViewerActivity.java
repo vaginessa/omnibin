@@ -56,7 +56,7 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
         mTextCodeView.setTextWrap(App.getPreferencesUtil().textWrap());
         mTextCodeView.setBackgroundColor(getWindow().getStatusBarColor());
 
-        mTextCodeView.setOnContentHighlightedListener(mViewModel);
+        mTextCodeView.setWebViewClient(mViewModel.client());
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
@@ -122,9 +122,8 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
                     App.getPreferencesUtil().setTextWrap(which);
 
                     mTextCodeView.setTextWrap(textWrap);
-                    mTextCodeView.refresh();
-
                     mViewModel.setLoading();
+                    mTextCodeView.refresh();
 
                     dialog.cancel();
                 })

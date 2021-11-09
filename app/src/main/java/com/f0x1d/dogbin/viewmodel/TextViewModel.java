@@ -2,6 +2,8 @@ package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
 import android.content.Intent;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -15,9 +17,8 @@ import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
-import com.pddstudio.highlightjs.HighlightJsView;
 
-public class TextViewModel extends BaseViewModel implements HighlightJsView.OnContentHighlightedListener {
+public class TextViewModel extends BaseViewModel {
 
     public static class TextViewModelFactory implements ViewModelProvider.Factory {
 
@@ -39,8 +40,18 @@ public class TextViewModel extends BaseViewModel implements HighlightJsView.OnCo
     private final MutableLiveData<Boolean> mIsEditableData = new MutableLiveData<>();
     private final MutableLiveData<String> mRedirectURLData = new MutableLiveData<>();
 
-    private Intent mIntent;
-    private boolean mMyNote;
+    private final Intent mIntent;
+    private final boolean mMyNote;
+
+    private final WebViewClient mClient = new WebViewClient() {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            if (view.getProgress() == 100) {
+                mLoadingStateData.setValue(LoadingState.LOADED);
+            }
+        }
+    };
 
     public TextViewModel(@NonNull Application application, Intent intent) {
         super(application);
@@ -104,7 +115,7 @@ public class TextViewModel extends BaseViewModel implements HighlightJsView.OnCo
             try {
                 Boolean editable = BinServiceUtils.getCurrentActiveService().isEditableDocument(slug);
                 if (editable != null) {
-                    mIsEditableData.postValue(BinServiceUtils.getCurrentActiveService().isEditableDocument(slug));
+                    mIsEditableData.postValue(editable);
                 }
             } catch (Exception e) {
                 processError(e);
@@ -114,6 +125,10 @@ public class TextViewModel extends BaseViewModel implements HighlightJsView.OnCo
 
     public void setLoading() {
         mLoadingStateData.setValue(LoadingState.LOADING);
+    }
+
+    public WebViewClient client() {
+        return mClient;
     }
 
     public LiveData<String> getSlugData() {
@@ -130,10 +145,5 @@ public class TextViewModel extends BaseViewModel implements HighlightJsView.OnCo
 
     public LiveData<String> getIsRedirectData() {
         return mRedirectURLData;
-    }
-
-    @Override
-    public void onHighlighted() {
-        mLoadingStateData.postValue(LoadingState.LOADED);
     }
 }
