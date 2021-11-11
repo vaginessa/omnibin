@@ -14,11 +14,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.pddstudio.highlightjs.HighlightJsView
+    <com.f0x1d.dogbin.ui.view.CoolCodeView
         android:id="@+id/text_code_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

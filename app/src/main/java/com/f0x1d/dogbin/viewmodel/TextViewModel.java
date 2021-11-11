@@ -63,7 +63,7 @@ public class TextViewModel extends BaseViewModel {
     }
 
     public void load() {
-        mLoadingStateData.setValue(LoadingState.LOADING);
+        mLoadingStateData.setValue(LoadingState.LOADED);
 
         Utils.getExecutor().execute(() -> {
             String slug = mSlugData.getValue();
@@ -73,7 +73,7 @@ public class TextViewModel extends BaseViewModel {
             }
 
             String finalSlug = slug;
-            Utils.getExecutor().execute(() -> loadEditable(finalSlug)); // so hard w/o coroutines
+            loadEditable(finalSlug); // so hard w/o coroutines
 
             DocumentContent content = BinServiceUtils.getCurrentActiveService().getContentFromCache(slug);
             if (content == null) {

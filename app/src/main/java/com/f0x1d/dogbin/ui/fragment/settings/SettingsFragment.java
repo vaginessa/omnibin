@@ -120,7 +120,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mClearCachePreference = findPreference("cache_nuke");
         mClearCachePreference.setOnPreferenceClickListener(preference -> {
-            Utils.getExecutor().execute(() -> App.getMyDatabase().getDogbinSavedNoteDao().nukeTable());
+            Utils.getExecutor().execute(() -> {
+                App.getMyDatabase().getDogbinSavedNoteDao().nukeTable();
+                App.getMyDatabase().getPastebinSavedNoteDao().nukeTable();
+                App.getMyDatabase().getFoxBinSavedNoteDao().nukeTable();
+            });
             return false;
         });
 

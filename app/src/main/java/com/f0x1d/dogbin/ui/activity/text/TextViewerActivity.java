@@ -18,6 +18,7 @@ import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.billing.DonationStatus;
 import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
+import com.f0x1d.dogbin.ui.view.CoolCodeView;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.TextViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -30,7 +31,7 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
     public static final String ACTION_TEXT_VIEW = "com.f0x1d.dogbin.ACTION_TEXT_VIEW";
 
     private MaterialToolbar mToolbar;
-    private HighlightJsView mTextCodeView;
+    private CoolCodeView mTextCodeView;
     private ProgressBar mLoadingProgress;
 
     @Override
@@ -51,13 +52,13 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
 
         setupToolbar();
 
-        mTextCodeView.setShowLineNumbers(true);
+        /*mTextCodeView.setShowLineNumbers(true);
         mTextCodeView.setZoomSupportEnabled(true);
         mTextCodeView.setTheme(isNightTheme() ? Theme.DOGBIN_AMOLED : Theme.GOOGLECODE);
         mTextCodeView.setTextWrap(App.getPreferencesUtil().textWrap());
         mTextCodeView.setBackgroundColor(getWindow().getStatusBarColor());
 
-        mTextCodeView.setWebViewClient(mViewModel.client());
+        mTextCodeView.setWebViewClient(mViewModel.client());*/
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
             if (loadingState == null)
@@ -79,7 +80,7 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
             if (text == null)
                 return;
 
-            mTextCodeView.setSource(text);
+            mTextCodeView.setText(text);
         });
 
         mViewModel.getIsRedirectData().observe(this, redirectURL -> {
@@ -122,9 +123,9 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
 
                     App.getPreferencesUtil().setTextWrap(which);
 
-                    mTextCodeView.setTextWrap(textWrap);
-                    mViewModel.setLoading();
-                    mTextCodeView.refresh();
+                    //mTextCodeView.setTextWrap(textWrap);
+                    //mViewModel.setLoading();
+                    //mTextCodeView.refresh();
 
                     dialog.cancel();
                 })

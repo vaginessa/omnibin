@@ -63,6 +63,10 @@ public class Utils {
         ((ViewGroup.MarginLayoutParams) materialToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
     }
 
+    public static float dpToPx(float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
+    }
+
     public static Gson getGson() {
         return sGson;
     }
