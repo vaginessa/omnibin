@@ -2,8 +2,6 @@ package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
 import android.content.Intent;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -42,16 +40,6 @@ public class TextViewModel extends BaseViewModel {
 
     private final Intent mIntent;
     private final boolean mMyNote;
-
-    private final WebViewClient mClient = new WebViewClient() {
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-            if (view.getProgress() == 100) {
-                mLoadingStateData.setValue(LoadingState.LOADED);
-            }
-        }
-    };
 
     public TextViewModel(@NonNull Application application, Intent intent) {
         super(application);
@@ -121,14 +109,6 @@ public class TextViewModel extends BaseViewModel {
                 processError(e);
             }
         });
-    }
-
-    public void setLoading() {
-        mLoadingStateData.setValue(LoadingState.LOADING);
-    }
-
-    public WebViewClient client() {
-        return mClient;
     }
 
     public LiveData<String> getSlugData() {

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import com.f0x1d.dogbin.billing.DonationStatus;
-import com.pddstudio.highlightjs.HighlightJsView;
 
 public class PreferencesUtils {
 
@@ -26,11 +25,8 @@ public class PreferencesUtils {
     public static final String PASTEBIN_TOKEN_NAME = "pastebin_token";
 
     public static final String NETWORK_REDIRECT_NOTE_NAME = "note_redirect";
-    public static final String DOGBIN_DOMAIN_NAME = "dogbin_domain";
 
     public static final String CACHE_ONLY_MY_NAME = "cache_my";
-
-    public static final String EDITOR_TEXT_WRAP_NAME = "editor_text_wrap";
 
     public static final String DONATE_STATUS_NAME = "donate_status";
 
@@ -122,24 +118,8 @@ public class PreferencesUtils {
         return mDefaultPreferences.getBoolean(NETWORK_REDIRECT_NOTE_NAME, true);
     }
 
-    public String getDogbinDomain() {
-        return "https://del.dog/";//mDefaultPreferences.getString(DOGBIN_DOMAIN_NAME, "https://del.dog/");
-    }
-
-    public void setDogbinDomain(String domain) {
-        mDefaultPreferences.edit().putString(DOGBIN_DOMAIN_NAME, domain).apply();
-    }
-
     public boolean cacheOnlyMy() {
         return mDefaultPreferences.getBoolean(CACHE_ONLY_MY_NAME, true);
-    }
-
-    public HighlightJsView.TextWrap textWrap() {
-        return HighlightJsView.TextWrap.values()[mAppPreferences.getInt(EDITOR_TEXT_WRAP_NAME, 0)];
-    }
-
-    public void setTextWrap(int ordinal) {
-        mAppPreferences.edit().putInt(EDITOR_TEXT_WRAP_NAME, ordinal).apply();
     }
 
     public DonationStatus getDonationStatus() {

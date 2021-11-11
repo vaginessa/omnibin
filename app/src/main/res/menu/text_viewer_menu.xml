@@ -8,9 +8,9 @@
         android:title="@string/edit"
         app:showAsAction="ifRoom" />
 
-    <item
+    <!--<item
         android:id="@+id/text_wrap_item"
         android:title="@string/text_wrap"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 
 </menu>
