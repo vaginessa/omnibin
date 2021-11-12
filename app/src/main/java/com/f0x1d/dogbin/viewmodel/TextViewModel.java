@@ -51,7 +51,7 @@ public class TextViewModel extends BaseViewModel {
     }
 
     public void load() {
-        mLoadingStateData.setValue(LoadingState.LOADED);
+        mLoadingStateData.setValue(LoadingState.LOADING);
 
         Utils.getExecutor().execute(() -> {
             String slug = mSlugData.getValue();
@@ -70,6 +70,7 @@ public class TextViewModel extends BaseViewModel {
             }
 
             mTextResponseData.postValue(content.getContent());
+            mLoadingStateData.postValue(LoadingState.LOADED);
             if (content.getEditable() != null) {
                 mIsEditableData.postValue(content.getEditable());
             }
@@ -88,6 +89,7 @@ public class TextViewModel extends BaseViewModel {
                 return;
 
             mTextResponseData.postValue(body.getContent());
+            mLoadingStateData.postValue(LoadingState.LOADED);
             if (body.getEditable() != null) {
                 mIsEditableData.postValue(body.getEditable());
             }
