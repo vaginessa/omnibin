@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -199,9 +200,18 @@ public class CoolCodeView extends ViewGroup {
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             mPreviouslyInterceptedCoordinates.set(event.getX(), event.getY());
-        }
-        if (mInMomentum && event.getAction() == MotionEvent.ACTION_DOWN && System.currentTimeMillis() - mTimeStartedMomentum > 200) {
-            mValueAnimator.cancel();
+
+            if (mInMomentum) {
+                long timeDiff = System.currentTimeMillis() - mTimeStartedMomentum;
+
+                if (timeDiff > 200) {
+                    mValueAnimator.cancel();
+                    return false;
+                } else {
+                    startScrolling(event);
+                    return true;
+                }
+            }
             return false;
         }
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
