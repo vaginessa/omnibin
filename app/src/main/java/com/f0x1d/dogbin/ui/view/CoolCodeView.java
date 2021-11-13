@@ -301,7 +301,6 @@ public class CoolCodeView extends ViewGroup {
     private void stopScrolling() {
         if (mScrolling) {
             mScrolling = false;
-            mPreviousTouchCoordinates.set(0, 0);
 
             startMomentumAnimator(
                     System.currentTimeMillis() - mTimeStartedScroll,
@@ -309,12 +308,10 @@ public class CoolCodeView extends ViewGroup {
                     mCoordinates.getY() - mStartCoordinates.getY()
             );
             mTimeStartedScroll = 0;
+
+            mLastDistanceForScale = 0;
+            mLastInterceptedDistance = 0;
         }
-
-        mLastDistanceForScale = 0;
-
-        mLastInterceptedDistance = 0;
-        mPreviouslyInterceptedCoordinates.set(0, 0);
     }
 
     private void returnToBounds() {

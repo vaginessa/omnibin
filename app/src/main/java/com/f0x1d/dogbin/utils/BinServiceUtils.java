@@ -23,10 +23,10 @@ import dalvik.system.BaseDexClassLoader;
 
 public class BinServiceUtils {
 
-    public static final String PASTEBIN_SERVICE = "pastebin";
     public static final String FOXBIN_SERVICE = "foxbin";
+    public static final String PASTEBIN_SERVICE = "pastebin";
 
-    public static String[] IMPLEMENTED_SERVICES = new String[]{PASTEBIN_SERVICE, FOXBIN_SERVICE};
+    public static String[] IMPLEMENTED_SERVICES = new String[]{FOXBIN_SERVICE, PASTEBIN_SERVICE};
 
     private static BinService sInstance;
     private static final MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>();
@@ -43,10 +43,10 @@ public class BinServiceUtils {
                 }
 
                 switch (selectedService) {
-                    case PASTEBIN_SERVICE:
-                        return sInstance = PasteBinService.getInstance();
                     case FOXBIN_SERVICE:
                         return sInstance = FoxBinService.getInstance();
+                    case PASTEBIN_SERVICE:
+                        return sInstance = PasteBinService.getInstance();
                 }
 
                 try {

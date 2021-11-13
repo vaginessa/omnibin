@@ -148,9 +148,9 @@ public class Utils {
         String selectedPackageName = App.getPreferencesUtil().getSelectedService();
 
         switch (selectedPackageName) {
-            case BinServiceUtils.PASTEBIN_SERVICE:
-                return 0;
             case BinServiceUtils.FOXBIN_SERVICE:
+                return 0;
+            case BinServiceUtils.PASTEBIN_SERVICE:
                 return 1;
         }
 
