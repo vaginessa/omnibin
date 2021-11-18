@@ -8,6 +8,7 @@ import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
+import com.f0x1d.dogbin.BuildConfig;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
 import com.f0x1d.dogbin.network.parser.DarkNetParser;
@@ -60,12 +61,14 @@ public class PasteBinService implements BinService {
 
     @Override
     public void login(String username, String password) throws Exception {
-        String token = PasteBinApi.getInstance().getService().login(new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("api_dev_key", "0ae8754d0ef14a23233caec62cd3055a")
-                .addFormDataPart("api_user_name", username)
-                .addFormDataPart("api_user_password", password)
-                .build()).execute().body();
+        String token = PasteBinApi.getInstance().getService().login(
+                new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("api_dev_key", BuildConfig.PASTEBIN_API_KEY)
+                        .addFormDataPart("api_user_name", username)
+                        .addFormDataPart("api_user_password", password)
+                        .build()
+        ).execute().body();
 
         if (!isResponseOk(token))
             throw new Exception(token);
@@ -92,7 +95,7 @@ public class PasteBinService implements BinService {
     public DocumentContent getDocumentContent(String slug) throws Exception {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
-        builder.addFormDataPart("api_dev_key", "0ae8754d0ef14a23233caec62cd3055a");
+        builder.addFormDataPart("api_dev_key", BuildConfig.PASTEBIN_API_KEY);
         if (getToken() != null)
             builder.addFormDataPart("api_user_key", getToken());
         builder.addFormDataPart("api_paste_key", slug);
@@ -114,7 +117,7 @@ public class PasteBinService implements BinService {
     public String createDocument(String slug, String content) throws Exception {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
-        builder.addFormDataPart("api_dev_key", "0ae8754d0ef14a23233caec62cd3055a");
+        builder.addFormDataPart("api_dev_key", BuildConfig.PASTEBIN_API_KEY);
         if (getToken() != null)
             builder.addFormDataPart("api_user_key", getToken());
         builder.addFormDataPart("api_paste_code", content);
@@ -137,13 +140,23 @@ public class PasteBinService implements BinService {
     }
 
     @Override
+    public boolean deleteDocument(String slug) throws Exception {
+        return false;
+    }
+
+    @Override
+    public boolean canDelete(UserDocument userDocument) {
+        return false;
+    }
+
+    @Override
     public Boolean isEditableDocument(String slug) throws Exception {
         return null;
     }
 
     @Override
     public List<UserDocument> getDocumentListFromCache() {
-        return Utils.toUserNotesPastebin(App.getMyDatabase().getPastebinSavedNoteDao().getAllSync());
+        return Utils.toUserNotesPastebin(App.getMyDatabase().getPastebinSavedNoteDao().getAllSync(), false);
     }
 
     @Override
@@ -196,7 +209,7 @@ public class PasteBinService implements BinService {
             case "my_notes":
                 String pastesXml = PasteBinApi.getInstance().getService().getPastes(new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
-                        .addFormDataPart("api_dev_key", "0ae8754d0ef14a23233caec62cd3055a")
+                        .addFormDataPart("api_dev_key", BuildConfig.PASTEBIN_API_KEY)
                         .addFormDataPart("api_user_key", getToken())
                         .addFormDataPart("api_option", "list")
                         .build()).execute().body();

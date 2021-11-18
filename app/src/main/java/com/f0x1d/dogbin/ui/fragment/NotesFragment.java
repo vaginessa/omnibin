@@ -52,14 +52,14 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
         mRefreshLayout = findViewById(R.id.refresh_layout);
         mNotesRecycler = findViewById(R.id.notes_recycler);
 
-        Utils.applyToolbarShit(view, requireArguments().getString("folder_title"));
+        Utils.applyToolbarTitleAndMargins(view, requireArguments().getString("folder_title"));
 
         mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorPrimary));
         if (isNightTheme())
             mRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getColorFromAttr(requireActivity(), android.R.attr.windowBackground));
 
         mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
-        mNotesRecycler.setAdapter(mAdapter = new NotesAdapter(requireActivity()));
+        mNotesRecycler.setAdapter(mAdapter = new NotesAdapter(requireActivity(), userDocument -> mViewModel.deleteNote(userDocument)));
         mNotesRecycler.addItemDecoration(new ItemOffsetDecoration(8));
 
         mViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {

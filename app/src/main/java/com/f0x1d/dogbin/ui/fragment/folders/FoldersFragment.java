@@ -48,7 +48,7 @@ public class FoldersFragment extends BaseFragment<FoldersViewModel> {
         mFoldersRecycler = findViewById(R.id.folders_recycler);
         mRefreshLayout = findViewById(R.id.refresh_layout);
 
-        Utils.applyToolbarShit(view, getString(R.string.folders));
+        Utils.applyToolbarTitleAndMargins(view, getString(R.string.folders));
 
         mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorPrimary));
         if (isNightTheme())

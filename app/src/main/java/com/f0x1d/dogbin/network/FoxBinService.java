@@ -18,6 +18,7 @@ import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNoteResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNotesResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinLoginRegisterRequest;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinLoginRegisterResponse;
+import com.f0x1d.dogbin.network.model.foxbin.base.BaseFoxBinResponse;
 import com.f0x1d.dogbin.network.okhttp.NetworkUtils;
 import com.f0x1d.dogbin.network.retrofit.foxbin.FoxBinApi;
 import com.f0x1d.dogbin.utils.Utils;
@@ -123,13 +124,20 @@ public class FoxBinService implements BinService {
     }
 
     @Override
+    public boolean deleteDocument(String slug) throws Exception {
+        Response<BaseFoxBinResponse> response = FoxBinApi.getInstance().getService().deleteNote(slug, App.getPreferencesUtil().getFoxBinToken()).execute();
+        checkResponseForError(response);
+        return response.body().isOk();
+    }
+
+    @Override
     public Boolean isEditableDocument(String slug) throws Exception {
         return null;
     }
 
     @Override
     public List<UserDocument> getDocumentListFromCache() {
-        return Utils.toUserNotesFoxBin(App.getMyDatabase().getFoxBinSavedNoteDao().getAllSync());
+        return Utils.toUserNotesFoxBin(App.getMyDatabase().getFoxBinSavedNoteDao().getAllSync(), false);
     }
 
     @Override
@@ -180,7 +188,7 @@ public class FoxBinService implements BinService {
                 List<FoxBinGetNoteResponse.FoxBinNote> documents = response.body().getNotes();
                 List<UserDocument> userDocuments = new ArrayList<>();
                 for (FoxBinGetNoteResponse.FoxBinNote document : documents) {
-                    userDocuments.add(UserDocument.createDocument(document.getSlug(), new Date(document.getDate()).toLocaleString()));
+                    userDocuments.add(UserDocument.createDocument(document.getSlug(), new Date(document.getDate()).toLocaleString(), true));
                 }
 
                 return userDocuments;

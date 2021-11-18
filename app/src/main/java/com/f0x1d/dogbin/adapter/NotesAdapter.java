@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,15 +32,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private List<UserDocument> mUserDocuments = new ArrayList<>();
 
     private Context mContext;
+    private OnDeleteClickedListener mOnDeleteClickedListener;
 
-    public NotesAdapter(Context context) {
+    public NotesAdapter(Context context, OnDeleteClickedListener onDeleteClickedListener) {
         this.mContext = context;
+        this.mOnDeleteClickedListener = onDeleteClickedListener;
     }
 
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NoteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false));
+        return new NoteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false), mOnDeleteClickedListener);
     }
 
     @Override
@@ -63,13 +66,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         notifyDataSetChanged();
     }
 
+    public interface OnDeleteClickedListener {
+        void clicked(UserDocument userDocument);
+    }
+
     class NoteViewHolder extends RecyclerView.ViewHolder {
 
         private MaterialCardView mContentCard;
         private TextView mURLText;
         private TextView mTimeText;
 
-        public NoteViewHolder(@NonNull View itemView) {
+        public NoteViewHolder(@NonNull View itemView, OnDeleteClickedListener onDeleteClickedListener) {
             super(itemView);
 
             this.mContentCard = itemView.findViewById(R.id.content_card);
@@ -94,15 +101,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                         Toast.makeText(mContext, mContext.getString(R.string.copied_to_clipboard, delDogUrl), Toast.LENGTH_SHORT).show();
                         return true;
 
+                    case R.id.delete_item:
+                        onDeleteClickedListener.clicked(mUserDocuments.get(getAdapterPosition()));
+                        return true;
+
                     default:
                         return false;
                 }
             });
-            MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, (MenuBuilder) popupMenu.getMenu(), itemView);
-            menuPopupHelper.setForceShowIcon(true);
 
             mContentCard.setOnClickListener(v -> openDocument());
             mContentCard.setOnLongClickListener(v -> {
+                MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, checkDeletable(popupMenu), itemView);
+                menuPopupHelper.setForceShowIcon(true);
                 menuPopupHelper.show();
                 return true;
             });
@@ -113,10 +124,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             mTimeText.setText(userDocument.getTime());
         }
 
+        private MenuBuilder checkDeletable(PopupMenu popupMenu) {
+            Menu menu = popupMenu.getMenu();
+            menu.findItem(R.id.delete_item).setVisible(BinServiceUtils.getCurrentActiveService().canDelete(mUserDocuments.get(getAdapterPosition())));
+            return (MenuBuilder) menu;
+        }
+
         private void openDocument() {
             Intent intent = new Intent(mContext, TextViewerActivity.class);
             intent.setData(Uri.parse(BinServiceUtils.getCurrentActiveService().getDomain() + mUserDocuments.get(getAdapterPosition()).getSlug()));
-            intent.putExtra("my_note", true);
+            intent.putExtra("my_note", mUserDocuments.get(getAdapterPosition()).myNote());
 
             mContext.startActivity(intent);
         }

@@ -55,7 +55,7 @@ public class Utils {
         return result;
     }
 
-    public static void applyToolbarShit(View view, String title) {
+    public static void applyToolbarTitleAndMargins(View view, String title) {
         CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(title);
 
@@ -101,31 +101,31 @@ public class Utils {
         return new Date(System.currentTimeMillis()).toLocaleString();
     }
 
-    public static List<UserDocument> toUserNotes(List<DogbinSavedNote> savedNotes) {
+    public static List<UserDocument> toUserNotes(List<DogbinSavedNote> savedNotes, boolean myNotes) {
         List<UserDocument> userDocuments = new ArrayList<>();
 
         for (DogbinSavedNote savedNote : savedNotes) {
-            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
+            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime(), myNotes));
         }
 
         return userDocuments;
     }
 
-    public static List<UserDocument> toUserNotesPastebin(List<PastebinSavedNote> savedNotes) {
+    public static List<UserDocument> toUserNotesPastebin(List<PastebinSavedNote> savedNotes, boolean myNotes) {
         List<UserDocument> userDocuments = new ArrayList<>();
 
         for (PastebinSavedNote savedNote : savedNotes) {
-            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
+            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime(), myNotes));
         }
 
         return userDocuments;
     }
 
-    public static List<UserDocument> toUserNotesFoxBin(List<FoxBinSavedNote> savedNotes) {
+    public static List<UserDocument> toUserNotesFoxBin(List<FoxBinSavedNote> savedNotes, boolean myNotes) {
         List<UserDocument> userDocuments = new ArrayList<>();
 
         for (FoxBinSavedNote savedNote : savedNotes) {
-            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime()));
+            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime(), myNotes));
         }
 
         return userDocuments;

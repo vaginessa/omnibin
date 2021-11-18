@@ -4,6 +4,7 @@ import com.f0x1d.dogbin.network.model.foxbin.FoxBinCreatedDocumentResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNoteResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNotesResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinLoginRegisterResponse;
+import com.f0x1d.dogbin.network.model.foxbin.base.BaseFoxBinResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -34,6 +35,9 @@ public interface FoxBinApiService {
 
     @GET("get/{slug}")
     Call<FoxBinGetNoteResponse> getNote(@Path("slug") String slug, @Query("accessToken") String token);
+
+    @GET("delete/{slug}")
+    Call<BaseFoxBinResponse> deleteNote(@Path("slug") String slug, @Query("accessToken") String token);
 
     @GET("getAll")
     Call<FoxBinGetNotesResponse> getAllNotes(@Query("accessToken") String token);

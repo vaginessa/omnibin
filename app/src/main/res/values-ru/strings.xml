@@ -62,4 +62,5 @@
     <string name="open">Открыть</string>
     <string name="copy_link">Копировать ссылку</string>
     <string name="toaster_dialog">Похоже у вас установлен VTosters. И вы тут, наверное, потому что VTosters отправил вам уведомление с просьбой скачать данное приложение.\n\nОднако, если вы не знаете что такое системные сообщения (логи), ТО ПРОСТО ИГНОРИРУЙТЕ ДАННЫЕ УВЕДОМЛЕНИЯ!</string>
+    <string name="delete">Удалить</string>
 </resources>

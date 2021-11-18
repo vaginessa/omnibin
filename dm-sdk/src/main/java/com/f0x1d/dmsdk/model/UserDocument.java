@@ -8,11 +8,13 @@ public class UserDocument {
     private long mId;
     private String mSlug;
     private String mTime;
+    private boolean mMyNote;
 
-    public static UserDocument createDocument(String slug, String time) {
+    public static UserDocument createDocument(String slug, String time, boolean myNote) {
         UserDocument userDocument = new UserDocument();
         userDocument.setSlug(slug);
         userDocument.setTime(time);
+        userDocument.setMyNote(myNote);
         return userDocument;
     }
 
@@ -40,12 +42,11 @@ public class UserDocument {
         this.mTime = time;
     }
 
-    @Override
-    public String toString() {
-        return "SavedDocument{" +
-                "mId=" + mId +
-                ", mSlug='" + mSlug + '\'' +
-                ", mTime='" + mTime + '\'' +
-                '}';
+    public boolean myNote() {
+        return mMyNote;
+    }
+
+    public void setMyNote(boolean myNote) {
+        this.mMyNote = myNote;
     }
 }

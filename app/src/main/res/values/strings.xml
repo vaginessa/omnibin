@@ -64,4 +64,5 @@
     <string name="copy_link">Copy link</string>
     <string name="vtosters" translatable="false">VTosters</string>
     <string name="toaster_dialog">Seems that you have VTosters installed. And you are here probably because VTosters has sent you notification to download this, aren\'t you?\n\nSo, if you don\'t know what android system messages (logs) are, JUST IGNORE THIS NOTIFICATIONS!</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -146,10 +146,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
                         switch (which) {
                             case 0:
-                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.PASTEBIN_SERVICE);
+                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.FOXBIN_SERVICE);
                                 break;
                             case 1:
-                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.FOXBIN_SERVICE);
+                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.PASTEBIN_SERVICE);
                                 break;
                             default:
                                 App.getPreferencesUtil().setSelectedService(services.get(which - BinServiceUtils.IMPLEMENTED_SERVICES.length).packageName);

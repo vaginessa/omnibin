@@ -16,7 +16,7 @@ public class DarkNetParser {
         Matcher matcher = pattern.matcher(html);
 
         while (matcher.find())
-            userDocuments.add(UserDocument.createDocument(matcher.group(1), matcher.group(2)));
+            userDocuments.add(UserDocument.createDocument(matcher.group(1), matcher.group(2), false));
 
         return userDocuments;
     }

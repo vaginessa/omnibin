@@ -39,7 +39,7 @@ public class SettingsWrapperFragment extends BaseFragment<AndroidViewModel> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Utils.applyToolbarShit(view, getString(R.string.settings));
+        Utils.applyToolbarTitleAndMargins(view, getString(R.string.settings));
 
         mFragmentNavigator = new FragmentNavigator(getChildFragmentManager(), R.id.wrapper_container, new MyFragmentBuilder());
         if (savedInstanceState == null)

@@ -49,6 +49,10 @@ Not all are run straight on the UI thread, idea is not to request smth from net 
 
 ```Boolean isEditableDocument(String slug) throws Exception;``` must return true if user can edit document, false if not, null if set in ```DocumentContent``` object.
 
+```boolean deleteDocument(String slug) throws Exception;``` must delete a user's document, can be called on document only if ```canDelete(UserDocument)``` returned true.
+
+```boolean canDelete(UserDocument userDocument);``` must return true if user can delete document, false if not.
+
 ### Cache
 
 You don't need to implement caching if you don't want to do it.

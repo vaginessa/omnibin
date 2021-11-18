@@ -17,6 +17,8 @@ import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class NotesViewModel extends BaseViewModel {
 
@@ -37,6 +39,8 @@ public class NotesViewModel extends BaseViewModel {
 
     private final MutableLiveData<List<UserDocument>> mNotesListData = new MutableLiveData<>();
     private final String mFolderKey;
+
+    private final Executor mExecutor = Executors.newSingleThreadExecutor();
 
     public NotesViewModel(@NonNull Application application, String folderKey) {
         super(application);
@@ -62,8 +66,23 @@ public class NotesViewModel extends BaseViewModel {
                     return;
                 }
 
-                mLoadingStateData.postValue(LoadingState.LOADED);
                 mNotesListData.postValue(userDocuments);
+            }
+        });
+    }
+
+    public void deleteNote(UserDocument userDocument) {
+        mExecutor.execute(() -> {
+            try {
+                boolean deleted = BinServiceUtils.getCurrentActiveService().deleteDocument(userDocument.getSlug());
+
+                List<UserDocument> userDocuments = mNotesListData.getValue();
+                if (deleted)
+                    userDocuments.remove(userDocument);
+
+                mNotesListData.postValue(userDocuments);
+            } catch (Exception e) {
+                processError(e);
             }
         });
     }

@@ -97,6 +97,23 @@ public interface BinService {
     String editDocument(String slug, String content) throws Exception;
 
     /**
+     * Delete document on slug, if can be (based on canDelete(UserDocument))
+     * @param slug
+     * @return true if successfully deleted, false if not
+     * @throws Exception
+     */
+    boolean deleteDocument(String slug) throws Exception;
+
+    /**
+     * Used to determine if this document can be deleted by user
+     * @param userDocument
+     * @return true if document can be deleted by user, false if not
+     */
+    default boolean canDelete(UserDocument userDocument) {
+        return userDocument.myNote();
+    }
+
+    /**
      * @param slug
      * @return true if document can be edited, false if not, null if you set it in DocumentContent
      * @throws Exception
