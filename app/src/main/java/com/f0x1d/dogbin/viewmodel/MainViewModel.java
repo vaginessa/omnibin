@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Pair;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.App;
+import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Event;
@@ -30,6 +32,8 @@ public class MainViewModel extends BaseViewModel {
     private final MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mShowFoldersItemData = new MutableLiveData<>();
     private final MutableLiveData<Folder> mDefaultFolderData = new MutableLiveData<>();
+
+    private final MutableLiveData<Boolean> mPublishButtonVisibleData = new MutableLiveData<>(true);
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -68,6 +72,10 @@ public class MainViewModel extends BaseViewModel {
         return new Event(EVENT_VIEW_TEXT, new Pair<>(uri, recreate));
     }
 
+    public void setCurrentTab(@IdRes int itemId) {
+        mPublishButtonVisibleData.setValue(itemId != R.id.settings_navigation);
+    }
+
     public LiveData<Boolean> getLoggedInData() {
         return mLoggedInData;
     }
@@ -78,5 +86,9 @@ public class MainViewModel extends BaseViewModel {
 
     public LiveData<Folder> getDefaultFolderData() {
         return mDefaultFolderData;
+    }
+
+    public LiveData<Boolean> getPublishButtonVisibleData() {
+        return mPublishButtonVisibleData;
     }
 }

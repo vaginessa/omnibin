@@ -83,7 +83,6 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
                 return;
 
             mAdapter.setNotes(notes, false);
-            mAdapter.notifyDataSetChanged();
         });
 
         mRefreshLayout.setOnRefreshListener(mViewModel::load);

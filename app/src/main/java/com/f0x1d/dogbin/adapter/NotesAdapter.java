@@ -60,6 +60,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             }
         } else
             mUserDocuments.addAll(userDocuments);
+        notifyDataSetChanged();
     }
 
     class NoteViewHolder extends RecyclerView.ViewHolder {

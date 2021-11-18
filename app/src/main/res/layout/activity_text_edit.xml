@@ -41,6 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="3dp"
         app:ke_editor_backgroundColor="?android:windowBackground"
         app:ke_editor_maxZoom="10.0"
         app:ke_lineNumbers_backgroundColor="?android:windowBackground"

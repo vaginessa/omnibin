@@ -50,6 +50,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
 
         mViewModel.getEventsData().observe(this, event -> {
             if (event.isConsumed()) return;
+
             if (event.type().equals(MainViewModel.EVENT_VIEW_TEXT)) {
                 Pair<Uri, Boolean> data = event.consume();
 
@@ -71,6 +72,8 @@ public class MainActivity extends BaseActivity<MainViewModel> {
         if (savedInstanceState == null)
             mViewModel.processIntent(getIntent(), false);
 
+        mViewModel.getPublishButtonVisibleData().observe(this, isVisible -> mPublishButton.setVisibility(isVisible ? View.VISIBLE : View.GONE));
+
         setupBottomNavigation(savedInstanceState);
         mPublishButton.setOnClickListener(v -> startActivity(new Intent(this, TextEditActivity.class)));
     }
@@ -89,6 +92,9 @@ public class MainActivity extends BaseActivity<MainViewModel> {
 
     private void setupBottomNavigation(Bundle savedInstanceState) {
         mBottomNavigation.setOnItemSelectedListener(item -> {
+            mViewModel.setCurrentTab(item.getItemId());
+            mPublishButton.setVisibility(item.getItemId() == R.id.settings_navigation ? View.GONE : View.VISIBLE);
+
             Folder defaultFolderData = mViewModel.getDefaultFolderData().getValue();
 
             switch (item.getItemId()) {
