@@ -15,7 +15,9 @@ public class PasteBinApi {
     private PasteBinRawService mRawService;
 
     public static PasteBinApi getInstance() {
-        return sInstance == null ? sInstance = new PasteBinApi() : sInstance;
+        synchronized (PasteBinApi.class) {
+            return sInstance == null ? sInstance = new PasteBinApi() : sInstance;
+        }
     }
 
     public PasteBinApiService getService() {

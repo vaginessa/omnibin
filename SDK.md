@@ -13,6 +13,7 @@ Module is an android application from which omnibin loads code.
 ## Methods
 
 BinService must implement list of methods, these methods return instances of modules that you also have to create.
+[Example](https://github.com/F0x1d/omnibin/tree/master/app/src/main/java/com/f0x1d/dogbin/network/service/foxbin)
 
 Methods, which ```throw Exception``` are run **not** on the UI thread.
 
