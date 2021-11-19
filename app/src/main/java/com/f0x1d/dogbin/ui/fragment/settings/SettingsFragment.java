@@ -51,7 +51,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         mSettingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
-        boolean loggedIn = BinServiceUtils.getCurrentActiveService().loggedIn();
+        boolean loggedIn = BinServiceUtils.getCurrentActiveService().auth().loggedIn();
 
         addPreferencesFromResource(R.xml.settings);
 
@@ -99,8 +99,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (loggedIn)
             mLoginPreference.setTitle(R.string.log_out);
         mLoginPreference.setOnPreferenceClickListener(preference -> {
-            if (BinServiceUtils.getCurrentActiveService().loggedIn()) {
-                BinServiceUtils.getCurrentActiveService().logout();
+            if (BinServiceUtils.getCurrentActiveService().auth().loggedIn()) {
+                BinServiceUtils.getCurrentActiveService().auth().logout();
 
                 requireActivity().finish();
                 startActivity(new Intent(requireActivity(), MainActivity.class));

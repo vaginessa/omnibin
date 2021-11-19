@@ -126,7 +126,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         private MenuBuilder checkDeletable(PopupMenu popupMenu) {
             Menu menu = popupMenu.getMenu();
-            menu.findItem(R.id.delete_item).setVisible(BinServiceUtils.getCurrentActiveService().canDelete(mUserDocuments.get(getAdapterPosition())));
+            menu.findItem(R.id.delete_item).setVisible(BinServiceUtils.getCurrentActiveService().documents().canDelete(mUserDocuments.get(getAdapterPosition())));
             return (MenuBuilder) menu;
         }
 

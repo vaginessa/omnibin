@@ -63,7 +63,7 @@ public class TextViewModel extends BaseViewModel {
             String finalSlug = slug;
             loadEditable(finalSlug); // so hard w/o coroutines
 
-            DocumentContent content = BinServiceUtils.getCurrentActiveService().getContentFromCache(slug);
+            DocumentContent content = BinServiceUtils.getCurrentActiveService().cache().getContentFromCache(slug);
             if (content == null) {
                 updateText(slug);
                 return;
@@ -80,7 +80,7 @@ public class TextViewModel extends BaseViewModel {
 
     private void updateText(String slug) {
         try {
-            DocumentContent body = BinServiceUtils.getCurrentActiveService().getDocumentContent(slug);
+            DocumentContent body = BinServiceUtils.getCurrentActiveService().documents().getDocumentContent(slug);
             if (App.getPreferencesUtil().isRedirectFromNoteEnabled() && mRedirectURLData.getValue() == null && body.isUrl())
                 mRedirectURLData.postValue(body.getContent());
 
@@ -94,7 +94,7 @@ public class TextViewModel extends BaseViewModel {
                 mIsEditableData.postValue(body.getEditable());
             }
 
-            BinServiceUtils.getCurrentActiveService().cacheDocument(slug, body.getContent(), mMyNote);
+            BinServiceUtils.getCurrentActiveService().cache().cacheDocument(slug, body.getContent(), mMyNote);
         } catch (Exception e) {
             processError(e);
         }
@@ -103,7 +103,7 @@ public class TextViewModel extends BaseViewModel {
     private void loadEditable(String slug) {
         Utils.getExecutor().execute(() -> {
             try {
-                Boolean editable = BinServiceUtils.getCurrentActiveService().isEditableDocument(slug);
+                Boolean editable = BinServiceUtils.getCurrentActiveService().documents().isEditableDocument(slug);
                 if (editable != null) {
                     mIsEditableData.postValue(editable);
                 }

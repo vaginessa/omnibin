@@ -53,7 +53,7 @@ public class NotesViewModel extends BaseViewModel {
 
         Utils.getExecutor().execute(() -> {
             try {
-                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().getUserDocumentsForFolder(mFolderKey);
+                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().folders().getUserDocumentsForFolder(mFolderKey);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mNotesListData.postValue(userDocuments);
@@ -61,7 +61,7 @@ public class NotesViewModel extends BaseViewModel {
                 processError(e);
                 mNotesListData.postValue(Collections.emptyList());
 
-                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().getDocumentListFromCache();
+                List<UserDocument> userDocuments = BinServiceUtils.getCurrentActiveService().cache().getDocumentListFromCache();
                 if (userDocuments.isEmpty()) {
                     return;
                 }
@@ -74,7 +74,7 @@ public class NotesViewModel extends BaseViewModel {
     public void deleteNote(UserDocument userDocument) {
         mExecutor.execute(() -> {
             try {
-                boolean deleted = BinServiceUtils.getCurrentActiveService().deleteDocument(userDocument.getSlug());
+                boolean deleted = BinServiceUtils.getCurrentActiveService().documents().deleteDocument(userDocument.getSlug());
 
                 List<UserDocument> userDocuments = mNotesListData.getValue();
                 if (deleted)

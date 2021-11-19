@@ -38,9 +38,9 @@ public class LoginViewModel extends BaseViewModel {
         Utils.getExecutor().execute(() -> {
             try {
                 if (register)
-                    BinServiceUtils.getCurrentActiveService().register(login, password);
+                    BinServiceUtils.getCurrentActiveService().auth().register(login, password);
                 else
-                    BinServiceUtils.getCurrentActiveService().login(login, password);
+                    BinServiceUtils.getCurrentActiveService().auth().login(login, password);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mLoggedInData.postValue(true);

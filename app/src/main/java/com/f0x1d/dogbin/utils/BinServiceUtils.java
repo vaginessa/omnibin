@@ -12,8 +12,8 @@ import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.Constants;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.network.FoxBinService;
-import com.f0x1d.dogbin.network.PasteBinService;
+import com.f0x1d.dogbin.network.service.foxbin.FoxBinService;
+import com.f0x1d.dogbin.network.service.pastebin.PasteBinService;
 
 import java.io.File;
 import java.util.ArrayList;

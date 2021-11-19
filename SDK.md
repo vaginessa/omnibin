@@ -12,7 +12,7 @@ Module is an android application from which omnibin loads code.
 
 ## Methods
 
-BinService must implement list of methods, these methods are called by omnibin.
+BinService must implement list of methods, these methods return instances of modules that you also have to create.
 
 Methods, which ```throw Exception``` are run **not** on the UI thread.
 
@@ -27,7 +27,7 @@ Not all are run straight on the UI thread, idea is not to request smth from net 
 
 ```String getSlugFromLink(String link);``` must parse link in order to get slug. Example: https://del.dog/test -> test
 
-### Login
+### Auth
 
 ```String getUsername() throws Exception;``` must return user's username, called only when user is logged in.
 
@@ -99,7 +99,7 @@ And add something like this in this activity:
 
 ## Proguard
 
-If you're using proguard, please use ```@Keep``` annotation in your ```BinService``` class.
+If you're using proguard, please use ```@Keep``` annotation in your ```BinService``` class and modules.
 
 ## End
 

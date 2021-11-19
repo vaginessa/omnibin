@@ -29,7 +29,7 @@ public class FoldersViewModel extends BaseViewModel {
 
         Utils.getExecutor().execute(() -> {
             try {
-                List<Folder> folders = BinServiceUtils.getCurrentActiveService().getAvailableFolders();
+                List<Folder> folders = BinServiceUtils.getCurrentActiveService().folders().getAvailableFolders();
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mFoldersData.postValue(folders);

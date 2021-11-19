@@ -25,7 +25,7 @@ public class SettingsViewModel extends BaseViewModel {
 
         Utils.getExecutor().execute(() -> {
             try {
-                String username = BinServiceUtils.getCurrentActiveService().getUsername();
+                String username = BinServiceUtils.getCurrentActiveService().auth().getUsername();
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mUsernameData.postValue(username);

@@ -68,9 +68,9 @@ public class WritingViewModel extends BaseViewModel {
             try {
                 String resultSlug;
                 if (isInEditingMode())
-                    resultSlug = BinServiceUtils.getCurrentActiveService().editDocument(slug, text);
+                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().editDocument(slug, text);
                 else
-                    resultSlug = BinServiceUtils.getCurrentActiveService().createDocument(slug, text);
+                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().createDocument(slug, text);
 
                 String resultUrl = resultSlug == null ? null : BinServiceUtils.getCurrentActiveService().getDomain() + resultSlug;
 

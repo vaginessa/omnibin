@@ -42,9 +42,9 @@ public class MainViewModel extends BaseViewModel {
 
     private void load() {
         Utils.getExecutor().execute(() -> {
-            mLoggedInData.postValue(BinServiceUtils.getCurrentActiveService().loggedIn());
-            mShowFoldersItemData.postValue(BinServiceUtils.getCurrentActiveService().showFoldersItem());
-            mDefaultFolderData.postValue(BinServiceUtils.getCurrentActiveService().getDefaultFolder());
+            mLoggedInData.postValue(BinServiceUtils.getCurrentActiveService().auth().loggedIn());
+            mShowFoldersItemData.postValue(BinServiceUtils.getCurrentActiveService().folders().showFoldersItem());
+            mDefaultFolderData.postValue(BinServiceUtils.getCurrentActiveService().folders().getDefaultFolder());
 
             if (!App.getPreferencesUtil().toasterShowed() && Utils.isPackageInstalled("com.vtosters.android", getApplication().getPackageManager())) {
                 mEventsData.postValue(new Event(EVENT_TOASTER_DIALOG, true));
