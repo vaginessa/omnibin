@@ -6,4 +6,17 @@
         <item>Лайм</item>
         <item>Золотой</item>
     </string-array>
+
+    <string-array name="foxbin_expiration">
+        <item>Никогда</item>
+
+        <item>10 минут</item>
+        <item>30 минут</item>
+        <item>1 час</item>
+        <item>3 часа</item>
+        <item>12 часов</item>
+        <item>1 день</item>
+        <item>7 дней</item>
+        <item>30 дней</item>
+    </string-array>
 </resources>

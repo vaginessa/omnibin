@@ -10,6 +10,9 @@ public class FoxBinCreateDocumentRequest {
     @SerializedName("accessToken")
     private String accessToken;
 
+    @SerializedName("deleteAfter")
+    private long deleteAfter = 0;
+
     public String getContent() {
         return content;
     }
@@ -24,5 +27,13 @@ public class FoxBinCreateDocumentRequest {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public long getDeleteAfter() {
+        return deleteAfter;
+    }
+
+    public void setDeleteAfter(long deleteAfter) {
+        this.deleteAfter = deleteAfter;
     }
 }

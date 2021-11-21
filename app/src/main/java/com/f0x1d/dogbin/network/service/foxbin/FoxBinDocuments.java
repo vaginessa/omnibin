@@ -1,5 +1,7 @@
 package com.f0x1d.dogbin.network.service.foxbin;
 
+import android.os.Bundle;
+
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.module.DocumentsModule;
@@ -31,10 +33,11 @@ public class FoxBinDocuments extends DocumentsModule {
     }
 
     @Override
-    public String createDocument(String slug, String content) throws Exception {
+    public String createDocument(String slug, String content, Bundle settings) throws Exception {
         FoxBinCreateDocumentRequest foxBinCreateDocumentRequest = slug.isEmpty() ? new FoxBinCreateDocumentRequest() : new FoxBinCreateDocumentWithSlugRequest();
         foxBinCreateDocumentRequest.setContent(content);
         foxBinCreateDocumentRequest.setAccessToken(App.getPreferencesUtil().getFoxBinToken());
+        foxBinCreateDocumentRequest.setDeleteAfter(settings.getLong("delete_after"));
         if (!slug.isEmpty()) ((FoxBinCreateDocumentWithSlugRequest) foxBinCreateDocumentRequest).setSlug(slug);
 
         Response<FoxBinCreatedDocumentResponse> response =
@@ -44,7 +47,7 @@ public class FoxBinDocuments extends DocumentsModule {
     }
 
     @Override
-    public String editDocument(String slug, String content) throws Exception {
+    public String editDocument(String slug, String content, Bundle settings) throws Exception {
         FoxBinCreateDocumentWithSlugRequest foxBinCreateDocumentRequest = new FoxBinCreateDocumentWithSlugRequest();
         foxBinCreateDocumentRequest.setContent(content);
         foxBinCreateDocumentRequest.setAccessToken(App.getPreferencesUtil().getFoxBinToken());

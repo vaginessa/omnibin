@@ -1,9 +1,11 @@
 package com.f0x1d.dogbin.ui.activity.text;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
@@ -12,9 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
+import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.WritingViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.markusressel.kodeeditor.library.view.CodeEditorLayout;
@@ -105,11 +109,30 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
                 mSlugText.setText(mViewModel.getSlug());
 
             mWritebarText.setText(mViewModel.getTextFromIntent());
-            mViewModel.publish(mViewModel.getTextFromIntent(), mViewModel.getSlug() == null ? "" : mViewModel.getSlug());
+            publish(mViewModel.getTextFromIntent(), mViewModel.getSlug() == null ? "" : mViewModel.getSlug());
         }
 
-        mDoneButton.setOnClickListener(v ->
-                mViewModel.publish(mWritebarText.getText(), mViewModel.getSlug() == null ? mSlugText.getText().toString() : mViewModel.getSlug()));
+        mDoneButton.setOnClickListener(v -> publish(mWritebarText.getText(), mViewModel.getSlug() == null ? mSlugText.getText().toString() : mViewModel.getSlug()));
+    }
+
+    private void publish(String text, String slug) {
+        View dialogView = BinServiceUtils.getCurrentActiveService().ui().buildSettingsDialog(mViewModel.isInEditingMode(), getTheme());
+        if (dialogView == null) {
+            mViewModel.publish(text, slug, null);
+            return;
+        }
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.settings)
+                .setView(dialogView)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    mViewModel.publish(
+                            text,
+                            slug,
+                            BinServiceUtils.getCurrentActiveService().ui().collectDataFromDialog(dialogView, mViewModel.isInEditingMode())
+                    );
+                })
+                .show();
     }
 
     @Override

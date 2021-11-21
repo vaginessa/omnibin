@@ -1,16 +1,14 @@
 package com.f0x1d.dogbin.network.service.pastebin;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.module.AuthModule;
 import com.f0x1d.dmsdk.module.CacheModule;
 import com.f0x1d.dmsdk.module.DocumentsModule;
 import com.f0x1d.dmsdk.module.FoldersModule;
+import com.f0x1d.dmsdk.module.UIModule;
 
 /* Please don't read this code, i don't know under what i've written it */
-public class PasteBinService implements BinService {
+public class PasteBinService extends BinService {
 
     private static PasteBinService sInstance;
 
@@ -18,16 +16,12 @@ public class PasteBinService implements BinService {
     private final PasteBinDocuments mPasteBinDocuments = new PasteBinDocuments(this);
     private final PasteBinCache mPasteBinCache = new PasteBinCache(this);
     private final PasteBinFolders mPasteBinFolders = new PasteBinFolders(this);
+    private final PastebinUI mPasteBinUI = new PastebinUI(this);
 
     public static PasteBinService getInstance() {
         synchronized (PasteBinService.class) {
             return sInstance == null ? sInstance = new PasteBinService() : sInstance;
         }
-    }
-
-    @Override
-    public void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences) {
-
     }
 
     @Override
@@ -58,6 +52,11 @@ public class PasteBinService implements BinService {
     @Override
     public FoldersModule folders() {
         return mPasteBinFolders;
+    }
+
+    @Override
+    public UIModule ui() {
+        return mPasteBinUI;
     }
 
     public static boolean isResponseOk(String text) {

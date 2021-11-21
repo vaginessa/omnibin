@@ -1,5 +1,7 @@
 package com.f0x1d.dmsdk.module;
 
+import android.os.Bundle;
+
 import androidx.annotation.Keep;
 
 import com.f0x1d.dmsdk.BinService;
@@ -29,7 +31,7 @@ public abstract class DocumentsModule extends BaseModule {
      * @return created document's slug
      * @throws Exception
      */
-    public abstract String createDocument(String slug, String content) throws Exception;
+    public abstract String createDocument(String slug, String content, Bundle settings) throws Exception;
 
     /**
      * Edit document on slug
@@ -38,7 +40,7 @@ public abstract class DocumentsModule extends BaseModule {
      * @return edited document's slug
      * @throws Exception
      */
-    public abstract String editDocument(String slug, String content) throws Exception;
+    public abstract String editDocument(String slug, String content, Bundle settings) throws Exception;
 
     /**
      * Delete document on slug, if can be (based on canDelete(UserDocument))

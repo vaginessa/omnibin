@@ -2,6 +2,8 @@ package com.f0x1d.dogbin.network.service.pastebin;
 
 import static com.f0x1d.dogbin.network.service.pastebin.PasteBinService.isResponseOk;
 
+import android.os.Bundle;
+
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.model.UserDocument;
@@ -41,7 +43,7 @@ public class PasteBinDocuments extends DocumentsModule {
     }
 
     @Override
-    public String createDocument(String slug, String content) throws Exception {
+    public String createDocument(String slug, String content, Bundle settings) throws Exception {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         builder.addFormDataPart("api_dev_key", BuildConfig.PASTEBIN_API_KEY);
@@ -62,7 +64,7 @@ public class PasteBinDocuments extends DocumentsModule {
     }
 
     @Override
-    public String editDocument(String slug, String content) throws Exception {
+    public String editDocument(String slug, String content, Bundle settings) throws Exception {
         return null;
     }
 

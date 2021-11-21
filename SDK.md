@@ -6,7 +6,7 @@ Module is an android application from which omnibin loads code.
 
 1. Create android application project in Android Studio.
 2. Add [DM-SDK](https://files.f0x1d.com/files/dm-sdk.aar) as dependency to the project.
-3. Create class and implement ```BinService``` from SDK.
+3. Create class and extend ```BinService``` from SDK.
 4. In manifest add ```<meta-data android:name="binservice" android:value="com.your.package.to.your.BinService" />``` in ```<application``` tag.
 5. Android 11 is cool, also add ```<intent-filter>``` with ```<action android:name="com.f0x1d.dogbin.VISIBILITY"/>``` in ```<activity``` tag.
 
@@ -76,6 +76,14 @@ These methods are also called **not** on the UI thread.
 
 ```List<UserDocument> getUserDocumentsForFolder(String key) throws Exception;``` must return a list of documents for folder as each folder has a key.
 
+### UI
+
+You can access both Contexts from ```service().getApplicationContext();``` and ```service().getOmnibinContext();```.
+
+```View buildSettingsDialog(boolean editingMode, Resources.Theme theme);``` must build a view for a dialog after publish button is pressed, return null to skip dialog. You can use theme param to create ContextThemeWrapper.
+
+```Bundle collectDataFromDialog(View view, boolean editingMode);``` must return bundle with data you need, it will be passed in create/editDocument method, can be null.
+
 ### Errors
 
 You can ```throw Exception``` in methods, where you are allowed to do so, then omnibin will display a Toast with such text: ```Error: Exception.getLocalizedMessage()```.
@@ -87,15 +95,15 @@ If you want to do so, then add your ```<intent-filter>``` to activity in your ma
 
 And add something like this in this activity:
 ```
-    if (getIntent().getData() != null) {
-        Intent intent = new Intent("com.f0x1d.dogbin.ACTION_TEXT_VIEW");
-        intent.setType("text/plain");
-        intent.putExtra("module_package_name", getPackageName());
-        intent.putExtra("url", getIntent().getData().toString());
+if (getIntent().getData() != null) {
+    Intent intent = new Intent("com.f0x1d.dogbin.ACTION_TEXT_VIEW");
+    intent.setType("text/plain");
+    intent.putExtra("module_package_name", getPackageName());
+    intent.putExtra("url", getIntent().getData().toString());
 
-        startActivity(intent);
-        finish();
-    }
+    startActivity(intent);
+    finish();
+}
 ```
 
 ## Proguard

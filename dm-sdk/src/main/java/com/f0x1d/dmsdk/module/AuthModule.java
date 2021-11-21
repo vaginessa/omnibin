@@ -14,7 +14,6 @@ public abstract class AuthModule extends BaseModule {
 
     /**
      * Called only when user is logged in
-     *
      * @return user's username
      * @throws Exception
      */

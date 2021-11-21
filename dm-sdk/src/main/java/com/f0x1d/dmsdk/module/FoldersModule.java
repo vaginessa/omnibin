@@ -7,6 +7,7 @@ import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dmsdk.module.base.BaseModule;
 
+import java.util.Collections;
 import java.util.List;
 
 @Keep
@@ -30,7 +31,9 @@ public abstract class FoldersModule extends BaseModule {
      * @return list of available folders, empty list if there is no such
      * @throws Exception
      */
-    public abstract List<Folder> getAvailableFolders() throws Exception;
+    public List<Folder> getAvailableFolders() throws Exception {
+        return Collections.emptyList();
+    }
 
     /**
      * @param key

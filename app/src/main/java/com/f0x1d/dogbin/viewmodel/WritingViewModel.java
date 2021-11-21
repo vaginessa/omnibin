@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -58,7 +59,7 @@ public class WritingViewModel extends BaseViewModel {
                 (intent.getAction().equals(ACTION_UPLOAD_TO_FOXBIN) || intent.getAction().equals(Intent.ACTION_SEND));
     }
 
-    public void publish(String text, String slug) {
+    public void publish(String text, String slug, Bundle settings) {
         if (text == null || text.isEmpty())
             return;
 
@@ -68,9 +69,9 @@ public class WritingViewModel extends BaseViewModel {
             try {
                 String resultSlug;
                 if (isInEditingMode())
-                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().editDocument(slug, text);
+                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().editDocument(slug, text, settings);
                 else
-                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().createDocument(slug, text);
+                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().createDocument(slug, text, settings);
 
                 String resultUrl = resultSlug == null ? null : BinServiceUtils.getCurrentActiveService().getDomain() + resultSlug;
 

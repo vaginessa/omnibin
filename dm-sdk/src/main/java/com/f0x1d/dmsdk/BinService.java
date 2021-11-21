@@ -9,53 +9,71 @@ import com.f0x1d.dmsdk.module.AuthModule;
 import com.f0x1d.dmsdk.module.CacheModule;
 import com.f0x1d.dmsdk.module.DocumentsModule;
 import com.f0x1d.dmsdk.module.FoldersModule;
+import com.f0x1d.dmsdk.module.UIModule;
 
 @Keep
-public interface BinService {
+public abstract class BinService {
+
+    protected Context mApplicationContext;
+    protected Context mOmnibinContext;
 
     /**
      * Called when module is loaded
-     *
      * @param applicationContext
-     * @param dogbinMobileContext
+     * @param omnibinContext
      * @param modulePreferences
      */
-    void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences);
+    public void init(Context applicationContext, Context omnibinContext, SharedPreferences modulePreferences) {
+        this.mApplicationContext = applicationContext;
+        this.mOmnibinContext = omnibinContext;
+    }
 
     /**
      * @return service domain
      */
-    String getDomain();
+    public abstract String getDomain();
 
     /**
      * Parses link in order to get slug
-     *
      * @param link
      * @return slug
      */
-    String getSlugFromLink(String link);
+    public abstract String getSlugFromLink(String link);
 
     /**
      * @return your implementation of auth
      */
-    AuthModule auth();
+    public abstract AuthModule auth();
 
     /**
      * @return your implementation of working with documents
      */
-    DocumentsModule documents();
+    public abstract DocumentsModule documents();
 
     /**
      * @return your implementation of cache
      */
-    CacheModule cache();
+    public abstract CacheModule cache();
 
     /**
      * @return your implementation of folders
      */
-    FoldersModule folders();
+    public abstract FoldersModule folders();
 
-    default int getSDKVersion() {
+    /**
+     * @return your implementation of ui
+     */
+    public abstract UIModule ui();
+
+    public Context getApplicationContext() {
+        return mApplicationContext;
+    }
+
+    public Context getOmnibinContext() {
+        return mOmnibinContext;
+    }
+
+    public int getSDKVersion() {
         return Constants.LATEST_VERSION;
     }
 }

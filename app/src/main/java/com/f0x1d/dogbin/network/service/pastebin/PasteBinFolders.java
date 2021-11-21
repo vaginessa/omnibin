@@ -106,6 +106,7 @@ public class PasteBinFolders extends FoldersModule {
                         }
                     }
 
+                    Collections.reverse(userDocuments);
                     return userDocuments;
                 } catch (Exception e) {
                     return Collections.emptyList();

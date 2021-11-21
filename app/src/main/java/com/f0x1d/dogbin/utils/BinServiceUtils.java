@@ -92,7 +92,7 @@ public class BinServiceUtils {
 
         BaseDexClassLoader baseDexClassLoader = new BaseDexClassLoader(applicationInfo.sourceDir, outDir, null, App.getInstance().getClassLoader());
         BinService binService = (BinService) baseDexClassLoader.loadClass(applicationInfo.metaData.getString("binservice")).getConstructor().newInstance();
-        if (binService.getSDKVersion() < Constants.LATEST_VERSION) {
+        if (binService.getSDKVersion() != Constants.LATEST_VERSION) {
             Toast.makeText(App.getInstance(), R.string.module_v_old, Toast.LENGTH_SHORT).show();
             App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
             return FoxBinService.getInstance();

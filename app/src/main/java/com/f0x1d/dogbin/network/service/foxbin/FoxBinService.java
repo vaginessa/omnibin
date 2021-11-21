@@ -1,15 +1,13 @@
 package com.f0x1d.dogbin.network.service.foxbin;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.module.AuthModule;
 import com.f0x1d.dmsdk.module.CacheModule;
 import com.f0x1d.dmsdk.module.DocumentsModule;
 import com.f0x1d.dmsdk.module.FoldersModule;
+import com.f0x1d.dmsdk.module.UIModule;
 
-public class FoxBinService implements BinService {
+public class FoxBinService extends BinService {
 
     private static FoxBinService sInstance;
 
@@ -17,16 +15,12 @@ public class FoxBinService implements BinService {
     private final FoxBinDocuments mFoxBinDocuments = new FoxBinDocuments(this);
     private final FoxBinCache mFoxBinCache = new FoxBinCache(this);
     private final FoxBinFolders mFoxBinFolders = new FoxBinFolders(this);
+    private final FoxBinUI mFoxBinUI = new FoxBinUI(this);
 
     public static FoxBinService getInstance() {
         synchronized (FoxBinService.class) {
             return sInstance == null ? sInstance = new FoxBinService() : sInstance;
         }
-    }
-
-    @Override
-    public void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences) {
-
     }
 
     @Override
@@ -57,5 +51,10 @@ public class FoxBinService implements BinService {
     @Override
     public FoldersModule folders() {
         return mFoxBinFolders;
+    }
+
+    @Override
+    public UIModule ui() {
+        return mFoxBinUI;
     }
 }
