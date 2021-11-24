@@ -20,14 +20,14 @@ public class FoxBinUI extends UIModule {
     }
 
     @Override
-    public View buildSettingsDialog(boolean editing, Resources.Theme theme) {
-        return editing ? null : LayoutInflater.from(new ContextThemeWrapper(App.getInstance(), theme))
+    public View buildSettingsDialog(boolean editingMode, Resources.Theme theme) {
+        return editingMode ? null : LayoutInflater.from(new ContextThemeWrapper(App.getInstance(), theme))
                 .inflate(R.layout.dialog_foxbin_settings, null, false);
     }
 
     @Override
-    public Bundle collectDataFromDialog(View view, boolean editing) {
-        if (editing) return null;
+    public Bundle collectDataFromDialog(View view, boolean editingMode) {
+        if (editingMode) return null;
 
         Spinner spinner = view.findViewById(R.id.values_spinner);
         int selectedValue = spinner.getSelectedItemPosition();
@@ -36,7 +36,7 @@ public class FoxBinUI extends UIModule {
         long oneMinute = 1000 * 60;
         long oneHour = oneMinute * 60;
         long oneDay = oneHour * 24;
-        switch (selectedValue) {
+        switch (selectedValue) { // kotlin supremacy
             case 1:
                 expiration = oneMinute * 10;
                 break;

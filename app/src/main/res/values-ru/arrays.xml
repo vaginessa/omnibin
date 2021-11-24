@@ -19,4 +19,17 @@
         <item>7 дней</item>
         <item>30 дней</item>
     </string-array>
+
+    <string-array name="pastebin_expiration">
+        <item>Никогда</item>
+
+        <item>10 минут</item>
+        <item>1 час</item>
+        <item>1 день</item>
+        <item>1 неделю</item>
+        <item>2 недели</item>
+        <item>1 месяц</item>
+        <item>6 месяцев</item>
+        <item>1 год</item>
+    </string-array>
 </resources>

@@ -52,7 +52,7 @@ public class PasteBinDocuments extends DocumentsModule {
         builder.addFormDataPart("api_paste_code", content);
         if (!slug.isEmpty())
             builder.addFormDataPart("api_paste_name", slug);
-        builder.addFormDataPart("api_paste_expire_date", "N");
+        builder.addFormDataPart("api_paste_expire_date", settings.getString("expiration"));
         builder.addFormDataPart("api_option", "paste");
 
         String url = PasteBinApi.getInstance().getService().paste(builder.build()).execute().body();
