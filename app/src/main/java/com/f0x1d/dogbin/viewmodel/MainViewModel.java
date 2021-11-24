@@ -2,6 +2,7 @@ package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Pair;
 
@@ -16,6 +17,7 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Event;
+import com.f0x1d.dogbin.utils.TextDrawable;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
 
@@ -32,6 +34,7 @@ public class MainViewModel extends BaseViewModel {
     private final MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mShowFoldersItemData = new MutableLiveData<>();
     private final MutableLiveData<Folder> mDefaultFolderData = new MutableLiveData<>();
+    private final MutableLiveData<Drawable> mModuleIconData = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> mPublishButtonVisibleData = new MutableLiveData<>(true);
 
@@ -42,6 +45,7 @@ public class MainViewModel extends BaseViewModel {
 
     private void load() {
         Utils.getExecutor().execute(() -> {
+            mModuleIconData.postValue(new TextDrawable(BinServiceUtils.getCurrentActiveService().getServiceShortName()));
             mLoggedInData.postValue(BinServiceUtils.getCurrentActiveService().auth().loggedIn());
             mShowFoldersItemData.postValue(BinServiceUtils.getCurrentActiveService().folders().showFoldersItem());
             mDefaultFolderData.postValue(BinServiceUtils.getCurrentActiveService().folders().getDefaultFolder());
@@ -86,6 +90,10 @@ public class MainViewModel extends BaseViewModel {
 
     public LiveData<Folder> getDefaultFolderData() {
         return mDefaultFolderData;
+    }
+
+    public LiveData<Drawable> getModuleIconData() {
+        return mModuleIconData;
     }
 
     public LiveData<Boolean> getPublishButtonVisibleData() {

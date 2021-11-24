@@ -24,6 +24,11 @@ public class FoxBinService extends BinService {
     }
 
     @Override
+    public String getServiceShortName() {
+        return "fb";
+    }
+
+    @Override
     public String getDomain() {
         return "https://f0x1d.com/foxbin/";
     }

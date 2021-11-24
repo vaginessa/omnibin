@@ -25,6 +25,11 @@ public class PasteBinService extends BinService {
     }
 
     @Override
+    public String getServiceShortName() {
+        return "pb";
+    }
+
+    @Override
     public String getDomain() {
         return "https://pastebin.com/";
     }

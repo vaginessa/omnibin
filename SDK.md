@@ -24,6 +24,8 @@ Not all are run straight on the UI thread, idea is not to request smth from net 
 
 ```void init(Context applicationContext, Context dogbinMobileContext, SharedPreferences modulePreferences);``` is called when module is loaded, here you can use module application context, dogbin application context and SharedPreferences where you can store something.
 
+```String getServiceShortName();``` must return short service name. Example: fb (foxbin)
+
 ```String getDomain();``` must return service domain. Example: https://f0x1d.com/
 
 ```String getSlugFromLink(String link);``` must parse link in order to get slug. Example: https://del.dog/test -> test

@@ -2,6 +2,7 @@ package com.f0x1d.dmsdk;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Keep;
 
@@ -16,6 +17,7 @@ public abstract class BinService {
 
     protected Context mApplicationContext;
     protected Context mOmnibinContext;
+    protected SharedPreferences mModulePreferences;
 
     /**
      * Called when module is loaded
@@ -26,7 +28,13 @@ public abstract class BinService {
     public void init(Context applicationContext, Context omnibinContext, SharedPreferences modulePreferences) {
         this.mApplicationContext = applicationContext;
         this.mOmnibinContext = omnibinContext;
+        this.mModulePreferences = modulePreferences;
     }
+
+    /**
+     * @return service short name
+     */
+    public abstract String getServiceShortName();
 
     /**
      * @return service domain
@@ -71,6 +79,10 @@ public abstract class BinService {
 
     public Context getOmnibinContext() {
         return mOmnibinContext;
+    }
+
+    public SharedPreferences getModulePreferences() {
+        return mModulePreferences;
     }
 
     public int getSDKVersion() {

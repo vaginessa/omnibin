@@ -1,6 +1,7 @@
 package com.f0x1d.dogbin.ui.fragment.settings;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,6 +23,8 @@ import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.SettingsViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.List;
+
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private Preference mDonatePreference;
@@ -33,7 +36,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private Preference mLoginPreference;
 
     private Preference mServicePreference;
-    private boolean mAskedServiceDialog = false;
 
     private Preference mClearCachePreference;
 
@@ -113,8 +115,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mServicePreference = findPreference("select_service");
         mServicePreference.setOnPreferenceClickListener(preference -> {
-            mAskedServiceDialog = true;
-            BinServiceUtils.refreshInstalledServices();
+            List<ApplicationInfo> services = BinServiceUtils.getInstalledServicesData().getValue();
+
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.select_service)
+                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) ->
+                            Utils.switchService(which, services, requireActivity()))
+                    .show();
             return false;
         });
 
@@ -133,33 +140,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return;
 
             mUsernamePreference.setTitle(username);
-        });
-
-        BinServiceUtils.getInstalledServicesData().observe(this, services -> {
-            if (!mAskedServiceDialog)
-                return;
-
-            mAskedServiceDialog = false;
-
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.select_service)
-                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
-                        switch (which) {
-                            case 0:
-                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.FOXBIN_SERVICE);
-                                break;
-                            case 1:
-                                App.getPreferencesUtil().setSelectedService(BinServiceUtils.PASTEBIN_SERVICE);
-                                break;
-                            default:
-                                App.getPreferencesUtil().setSelectedService(services.get(which - BinServiceUtils.IMPLEMENTED_SERVICES.length).packageName);
-                        }
-                        BinServiceUtils.refreshCurrentService();
-
-                        requireActivity().finish();
-                        startActivity(new Intent(requireContext(), MainActivity.class));
-                    })
-                    .show();
         });
     }
 }

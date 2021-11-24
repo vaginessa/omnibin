@@ -1,7 +1,6 @@
 package com.f0x1d.dogbin.ui.activity.text;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;

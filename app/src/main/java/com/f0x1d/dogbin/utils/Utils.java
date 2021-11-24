@@ -1,6 +1,8 @@
 package com.f0x1d.dogbin.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -18,6 +20,7 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
+import com.f0x1d.dogbin.ui.activity.MainActivity;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
@@ -159,5 +162,22 @@ public class Utils {
                 return i + BinServiceUtils.IMPLEMENTED_SERVICES.length;
         }
         return 0;
+    }
+
+    public static void switchService(int which, List<ApplicationInfo> services, Activity activity) {
+        switch (which) {
+            case 0:
+                App.getPreferencesUtil().setSelectedService(BinServiceUtils.FOXBIN_SERVICE);
+                break;
+            case 1:
+                App.getPreferencesUtil().setSelectedService(BinServiceUtils.PASTEBIN_SERVICE);
+                break;
+            default:
+                App.getPreferencesUtil().setSelectedService(services.get(which - BinServiceUtils.IMPLEMENTED_SERVICES.length).packageName);
+        }
+        BinServiceUtils.refreshCurrentService();
+
+        activity.finish();
+        activity.startActivity(new Intent(activity, MainActivity.class));
     }
 }

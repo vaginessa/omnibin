@@ -17,6 +17,7 @@ import com.f0x1d.dogbin.network.service.pastebin.PasteBinService;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import dalvik.system.BaseDexClassLoader;
@@ -29,7 +30,7 @@ public class BinServiceUtils {
     public static String[] IMPLEMENTED_SERVICES = new String[]{FOXBIN_SERVICE, PASTEBIN_SERVICE};
 
     private static BinService sInstance;
-    private static final MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>();
+    private static final MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>(Collections.emptyList());
 
     public static BinService getCurrentActiveService() {
         synchronized (BinServiceUtils.class) {

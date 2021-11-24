@@ -1,12 +1,16 @@
 package com.f0x1d.dogbin.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.fragment.app.Fragment;
 
 import com.f0x1d.dmsdk.model.Folder;
@@ -18,13 +22,18 @@ import com.f0x1d.dogbin.ui.activity.text.TextEditActivity;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.folders.FoldersWrapperFragment;
+import com.f0x1d.dogbin.utils.BinServiceUtils;
+import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
 import com.f0x1d.dogbin.viewmodel.MainViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.shape.MaterialShapeDrawable;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity<MainViewModel> {
 
@@ -87,13 +96,13 @@ public class MainActivity extends BaseActivity<MainViewModel> {
     @Override
     protected void onStart() {
         super.onStart();
+        BinServiceUtils.refreshInstalledServices();
         BillingManager.getInstance(this).loadPurchases();
     }
 
     private void setupBottomNavigation(Bundle savedInstanceState) {
         mBottomNavigation.setOnItemSelectedListener(item -> {
             mViewModel.setCurrentTab(item.getItemId());
-            mPublishButton.setVisibility(item.getItemId() == R.id.settings_navigation ? View.GONE : View.VISIBLE);
 
             Folder defaultFolderData = mViewModel.getDefaultFolderData().getValue();
 
@@ -135,6 +144,40 @@ public class MainActivity extends BaseActivity<MainViewModel> {
                 mBottomNavigation.getMenu().findItem(R.id.login_navigation).setVisible(!loggedIn));
         mViewModel.getShowFoldersItemData().observe(this, showFolders ->
                 mBottomNavigation.getMenu().findItem(R.id.folders_navigation).setVisible(showFolders));
+
+        mViewModel.getModuleIconData().observe(this, drawable -> mBottomNavigation.getMenu().findItem(R.id.settings_navigation).setIcon(drawable));
+
+        ViewGroup navigationMenuView = (ViewGroup) mBottomNavigation.getChildAt(0);
+        for (int i = 0; i < navigationMenuView.getChildCount(); i++) {
+            BottomNavigationItemView bottomNavigationItemView = (BottomNavigationItemView) navigationMenuView.getChildAt(i);
+
+            bottomNavigationItemView.setOnLongClickListener(v -> {
+                if (v.getId() != R.id.settings_navigation)
+                    return false;
+
+                openPopup(v);
+                return true;
+            });
+        }
+    }
+
+    private void openPopup(View v) {
+        MenuBuilder menuBuilder = new MenuBuilder(v.getContext());
+
+        List<ApplicationInfo> services = BinServiceUtils.getInstalledServicesData().getValue();
+        String[] installedServices = Utils.getInstalledServices(services);
+
+        for (int i = 0; i < installedServices.length; i++) {
+            String installedService = installedServices[i];
+
+            int finalI = i;
+            menuBuilder.add(installedService).setOnMenuItemClickListener(item -> {
+                Utils.switchService(finalI, services, this);
+                return true;
+            });
+        }
+
+        new MenuPopupHelper(this, menuBuilder, v).show();
     }
 
     @Override
