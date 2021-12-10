@@ -30,12 +30,12 @@ public class FoxBinService extends BinService {
 
     @Override
     public String getDomain() {
-        return "https://f0x1d.com/foxbin/";
+        return "https://foxbin.f0x1d.com/";
     }
 
     @Override
     public String getSlugFromLink(String link) {
-        return link.split("/")[4];
+        return link.contains("foxbin.f0x1d.com") ? link.split("/")[3] : link.split("/")[4];
     }
 
     @Override

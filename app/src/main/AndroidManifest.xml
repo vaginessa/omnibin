@@ -61,6 +61,20 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
+                    android:host="foxbin.f0x1d.com"
+                    android:scheme="http" />
+                <data
+                    android:host="foxbin.f0x1d.com"
+                    android:scheme="https" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
                     android:host="pastebin.com"
                     android:scheme="http" />
                 <data
