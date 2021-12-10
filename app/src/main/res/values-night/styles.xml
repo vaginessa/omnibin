@@ -5,7 +5,7 @@
     </style>
 
 
-    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/pixelAccent</item>
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">?colorPrimary</item>
@@ -24,7 +24,7 @@
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
     </style>
 
-    <style name="AlertDialogStyle.Blue" parent="Theme.Material3.Dark.Dialog.Alert">
+    <style name="AlertDialogStyle.Blue" parent="Theme.Material3.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/pixelAccent</item>
         <item name="dialogCornerRadius">10dp</item>
         <item name="android:dialogCornerRadius" tools:targetApi="p">10dp</item>
@@ -41,7 +41,7 @@
 
 
 
-    <style name="AppTheme.Gold" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="AppTheme.Gold" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/goldAccent</item>
         <item name="colorOnPrimary">@android:color/black</item>
         <item name="colorSecondary">?colorPrimary</item>
@@ -60,7 +60,7 @@
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
     </style>
 
-    <style name="AlertDialogStyle.Gold" parent="Theme.Material3.Dark.Dialog.Alert">
+    <style name="AlertDialogStyle.Gold" parent="Theme.Material3.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/goldAccent</item>
         <item name="dialogCornerRadius">10dp</item>
         <item name="android:dialogCornerRadius" tools:targetApi="p">10dp</item>
@@ -76,7 +76,7 @@
 
 
 
-    <style name="AppTheme.Pink" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="AppTheme.Pink" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/pinkAccent</item>
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">?colorPrimary</item>
@@ -95,7 +95,7 @@
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
     </style>
 
-    <style name="AlertDialogStyle.Pink" parent="Theme.Material3.Dark.Dialog.Alert">
+    <style name="AlertDialogStyle.Pink" parent="Theme.Material3.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/pinkAccent</item>
         <item name="dialogCornerRadius">10dp</item>
         <item name="android:dialogCornerRadius" tools:targetApi="p">10dp</item>
@@ -111,7 +111,7 @@
 
 
 
-    <style name="AppTheme.Lime" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="AppTheme.Lime" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/limeAccent</item>
         <item name="colorOnPrimary">@android:color/black</item>
         <item name="colorSecondary">?colorPrimary</item>
@@ -130,7 +130,7 @@
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
     </style>
 
-    <style name="AlertDialogStyle.Lime" parent="Theme.Material3.Dark.Dialog.Alert">
+    <style name="AlertDialogStyle.Lime" parent="Theme.Material3.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/limeAccent</item>
         <item name="dialogCornerRadius">10dp</item>
         <item name="android:dialogCornerRadius" tools:targetApi="p">10dp</item>

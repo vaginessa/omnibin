@@ -1,7 +1,5 @@
 package com.f0x1d.dogbin.ui.fragment.base;
 
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +9,11 @@ import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 
 public abstract class BaseFragment<T extends AndroidViewModel> extends Fragment {
 
@@ -50,10 +49,7 @@ public abstract class BaseFragment<T extends AndroidViewModel> extends Fragment 
     }
 
     protected boolean isNightTheme() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-        }
-        return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        return ((BaseActivity<?>) requireActivity()).isNightTheme();
     }
 
     protected ViewModelProvider.Factory buildFactory() {

@@ -23,15 +23,17 @@ public abstract class BaseActivity<T extends AndroidViewModel> extends AppCompat
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) ->
-                ViewCompat.onApplyWindowInsets(getWindow().getDecorView(),
-                        insets.replaceSystemWindowInsets(0, 0, 0, insets.getSystemWindowInsetBottom())));
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> ViewCompat.onApplyWindowInsets(
+                getWindow().getDecorView(),
+                insets.replaceSystemWindowInsets(0, 0, 0, insets.getSystemWindowInsetBottom())
+        ));
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             AppCompatDelegate.setDefaultNightMode(App.getPreferencesUtil().isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         }
 
         switch (App.getPreferencesUtil().selectedAccent()) {
+            default:
             case 0:
                 setTheme(R.style.AppTheme);
                 break;
@@ -75,7 +77,7 @@ public abstract class BaseActivity<T extends AndroidViewModel> extends AppCompat
         }
     }
 
-    protected boolean isNightTheme() {
+    public boolean isNightTheme() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
         }
