@@ -6,8 +6,10 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -49,6 +51,8 @@ public class CoolCodeView extends ViewGroup {
     private float mTenDp = 0;
     private float mFiveDp = 0;
 
+    private boolean mWrapText = false;
+
     public CoolCodeView(@NonNull Context context) {
         super(context);
         init();
@@ -85,9 +89,16 @@ public class CoolCodeView extends ViewGroup {
         addView(mLinesTextView);
     }
 
+    public void setWrapText(boolean wrapText) {
+        this.mWrapText = wrapText;
+        mLinesTextView.setVisibility(wrapText ? View.INVISIBLE : View.VISIBLE);
+
+        requestLayout();
+        returnToBounds();
+    }
+
     public void setText(String text) {
         mCodeTextView.setText(text);
-        mCodeTextView.measure(0, 0);
 
         int lines = text.split("\\n").length;
         StringBuilder stringBuilder = new StringBuilder();
@@ -98,24 +109,35 @@ public class CoolCodeView extends ViewGroup {
         }
 
         mLinesTextView.setText(stringBuilder.toString());
-        mLinesTextView.measure(0, 0);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        mLinesTextView.layout(
-                (int) (mCoordinates.getX() + mFiveDp),
-                (int) mCoordinates.getY(),
-                (int) (mCoordinates.getX() + mLinesTextView.getMeasuredWidth() + mFiveDp),
-                (int) (mCoordinates.getY() + mLinesTextView.getMeasuredHeight())
-        );
+        mCodeTextView.measure(mWrapText ? MeasureSpec.makeMeasureSpec((int) (getWidth() - mTenDp), MeasureSpec.EXACTLY) : 0, 0);
+        mLinesTextView.measure(0, 0);
 
-        mCodeTextView.layout(
-                (int) (mCoordinates.getX() + mTenDp + mLinesTextView.getMeasuredWidth()),
-                (int) mCoordinates.getY(),
-                (int) (mCoordinates.getX() + mCodeTextView.getMeasuredWidth() + mTenDp + mLinesTextView.getMeasuredWidth()),
-                (int) (mCoordinates.getY() + mCodeTextView.getMeasuredHeight())
-        );
+        if (!mWrapText) {
+            mLinesTextView.layout(
+                    (int) (mCoordinates.getX() + mFiveDp),
+                    (int) mCoordinates.getY(),
+                    (int) (mCoordinates.getX() + mLinesTextView.getMeasuredWidth() + mFiveDp),
+                    (int) (mCoordinates.getY() + mLinesTextView.getMeasuredHeight())
+            );
+
+            mCodeTextView.layout(
+                    (int) (mCoordinates.getX() + mTenDp + mLinesTextView.getMeasuredWidth()),
+                    (int) mCoordinates.getY(),
+                    (int) (mCoordinates.getX() + mCodeTextView.getMeasuredWidth() + mTenDp + mLinesTextView.getMeasuredWidth()),
+                    (int) (mCoordinates.getY() + mCodeTextView.getMeasuredHeight())
+            );
+        } else {
+            mCodeTextView.layout(
+                    (int) (mCoordinates.getX() + mTenDp),
+                    (int) mCoordinates.getY(),
+                    (int) (mCoordinates.getX() + mCodeTextView.getMeasuredWidth() + mTenDp),
+                    (int) (mCoordinates.getY() + mCodeTextView.getMeasuredHeight())
+            );
+        }
     }
 
     @Override
@@ -132,7 +154,7 @@ public class CoolCodeView extends ViewGroup {
                 else if (mScale < MINIMUM_SCALE) mScale = MINIMUM_SCALE;
 
                 mCodeTextView.setTextSize(mScale);
-                mCodeTextView.measure(0, 0);
+                mCodeTextView.measure(mWrapText ? MeasureSpec.makeMeasureSpec((int) (getWidth() - mTenDp), MeasureSpec.EXACTLY) : 0, 0);
 
                 mLinesTextView.setTextSize(mScale);
                 mLinesTextView.measure(0, 0);
@@ -314,7 +336,8 @@ public class CoolCodeView extends ViewGroup {
     }
 
     private void returnToBounds() {
-        int widthBound = (int) (getWidth() - mCodeTextView.getMeasuredWidth() - mLinesTextView.getMeasuredWidth() - mTenDp);
+        int widthBound = mWrapText ? (int) (getWidth() - mCodeTextView.getMeasuredWidth() - mTenDp) :
+                (int) (getWidth() - mCodeTextView.getMeasuredWidth() - mLinesTextView.getMeasuredWidth() - mTenDp);
         if (mCoordinates.getX() < widthBound) {
             mCoordinates.setX(widthBound);
         }
@@ -335,7 +358,9 @@ public class CoolCodeView extends ViewGroup {
         if (mCoordinates.getX() > 0) {
             return false;
         }
-        return !(mCoordinates.getX() < getWidth() - mCodeTextView.getMeasuredWidth() - mLinesTextView.getMeasuredWidth() - mTenDp);
+        int widthBound = mWrapText ? (int) (getWidth() - mCodeTextView.getMeasuredWidth() - mTenDp) :
+                (int) (getWidth() - mCodeTextView.getMeasuredWidth() - mLinesTextView.getMeasuredWidth() - mTenDp);
+        return !(mCoordinates.getX() < widthBound);
     }
 
     private boolean ySuitsBounds() {

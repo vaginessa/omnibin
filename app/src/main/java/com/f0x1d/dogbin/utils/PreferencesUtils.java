@@ -12,6 +12,8 @@ public class PreferencesUtils {
     public static final String DARK_THEME_NAME = "dark_theme";
     public static final String ACCENT_NAME = "accent";
 
+    public static final String TEXT_WRAP_NAME = "text_wrap_enabled";
+
     public static final String SUPPORT_APP_SHOWED_NAME = "support_app_dialog";
     public static final String TOASTER_SHOWED_NAME = "toaster_dialog";
     public static final String FIRST_START_NAME = "first_start";
@@ -32,12 +34,10 @@ public class PreferencesUtils {
 
     public static final String SELECTED_SERVICE_NAME = "selected_service";
 
-    private final Context mContext;
     private final SharedPreferences mDefaultPreferences;
     private final SharedPreferences mAppPreferences;
 
     public PreferencesUtils(Context c) {
-        this.mContext = c.getApplicationContext();
         this.mDefaultPreferences = PreferenceManager.getDefaultSharedPreferences(c);
         this.mAppPreferences = c.getSharedPreferences("dogbin_settings", Context.MODE_PRIVATE);
     }
@@ -48,6 +48,14 @@ public class PreferencesUtils {
 
     public int selectedAccent() {
         return Integer.parseInt(mDefaultPreferences.getString(ACCENT_NAME, "0"));
+    }
+
+    public boolean textWrap() {
+        return mAppPreferences.getBoolean(TEXT_WRAP_NAME, false);
+    }
+
+    public void setTextWrap(boolean wrap) {
+        mAppPreferences.edit().putBoolean(TEXT_WRAP_NAME, wrap).apply();
     }
 
     public boolean supportAppShowed() {

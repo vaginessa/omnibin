@@ -48,6 +48,8 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
         mTextCodeView = findViewById(R.id.text_code_view);
         mLoadingProgress = findViewById(R.id.loading_progress);
 
+        mTextCodeView.setWrapText(App.getPreferencesUtil().textWrap());
+
         setupToolbar();
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
@@ -94,9 +96,20 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
                     .putExtra("slug", mViewModel.getSlugData().getValue())
                     .putExtra(Intent.EXTRA_TEXT, mViewModel.getTextData().getValue())
                     .putExtra("edit", true), 1);
-            return false;
+            return true;
         });
         mToolbar.getMenu().findItem(R.id.edit_item).setVisible(false);
+
+        mToolbar.getMenu().findItem(R.id.text_wrap_item).setOnMenuItemClickListener(item -> {
+            boolean checked = item.isChecked();
+
+            mTextCodeView.setWrapText(!checked);
+            App.getPreferencesUtil().setTextWrap(!checked);
+
+            item.setChecked(!checked);
+            return true;
+        });
+        mToolbar.getMenu().findItem(R.id.text_wrap_item).setChecked(App.getPreferencesUtil().textWrap());
     }
 
     private void supportApp() {
