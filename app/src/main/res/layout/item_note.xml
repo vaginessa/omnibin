@@ -4,11 +4,11 @@
     android:id="@+id/content_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="?android:windowBackground"
+    app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="7dp"
     app:cardElevation="0dp"
-    app:strokeColor="?noteCardStrokeColor"
-    app:strokeWidth="1dp">
+    app:strokeWidth="1dp"
+    app:strokeColor="?noteCardStrokeColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,10 +22,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="bold"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="hackingvzlom3"
-            android:textColor="?textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,6 +38,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
             android:maxLines="5"
+            android:ellipsize="end"
             android:text="25.02.20 15:02"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/url_text"

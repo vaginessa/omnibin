@@ -55,6 +55,7 @@
             app:iconSpaceReserved="false" />
 
         <ListPreference
+            app:isPreferenceVisible="false"
             android:entries="@array/accents"
             android:entryValues="@array/accents_values"
             android:key="accent"

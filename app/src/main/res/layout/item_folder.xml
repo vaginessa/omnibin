@@ -8,10 +8,10 @@
     android:layout_marginTop="5dp"
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="5dp"
-    app:cardBackgroundColor="?android:windowBackground"
+    app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
-    app:strokeColor="?colorAccent"
+    app:strokeColor="?noteCardStrokeColor"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,12 +28,13 @@
             android:layout_marginEnd="15dp"
             android:drawableStart="@drawable/ic_saved"
             android:drawablePadding="10dp"
-            android:drawableTint="?colorAccent"
+            android:drawableTint="?android:textColorPrimary"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
             android:text="My notes"
-            android:textColor="?colorAccent"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="bold"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

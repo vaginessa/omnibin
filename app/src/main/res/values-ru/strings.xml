@@ -37,7 +37,7 @@
     <string name="creating_note">Создать запись</string>
     <string name="editing_note">Редактировать запись</string>
     <string name="redirect_from_notes">Перенаправление с записи</string>
-    <string name="loading">Загрузка...</string>
+    <string name="loading">Загрузка…</string>
     <string name="source_code">Исходный код</string>
     <string name="invalid_port">Неправильный порт</string>
     <string name="accent_picker">Выбор акцента</string>
@@ -46,8 +46,8 @@
     <string name="till_role">Создатель dogbin</string>
     <string name="f0x1d_name">F0x1d</string>
     <string name="f0x1d_role">Создатель omnibin</string>
-    <string name="donate_text">Omnibin - это полностью бесплатное приложение без рекламы, с открытым исходным кодом. Если оно вам нравится, пожалуйста, поддержите omnibin путем пожертвования. Вы также получите доступ к выбору акцента в подарок!</string>
-    <string name="donate_text_donated">Большое спасибо за поддержку omnibin!\nТеперь у вас есть доступ к выбору акцента!</string>
+    <string name="donate_text">Omnibin - это полностью бесплатное приложение без рекламы, с открытым исходным кодом. Если оно вам нравится, пожалуйста, поддержите omnibin путем пожертвования.</string>
+    <string name="donate_text_donated">Большое спасибо за поддержку omnibin!</string>
     <string name="donate_text_error">Не удается получить статус пожертвования. Пожалуйста убедитесь, что у вас установлены сервисы Google Play и попробуйте перезагрузить устройство.</string>
     <string name="donate_text_pending">Ваше пожертвование в ожидании оплаты. Если оно не применится автоматически после завершения покупки, пожалуйста, перезапустите omnibin.</string>
     <string name="donate_text_theme_lock">Данная опция доступна только пользователям, поддержавшим omnibin</string>

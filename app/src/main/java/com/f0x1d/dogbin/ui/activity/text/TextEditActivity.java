@@ -43,7 +43,6 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
 
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
-        ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
 
         mSlugText = findViewById(R.id.slug_text);
         mWritebarText = findViewById(R.id.writebar_text);

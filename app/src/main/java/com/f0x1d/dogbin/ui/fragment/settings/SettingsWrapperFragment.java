@@ -12,8 +12,11 @@ import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class SettingsWrapperFragment extends BaseFragment<AndroidViewModel> {
+
+    private MaterialToolbar mToolbar;
 
     private FragmentNavigator mFragmentNavigator;
 
@@ -39,7 +42,8 @@ public class SettingsWrapperFragment extends BaseFragment<AndroidViewModel> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Utils.applyToolbarTitleAndMargins(view, getString(R.string.settings));
+        mToolbar = findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.settings);
 
         mFragmentNavigator = new FragmentNavigator(getChildFragmentManager(), R.id.wrapper_container, new MyFragmentBuilder());
         if (savedInstanceState == null)

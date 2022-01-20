@@ -23,19 +23,12 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
 
     private List<Folder> mFolders = new ArrayList<>();
 
-    private int[] mColors = new int[4];
-
     private Context mContext;
     private FolderClickListener mFolderClickListener;
 
     public FoldersAdapter(Context context, FolderClickListener folderClickListener) {
         this.mContext = context;
         this.mFolderClickListener = folderClickListener;
-
-        mColors[0] = mContext.getResources().getColor(R.color.pinkAccent);
-        mColors[1] = mContext.getResources().getColor(R.color.limeAccent);
-        mColors[2] = mContext.getResources().getColor(R.color.pixelAccent);
-        mColors[3] = mContext.getResources().getColor(R.color.goldAccent);
     }
 
     @NonNull
@@ -47,7 +40,6 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
     @Override
     public void onBindViewHolder(@NonNull FolderViewHolder holder, int position) {
         holder.bindTo(mFolders.get(position));
-        holder.applyColor(mColors[position % mColors.length]);
     }
 
     @Override
@@ -81,15 +73,6 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
         public void bindTo(Folder folder) {
             mFolderTitleText.setText(folder.getTitle());
             mFolderTitleText.setCompoundDrawablesWithIntrinsicBounds(folder.getIcon(), null, null, null);
-        }
-
-        public void applyColor(int color) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-                return;
-
-            mFolderTitleText.setTextColor(color);
-            TextViewCompat.setCompoundDrawableTintList(mFolderTitleText, ColorStateList.valueOf(color));
-            mContentCard.setStrokeColor(color);
         }
     }
 }

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="darkBackground">#030303</color>
+    <color name="orange_200">#FFC55C</color>
+    <color name="orange_500">#FFB52E</color>
+    <color name="orange_700">#FFA500</color>
 
-    <color name="dogBinBackground">#263238</color>
-    <color name="dogBinAccent">#f9bfd3</color>
+    <color name="orange_light_secondary_container">#FFDDAA</color>
+    <color name="orange_light_on_secondary_container">#291800</color>
+    <color name="orange_dark_secondary_container">#624000</color>
+    <color name="orange_dark_on_secondary_container">#FFDDAA</color>
 
-    <color name="pixelAccent">#4285F4</color>
+    <color name="amoled">#020202</color>
 
-    <color name="pinkAccent">#FF69B4</color>
-    <color name="limeAccent">#32CD32</color>
-    <color name="goldAccent">#e9b115</color>
+    <color name="noteLightStroke">#ffdadce0</color>
+    <color name="noteDarkStroke">#3a3c3e</color>
 </resources>

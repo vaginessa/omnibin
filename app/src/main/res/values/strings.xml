@@ -47,8 +47,8 @@
     <string name="till_role">Creator of dogbin</string>
     <string name="f0x1d_name" translatable="false">F0x1d</string>
     <string name="f0x1d_role">Creator of omnibin</string>
-    <string name="donate_text">Omnibin is a ad-free open-source app. If you like it, please consider supporting omnibin by making a little donation. You will also get access to accent picker as a gift!</string>
-    <string name="donate_text_donated">A lot of thanks for supporting omnibin!\nNow you have access to accent picker!</string>
+    <string name="donate_text">Omnibin is a ad-free open-source app. If you like it, please consider supporting omnibin by making a little donation.</string>
+    <string name="donate_text_donated">A lot of thanks for supporting omnibin!</string>
     <string name="donate_text_error">Unable to get donation status. Please make sure you have Google Play Services installed and try restarting your device.</string>
     <string name="donate_text_pending">Your donation is pending. If it isn\'t applied automatically after you complete it, please restart omnibin.</string>
     <string name="donate_text_theme_lock">This setting is available only to users, who supported omnibin</string>

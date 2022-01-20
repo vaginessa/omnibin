@@ -2,6 +2,7 @@ package com.f0x1d.dogbin.ui.activity;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
@@ -11,6 +12,10 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.f0x1d.dmsdk.model.Folder;
@@ -23,6 +28,7 @@ import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.folders.FoldersWrapperFragment;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
+import com.f0x1d.dogbin.utils.TextDrawable;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
@@ -41,6 +47,8 @@ public class MainActivity extends BaseActivity<MainViewModel> {
 
     private FloatingActionButton mPublishButton;
     private BottomNavigationView mBottomNavigation;
+
+    private TextDrawable mBinDrawable;
 
     @Override
     protected Class<MainViewModel> viewModel() {
@@ -106,6 +114,8 @@ public class MainActivity extends BaseActivity<MainViewModel> {
 
             Folder defaultFolderData = mViewModel.getDefaultFolderData().getValue();
 
+            swapDrawableCheckedState(item.getItemId() == R.id.settings_navigation); // shit for my custom drawable
+
             switch (item.getItemId()) {
                 case R.id.settings_navigation:
                     mFragmentNavigator.switchTo("settings");
@@ -115,7 +125,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
                     finish();
                     return true;
                 case R.id.default_folder_navigation:
-                    mFragmentNavigator.switchTo(NotesFragment.newInstance(defaultFolderData.getTitle(), defaultFolderData.getKey(), true),
+                    mFragmentNavigator.switchTo(NotesFragment.newInstance(defaultFolderData.getTitle(), defaultFolderData.getKey()),
                             defaultFolderData.getKey() + "_notes", false);
                     return true;
                 case R.id.folders_navigation:
@@ -145,7 +155,13 @@ public class MainActivity extends BaseActivity<MainViewModel> {
         mViewModel.getShowFoldersItemData().observe(this, showFolders ->
                 mBottomNavigation.getMenu().findItem(R.id.folders_navigation).setVisible(showFolders));
 
-        mViewModel.getModuleIconData().observe(this, drawable -> mBottomNavigation.getMenu().findItem(R.id.settings_navigation).setIcon(drawable));
+        mViewModel.getModuleIconData().observe(this, title -> {
+            mBinDrawable = new TextDrawable(title);
+            mBottomNavigation
+                    .getMenu()
+                    .findItem(R.id.settings_navigation)
+                    .setIcon(mBinDrawable);
+        });
 
         ViewGroup navigationMenuView = (ViewGroup) mBottomNavigation.getChildAt(0);
         for (int i = 0; i < navigationMenuView.getChildCount(); i++) {
@@ -159,6 +175,23 @@ public class MainActivity extends BaseActivity<MainViewModel> {
                 return true;
             });
         }
+    }
+
+    private void swapDrawableCheckedState(boolean checked) {
+        if (mBinDrawable == null) return;
+
+        int[] states = mBinDrawable.getState();
+        if (states.length == 0)
+            states = new int[] { -android.R.attr.state_checked };
+
+        for (int i = 0; i < states.length; i++) {
+            int state = states[i];
+
+            if (Math.abs(state) == android.R.attr.state_checked)
+                states[i] = checked ? android.R.attr.state_checked : -android.R.attr.state_checked;
+        }
+
+        mBinDrawable.setState(states);
     }
 
     private void openPopup(View v) {

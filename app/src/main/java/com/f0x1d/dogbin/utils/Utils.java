@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.annotation.AttrRes;
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
 import com.f0x1d.dogbin.ui.activity.MainActivity;
@@ -49,23 +47,6 @@ public class Utils {
         sUiHandler = new Handler();
     }
 
-    public static int statusBarHeight() {
-        int result = 0;
-        int resourceId = Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = Resources.getSystem().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-    public static void applyToolbarTitleAndMargins(View view, String title) {
-        CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(title);
-
-        MaterialToolbar materialToolbar = view.findViewById(R.id.toolbar);
-        ((ViewGroup.MarginLayoutParams) materialToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
-    }
-
     public static float dpToPx(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
     }
@@ -83,13 +64,6 @@ public class Utils {
         }
     }
 
-    public static boolean getBooleanFromAttr(Context c, @AttrRes int attrId) {
-        TypedArray typedArray = c.obtainStyledAttributes(new int[]{attrId});
-        boolean result = typedArray.getBoolean(0, false);
-        typedArray.recycle();
-        return result;
-    }
-
     public static int getColorFromAttr(Context c, @AttrRes int attrId) {
         TypedValue typedValue = new TypedValue();
         c.getTheme().resolveAttribute(attrId, typedValue, true);
@@ -97,21 +71,7 @@ public class Utils {
     }
 
     public static String currentTimeToString() {
-        /*Date date = new Date(System.currentTimeMillis());
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault());
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));*/
-
         return new Date(System.currentTimeMillis()).toLocaleString();
-    }
-
-    public static List<UserDocument> toUserNotes(List<DogbinSavedNote> savedNotes, boolean myNotes) {
-        List<UserDocument> userDocuments = new ArrayList<>();
-
-        for (DogbinSavedNote savedNote : savedNotes) {
-            userDocuments.add(UserDocument.createDocument(savedNote.getSlug(), savedNote.getTime(), myNotes));
-        }
-
-        return userDocuments;
     }
 
     public static List<UserDocument> toUserNotesPastebin(List<PastebinSavedNote> savedNotes, boolean myNotes) {

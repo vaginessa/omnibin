@@ -69,4 +69,9 @@ public class TextDrawable extends Drawable {
     public void setTintList(@Nullable ColorStateList tint) {
         mColorStateList = tint;
     }
+
+    @Override
+    protected boolean onStateChange(int[] state) {
+        return true;
+    }
 }

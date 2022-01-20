@@ -15,9 +15,11 @@ import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.FoldersViewModel;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class FoldersFragment extends BaseFragment<FoldersViewModel> {
 
+    private MaterialToolbar mToolbar;
     private RecyclerView mFoldersRecycler;
     private SwipeRefreshLayout mRefreshLayout;
 
@@ -45,10 +47,11 @@ public class FoldersFragment extends BaseFragment<FoldersViewModel> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mToolbar = findViewById(R.id.toolbar);
         mFoldersRecycler = findViewById(R.id.folders_recycler);
         mRefreshLayout = findViewById(R.id.refresh_layout);
 
-        Utils.applyToolbarTitleAndMargins(view, getString(R.string.folders));
+        mToolbar.setTitle(R.string.folders);
 
         mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorPrimary));
         if (isNightTheme())
@@ -57,7 +60,7 @@ public class FoldersFragment extends BaseFragment<FoldersViewModel> {
         mFoldersRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         mFoldersRecycler.setAdapter(mAdapter = new FoldersAdapter(requireContext(), folder ->
                 ((FoldersWrapperFragment) getParentFragment()).getFragmentNavigator().switchTo(
-                        NotesFragment.newInstance(folder.getTitle(), folder.getKey(), false), folder.getKey() + "_notes", true)));
+                        NotesFragment.newInstance(folder.getTitle(), folder.getKey()), folder.getKey() + "_notes", true)));
 
         mViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == null)

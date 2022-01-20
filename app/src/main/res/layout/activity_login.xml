@@ -5,11 +5,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/dogbin_text"
+        android:id="@+id/omnibin_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textColor="?colorAccent"
+        android:textColor="?colorPrimary"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@id/login_text_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,15 +18,15 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/login_text_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="@string/login"
-        app:boxCornerRadiusBottomEnd="10dp"
-        app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
         app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,15 +41,15 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password_text_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="@string/password"
-        app:boxCornerRadiusBottomEnd="10dp"
-        app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
         app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_text_layout">
@@ -68,11 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:text="@string/log_in"
-        android:textColor="?fabIconColor"
         app:backgroundTint="@color/selector_fab"
         app:borderWidth="0dp"
         app:iconGravity="start"
-        app:iconTint="?fabIconColor"
         app:rippleColor="@android:color/white"
         app:icon="@drawable/ic_login"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -87,6 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:text="@string/register"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

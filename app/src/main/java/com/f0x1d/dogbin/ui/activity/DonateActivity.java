@@ -44,7 +44,6 @@ public class DonateActivity extends BaseActivity<AndroidViewModel> {
         mBillingManager = BillingManager.getInstance(this);
 
         mToolbar = findViewById(R.id.toolbar);
-        ((ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams()).topMargin = Utils.statusBarHeight();
         mToolbar.setTitle(R.string.donate);
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
 

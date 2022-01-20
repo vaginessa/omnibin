@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -73,7 +74,7 @@ public class CoolCodeView extends ViewGroup {
         mTenDp = Utils.dpToPx(10);
         mFiveDp = mTenDp / 2;
 
-        int textColor = Utils.getColorFromAttr(getContext(), R.attr.textColor);
+        int textColor = Utils.getColorFromAttr(getContext(), R.attr.colorOnSurface);
 
         mCodeTextView = new TextView(getContext());
         mCodeTextView.setTypeface(Typeface.MONOSPACE);

@@ -34,7 +34,7 @@ public class MainViewModel extends BaseViewModel {
     private final MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mShowFoldersItemData = new MutableLiveData<>();
     private final MutableLiveData<Folder> mDefaultFolderData = new MutableLiveData<>();
-    private final MutableLiveData<Drawable> mModuleIconData = new MutableLiveData<>();
+    private final MutableLiveData<String> mModuleNameData = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> mPublishButtonVisibleData = new MutableLiveData<>(true);
 
@@ -45,7 +45,7 @@ public class MainViewModel extends BaseViewModel {
 
     private void load() {
         Utils.getExecutor().execute(() -> {
-            mModuleIconData.postValue(new TextDrawable(BinServiceUtils.getCurrentActiveService().getServiceShortName()));
+            mModuleNameData.postValue(BinServiceUtils.getCurrentActiveService().getServiceShortName());
             mLoggedInData.postValue(BinServiceUtils.getCurrentActiveService().auth().loggedIn());
             mShowFoldersItemData.postValue(BinServiceUtils.getCurrentActiveService().folders().showFoldersItem());
             mDefaultFolderData.postValue(BinServiceUtils.getCurrentActiveService().folders().getDefaultFolder());
@@ -92,8 +92,8 @@ public class MainViewModel extends BaseViewModel {
         return mDefaultFolderData;
     }
 
-    public LiveData<Drawable> getModuleIconData() {
-        return mModuleIconData;
+    public LiveData<String> getModuleIconData() {
+        return mModuleNameData;
     }
 
     public LiveData<Boolean> getPublishButtonVisibleData() {
