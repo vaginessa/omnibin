@@ -31,6 +31,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreferenceCompat mDarkModePreference;
     private ListPreference mAccentPreference;
+    private Preference mTextInputTypePreference;
 
     private Preference mUsernamePreference;
     private Preference mLoginPreference;
@@ -93,6 +94,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        mTextInputTypePreference = findPreference("text_input_type");
+        mTextInputTypePreference.setOnPreferenceClickListener(preference -> {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.text_input_type)
+                    .setSingleChoiceItems(new CharSequence[]{"EditText", "KodeView"}, App.getPreferencesUtil().textInputType(), (dialog, which) -> {
+                        App.getPreferencesUtil().setTextInputType(which);
+                        dialog.cancel();
+                    })
+                    .setPositiveButton(android.R.string.cancel, null)
+                    .show();
+            return false;
+        });
+
         mUsernamePreference = findPreference("username");
         if (!loggedIn)
             mUsernamePreference.setVisible(false);
@@ -119,8 +133,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.select_service)
-                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) ->
-                            Utils.switchService(which, services, requireActivity()))
+                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services),
+                            (dialog, which) -> Utils.switchService(which, services, requireActivity()))
+                    .setPositiveButton(android.R.string.cancel, null)
                     .show();
             return false;
         });

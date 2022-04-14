@@ -2,7 +2,6 @@ package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Pair;
 
@@ -17,7 +16,6 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Event;
-import com.f0x1d.dogbin.utils.TextDrawable;
 import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
 
@@ -50,7 +48,7 @@ public class MainViewModel extends BaseViewModel {
             mShowFoldersItemData.postValue(BinServiceUtils.getCurrentActiveService().folders().showFoldersItem());
             mDefaultFolderData.postValue(BinServiceUtils.getCurrentActiveService().folders().getDefaultFolder());
 
-            if (!App.getPreferencesUtil().toasterShowed() && Utils.isPackageInstalled("com.vtosters.android", getApplication().getPackageManager())) {
+            if (!App.getPreferencesUtil().toasterShowed() && damnVTostersIsInstalled()) {
                 mEventsData.postValue(new Event(EVENT_TOASTER_DIALOG, true));
             }
         });
@@ -72,12 +70,17 @@ public class MainViewModel extends BaseViewModel {
         });
     }
 
+    public void setCurrentTab(@IdRes int itemId) {
+        mPublishButtonVisibleData.setValue(itemId != R.id.settings_navigation);
+    }
+
     private Event buildNewActivityEvent(Uri uri, boolean recreate) {
         return new Event(EVENT_VIEW_TEXT, new Pair<>(uri, recreate));
     }
 
-    public void setCurrentTab(@IdRes int itemId) {
-        mPublishButtonVisibleData.setValue(itemId != R.id.settings_navigation);
+    private boolean damnVTostersIsInstalled() {
+        return Utils.isPackageInstalled("com.vtosters.android", getApplication().getPackageManager()) ||
+                Utils.isPackageInstalled("com.vtosters.lite", getApplication().getPackageManager());
     }
 
     public LiveData<Boolean> getLoggedInData() {

@@ -66,4 +66,5 @@
     <string name="toaster_dialog">Seems that you have VTosters installed. And you are here probably because VTosters has sent you notification to download this, aren\'t you?\n\nSo, if you don\'t know what android system messages (logs) are, JUST IGNORE THIS NOTIFICATIONS!</string>
     <string name="delete">Delete</string>
     <string name="delete_note_in">Delete note in</string>
+    <string name="text_input_type">Text input type</string>
 </resources>

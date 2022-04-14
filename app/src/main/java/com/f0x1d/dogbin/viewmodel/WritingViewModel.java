@@ -82,9 +82,7 @@ public class WritingViewModel extends BaseViewModel {
                     ClipData clip = ClipData.newPlainText(getApplication().getString(R.string.app_name), resultUrl);
                     clipboard.setPrimaryClip(clip);
 
-                    Utils.runOnUiThread(() -> {
-                        Toast.makeText(getApplication(), getApplication().getString(R.string.copied_to_clipboard, resultUrl), Toast.LENGTH_SHORT).show();
-                    });
+                    Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.copied_to_clipboard, resultUrl), Toast.LENGTH_SHORT).show());
                 }
 
                 mResultUrlData.postValue(resultUrl);

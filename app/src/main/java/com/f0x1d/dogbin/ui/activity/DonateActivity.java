@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -13,7 +12,6 @@ import androidx.lifecycle.AndroidViewModel;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
-import com.f0x1d.dogbin.utils.Utils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;

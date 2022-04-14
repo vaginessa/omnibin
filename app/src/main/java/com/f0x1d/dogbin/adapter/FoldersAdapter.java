@@ -1,14 +1,11 @@
 package com.f0x1d.dogbin.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.f0x1d.dmsdk.model.Folder;

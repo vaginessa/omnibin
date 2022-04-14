@@ -17,6 +17,7 @@ public class PreferencesUtils {
     public static final String SUPPORT_APP_SHOWED_NAME = "support_app_dialog";
     public static final String TOASTER_SHOWED_NAME = "toaster_dialog";
     public static final String FIRST_START_NAME = "first_start";
+    public static final String TEXT_INPUT_TYPE_NAME = "input_type_text";
 
     public static final String API_KEY_NAME = "api_key";
     public static final String USERNAME_NAME = "username";
@@ -80,6 +81,14 @@ public class PreferencesUtils {
 
     public void setFirstStart(boolean firstStart) {
         mAppPreferences.edit().putBoolean(FIRST_START_NAME, firstStart).apply();
+    }
+
+    public int textInputType() {
+        return mAppPreferences.getInt(TEXT_INPUT_TYPE_NAME, 1);
+    }
+
+    public void setTextInputType(int i) {
+        mAppPreferences.edit().putInt(TEXT_INPUT_TYPE_NAME, i).apply();
     }
 
     public String getApiKey() {

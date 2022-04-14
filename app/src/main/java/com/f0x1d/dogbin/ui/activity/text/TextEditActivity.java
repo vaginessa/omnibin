@@ -5,16 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.utils.BinServiceUtils;
-import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.viewmodel.WritingViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,7 +27,7 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
 
     private MaterialToolbar mToolbar;
     private EditText mSlugText;
-    private CodeEditorLayout mWritebarText;
+    private View mWritebarText;
     private FloatingActionButton mDoneButton;
 
     @Override
@@ -39,7 +38,19 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_text_edit);
+
+        int layout;
+        switch (App.getPreferencesUtil().textInputType()) {
+            case 0:
+            default:
+                layout = R.layout.activity_text_edit_edittext;
+                break;
+
+            case 1:
+                layout = R.layout.activity_text_edit_kodeview;
+                break;
+        }
+        setContentView(layout);
 
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -48,14 +59,16 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
         mWritebarText = findViewById(R.id.writebar_text);
         mDoneButton = findViewById(R.id.done_button);
 
-        mWritebarText.setShowDivider(false);
+        if (mWritebarText instanceof CodeEditorLayout)
+            ((CodeEditorLayout) mWritebarText).setShowDivider(false);
+
         mToolbar.setTitle(mViewModel.isInEditingMode() ? R.string.editing_note : R.string.creating_note);
 
         if (mViewModel.isInEditingMode()) {
             mSlugText.setText(mViewModel.getSlug());
             mSlugText.setEnabled(false);
 
-            mWritebarText.setText(mViewModel.getTextFromIntent());
+            setText(mViewModel.getTextFromIntent());
         }
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
@@ -66,12 +79,12 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
                 case LOADING:
                     if (!mViewModel.isInEditingMode()) mSlugText.setEnabled(false);
                     mDoneButton.setEnabled(false);
-                    mWritebarText.setEditable(false);
+                    setEditable(false);
                     break;
                 case LOADED:
                     if (!mViewModel.isInEditingMode()) mSlugText.setEnabled(true);
                     mDoneButton.setEnabled(true);
-                    mWritebarText.setEditable(true);
+                    setEditable(true);
                     break;
             }
         });
@@ -83,7 +96,7 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
             }
 
             if (!mViewModel.isInEditingMode()) {
-                mWritebarText.setText("");
+                setText("");
                 mSlugText.setText("");
 
                 if (mViewModel.isIntentToPost()) {
@@ -106,11 +119,11 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
             if (mViewModel.getSlug() != null)
                 mSlugText.setText(mViewModel.getSlug());
 
-            mWritebarText.setText(mViewModel.getTextFromIntent());
+            setText(mViewModel.getTextFromIntent());
             publish(mViewModel.getTextFromIntent(), mViewModel.getSlug() == null ? "" : mViewModel.getSlug());
         }
 
-        mDoneButton.setOnClickListener(v -> publish(mWritebarText.getText(), mViewModel.getSlug() == null ? mSlugText.getText().toString() : mViewModel.getSlug()));
+        mDoneButton.setOnClickListener(v -> publish(getText(), mViewModel.getSlug() == null ? mSlugText.getText().toString() : mViewModel.getSlug()));
     }
 
     private void publish(String text, String slug) {
@@ -136,5 +149,30 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
     @Override
     protected ViewModelProvider.Factory buildFactory() {
         return new WritingViewModel.WritingViewModelFactory(getIntent());
+    }
+
+    private String getText() {
+        if (mWritebarText instanceof CodeEditorLayout) {
+            return ((CodeEditorLayout) mWritebarText).getText();
+        } else if (mWritebarText instanceof EditText) {
+            return ((EditText) mWritebarText).getText().toString();
+        }
+        return null;
+    }
+
+    private void setEditable(boolean editable) {
+        if (mWritebarText instanceof CodeEditorLayout) {
+            ((CodeEditorLayout) mWritebarText).setEditable(editable);
+        } else if (mWritebarText instanceof EditText) {
+            ((EditText) mWritebarText).setEnabled(editable);
+        }
+    }
+
+    private void setText(String text) {
+        if (mWritebarText instanceof CodeEditorLayout) {
+            ((CodeEditorLayout) mWritebarText).setText(text);
+        } else if (mWritebarText instanceof EditText) {
+            ((EditText) mWritebarText).setText(text);
+        }
     }
 }

@@ -4,6 +4,7 @@
 
     <queries>
         <package android:name="com.vtosters.android" />
+        <package android:name="com.vtosters.lite" />
         <intent>
             <action android:name="com.f0x1d.dogbin.VISIBILITY"/>
         </intent>

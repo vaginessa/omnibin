@@ -8,19 +8,14 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.AttrRes;
 
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
 import com.f0x1d.dogbin.ui.activity.MainActivity;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.view.ViewCompat;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
 

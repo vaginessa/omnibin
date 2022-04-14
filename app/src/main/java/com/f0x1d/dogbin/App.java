@@ -7,6 +7,7 @@ import androidx.room.Room;
 import com.f0x1d.dogbin.db.MyDatabase;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.f0x1d.dogbin.utils.Utils;
+import com.google.android.material.color.DynamicColors;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class App extends Application {
@@ -34,7 +35,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //DynamicColors.applyToActivitiesIfAvailable(this); // it doesnt work anyway
+        DynamicColors.applyToActivitiesIfAvailable(this);
 
         sInstance = this;
 
