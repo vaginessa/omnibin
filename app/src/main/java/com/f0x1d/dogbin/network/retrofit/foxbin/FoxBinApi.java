@@ -27,7 +27,7 @@ public class FoxBinApi {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://f0x1d.com/foxbin/")
+                .baseUrl("https://foxbin.f0x1d.com/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(builder.build())
