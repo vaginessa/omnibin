@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
-
 import androidx.appcompat.view.ContextThemeWrapper;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.module.UIModule;
 import com.f0x1d.dogbin.App;

@@ -2,21 +2,19 @@ package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
 import android.content.Intent;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
+import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
-import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
+import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
-public class TextViewModel extends BaseViewModel {
+public class TextViewModel extends BaseBinServiceViewModel {
 
     public static class TextViewModelFactory implements ViewModelProvider.Factory {
 
@@ -46,31 +44,36 @@ public class TextViewModel extends BaseViewModel {
 
         this.mIntent = intent;
         mMyNote = intent.getBooleanExtra("my_note", false);
+    }
 
+    @Override
+    protected void onServiceChanged(BinService service) {
         load();
     }
 
     public void load() {
+        if (isServiceUnloaded()) return;
+
         mLoadingStateData.setValue(LoadingState.LOADING);
 
         Utils.getExecutor().execute(() -> {
             String slug = mSlugData.getValue();
             if (slug == null) {
-                slug = BinServiceUtils.getCurrentActiveService().getSlugFromLink(mIntent.getData().toString());
+                slug = mCurrentService.getSlugFromLink(mIntent.getData().toString());
                 mSlugData.postValue(slug);
             }
 
             String finalSlug = slug;
             loadEditable(finalSlug); // so hard w/o coroutines
 
-            DocumentContent content = BinServiceUtils.getCurrentActiveService().cache().getContentFromCache(slug);
+            DocumentContent content = mCurrentService.cache().getContentFromCache(slug);
             if (content == null) {
                 updateText(slug);
                 return;
             }
 
-            mTextResponseData.postValue(content.getContent());
             mLoadingStateData.postValue(LoadingState.LOADED);
+            mTextResponseData.postValue(content.getContent());
             if (content.getEditable() != null) {
                 mIsEditableData.postValue(content.getEditable());
             }
@@ -80,7 +83,7 @@ public class TextViewModel extends BaseViewModel {
 
     private void updateText(String slug) {
         try {
-            DocumentContent body = BinServiceUtils.getCurrentActiveService().documents().getDocumentContent(slug);
+            DocumentContent body = mCurrentService.documents().getDocumentContent(slug);
             if (App.getPreferencesUtil().isRedirectFromNoteEnabled() && mRedirectURLData.getValue() == null && body.isUrl())
                 mRedirectURLData.postValue(body.getContent());
 
@@ -94,7 +97,7 @@ public class TextViewModel extends BaseViewModel {
                 mIsEditableData.postValue(body.getEditable());
             }
 
-            BinServiceUtils.getCurrentActiveService().cache().cacheDocument(slug, body.getContent(), mMyNote);
+            mCurrentService.cache().cacheDocument(slug, body.getContent(), mMyNote);
         } catch (Exception e) {
             processError(e);
         }
@@ -103,7 +106,7 @@ public class TextViewModel extends BaseViewModel {
     private void loadEditable(String slug) {
         Utils.getExecutor().execute(() -> {
             try {
-                Boolean editable = BinServiceUtils.getCurrentActiveService().documents().isEditableDocument(slug);
+                Boolean editable = mCurrentService.documents().isEditableDocument(slug);
                 if (editable != null) {
                     mIsEditableData.postValue(editable);
                 }

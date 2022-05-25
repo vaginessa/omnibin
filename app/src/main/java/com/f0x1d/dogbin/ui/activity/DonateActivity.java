@@ -5,10 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
-
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;

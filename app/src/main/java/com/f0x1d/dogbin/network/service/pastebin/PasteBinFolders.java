@@ -1,7 +1,5 @@
 package com.f0x1d.dogbin.network.service.pastebin;
 
-import static com.f0x1d.dogbin.network.service.pastebin.PasteBinService.isResponseOk;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dmsdk.model.UserDocument;
@@ -11,11 +9,12 @@ import com.f0x1d.dogbin.BuildConfig;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.parser.DarkNetParser;
 import com.f0x1d.dogbin.network.retrofit.pastebin.PasteBinApi;
-
+import okhttp3.MultipartBody;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,9 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import okhttp3.MultipartBody;
+import static com.f0x1d.dogbin.network.service.pastebin.PasteBinService.isResponseOk;
 
 public class PasteBinFolders extends FoldersModule {
 
@@ -41,9 +38,9 @@ public class PasteBinFolders extends FoldersModule {
     @Override
     public Folder getDefaultFolder() {
         if (service().auth().loggedIn())
-            return Folder.create(App.getInstance().getString(R.string.my_notes), App.getInstance().getDrawable(R.drawable.ic_saved), "my_notes");
+            return Folder.create(App.getInstance().getString(R.string.my_notes), App.getInstance().getDrawable(R.drawable.ic_saved), "my_notes", false);
         else
-            return Folder.create(App.getInstance().getString(R.string.history), App.getInstance().getDrawable(R.drawable.ic_history), "history");
+            return Folder.create(App.getInstance().getString(R.string.history), App.getInstance().getDrawable(R.drawable.ic_history), "history", true);
     }
 
     @Override
@@ -51,8 +48,8 @@ public class PasteBinFolders extends FoldersModule {
         List<Folder> folders = new ArrayList<>();
         if (service().auth().loggedIn())
             folders.add(getDefaultFolder());
-        folders.add(Folder.create("DarkNet", App.getInstance().getDrawable(R.drawable.ic_incognito), "darknet"));
-        folders.add(Folder.create(App.getInstance().getString(R.string.cache), App.getInstance().getDrawable(R.drawable.ic_history), "cache"));
+        folders.add(Folder.create("DarkNet", App.getInstance().getDrawable(R.drawable.ic_incognito), "darknet", true));
+        folders.add(Folder.create(App.getInstance().getString(R.string.cache), App.getInstance().getDrawable(R.drawable.ic_history), "cache", true));
         return folders;
     }
 

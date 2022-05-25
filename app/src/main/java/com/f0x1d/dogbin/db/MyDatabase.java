@@ -5,7 +5,6 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-
 import com.f0x1d.dogbin.db.dao.DogbinSavedNoteDao;
 import com.f0x1d.dogbin.db.dao.FoxBinSavedNoteDao;
 import com.f0x1d.dogbin.db.dao.PastebinSavedNoteDao;

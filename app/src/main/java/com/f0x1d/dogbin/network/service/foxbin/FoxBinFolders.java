@@ -11,13 +11,12 @@ import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNoteResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNotesResponse;
 import com.f0x1d.dogbin.network.okhttp.NetworkUtils;
 import com.f0x1d.dogbin.network.retrofit.foxbin.FoxBinApi;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import retrofit2.Response;
 
 public class FoxBinFolders extends FoldersModule {
 
@@ -33,16 +32,16 @@ public class FoxBinFolders extends FoldersModule {
     @Override
     public Folder getDefaultFolder() {
         if (service().auth().loggedIn())
-            return Folder.create(App.getInstance().getString(R.string.my_notes), App.getInstance().getDrawable(R.drawable.ic_saved), "my_notes");
+            return Folder.create(App.getInstance().getString(R.string.my_notes), App.getInstance().getDrawable(R.drawable.ic_saved), "my_notes", false);
         else
-            return Folder.create(App.getInstance().getString(R.string.history), App.getInstance().getDrawable(R.drawable.ic_history), "history");
+            return Folder.create(App.getInstance().getString(R.string.history), App.getInstance().getDrawable(R.drawable.ic_history), "history", true);
     }
 
     @Override
     public List<Folder> getAvailableFolders() throws Exception {
         List<Folder> folders = new ArrayList<>();
         folders.add(getDefaultFolder());
-        folders.add(Folder.create(App.getInstance().getString(R.string.cache), App.getInstance().getDrawable(R.drawable.ic_history), "cache"));
+        folders.add(Folder.create(App.getInstance().getString(R.string.cache), App.getInstance().getDrawable(R.drawable.ic_history), "cache", true));
         return folders;
     }
 

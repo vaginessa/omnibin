@@ -1,21 +1,16 @@
 package com.f0x1d.dogbin.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.util.TypedValue;
-
 import androidx.annotation.AttrRes;
-
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
-import com.f0x1d.dogbin.ui.activity.MainActivity;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -119,7 +114,7 @@ public class Utils {
         return 0;
     }
 
-    public static void switchService(int which, List<ApplicationInfo> services, Activity activity) {
+    public static void switchService(int which, List<ApplicationInfo> services) {
         switch (which) {
             case 0:
                 App.getPreferencesUtil().setSelectedService(BinServiceUtils.FOXBIN_SERVICE);
@@ -130,9 +125,7 @@ public class Utils {
             default:
                 App.getPreferencesUtil().setSelectedService(services.get(which - BinServiceUtils.IMPLEMENTED_SERVICES.length).packageName);
         }
-        BinServiceUtils.refreshCurrentService();
 
-        activity.finish();
-        activity.startActivity(new Intent(activity, MainActivity.class));
+        getExecutor().execute(BinServiceUtils::refreshCurrentServiceSafe);
     }
 }

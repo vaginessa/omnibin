@@ -1,9 +1,7 @@
 package com.f0x1d.dogbin;
 
 import android.app.Application;
-
 import androidx.room.Room;
-
 import com.f0x1d.dogbin.db.MyDatabase;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
 import com.f0x1d.dogbin.utils.Utils;

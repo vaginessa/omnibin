@@ -2,17 +2,13 @@ package com.f0x1d.dogbin.ui.activity;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.fragment.app.Fragment;
-
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
@@ -64,14 +60,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
             if (event.isConsumed()) return;
 
             if (event.type().equals(MainViewModel.EVENT_VIEW_TEXT)) {
-                Pair<Uri, Boolean> data = event.consume();
-
-                if (data.second) { // not the best solution ofc, but i had to think about it a lot of time before
-                    finish();
-                    startActivity(new Intent(this, MainActivity.class));
-                }
-
-                startActivity(new Intent(this, TextViewerActivity.class).setData(data.first));
+                startActivity(new Intent(this, TextViewerActivity.class).setData(event.consume()));
             } else if (event.type().equals(MainViewModel.EVENT_TOASTER_DIALOG)) {
                 new MaterialAlertDialogBuilder(this)
                         .setCancelable(false)
@@ -82,7 +71,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
             }
         });
         if (savedInstanceState == null)
-            mViewModel.processIntent(getIntent(), false);
+            mViewModel.processIntent(getIntent());
 
         mViewModel.getPublishButtonVisibleData().observe(this, isVisible -> mPublishButton.setVisibility(isVisible ? View.VISIBLE : View.GONE));
 
@@ -93,7 +82,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        mViewModel.processIntent(intent, true);
+        mViewModel.processIntent(intent);
     }
 
     @Override
@@ -120,8 +109,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
                     finish();
                     return true;
                 case R.id.default_folder_navigation:
-                    mFragmentNavigator.switchTo(NotesFragment.newInstance(defaultFolderData.getTitle(), defaultFolderData.getKey()),
-                            defaultFolderData.getKey() + "_notes", false);
+                    mFragmentNavigator.switchTo(NotesFragment.newInstance(defaultFolderData), defaultFolderData.getKey() + "_notes", false);
                     return true;
                 case R.id.folders_navigation:
                     mFragmentNavigator.switchTo("folders");
@@ -192,7 +180,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
     private void openPopup(View v) {
         MenuBuilder menuBuilder = new MenuBuilder(v.getContext());
 
-        List<ApplicationInfo> services = BinServiceUtils.getInstalledServicesData().getValue();
+        List<ApplicationInfo> services = BinServiceUtils.getInstalledServices();
         String[] installedServices = Utils.getInstalledServices(services);
 
         for (int i = 0; i < installedServices.length; i++) {
@@ -200,7 +188,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
 
             int finalI = i;
             menuBuilder.add(installedService).setOnMenuItemClickListener(item -> {
-                Utils.switchService(finalI, services, this);
+                Utils.switchService(finalI, services);
                 return true;
             });
         }

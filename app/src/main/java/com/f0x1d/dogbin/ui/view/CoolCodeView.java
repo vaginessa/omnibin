@@ -12,10 +12,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.Utils;
 

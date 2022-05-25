@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-
 import androidx.annotation.Nullable;
 
 public class TextDrawable extends Drawable {

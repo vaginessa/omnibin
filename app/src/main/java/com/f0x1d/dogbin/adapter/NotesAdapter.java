@@ -1,27 +1,17 @@
 package com.f0x1d.dogbin.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -31,18 +21,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     private List<UserDocument> mUserDocuments = new ArrayList<>();
 
-    private Context mContext;
-    private OnDeleteClickedListener mOnDeleteClickedListener;
+    private final OnNoteClickedListener mOnNoteClickedListener;
 
-    public NotesAdapter(Context context, OnDeleteClickedListener onDeleteClickedListener) {
-        this.mContext = context;
-        this.mOnDeleteClickedListener = onDeleteClickedListener;
+    public NotesAdapter(OnNoteClickedListener onNoteClickedListener) {
+        this.mOnNoteClickedListener = onNoteClickedListener;
     }
 
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NoteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false), mOnDeleteClickedListener);
+        return new NoteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false));
     }
 
     @Override
@@ -55,19 +43,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return mUserDocuments.size();
     }
 
-    public void setNotes(List<UserDocument> userDocuments, boolean toStart) {
-        mUserDocuments.clear();
-        if (toStart) {
-            for (UserDocument userDocument : userDocuments) {
-                mUserDocuments.add(0, userDocument);
-            }
-        } else
-            mUserDocuments.addAll(userDocuments);
+    public void setNotes(List<UserDocument> userDocuments) {
+        mUserDocuments = userDocuments;
         notifyDataSetChanged();
     }
 
-    public interface OnDeleteClickedListener {
+    public interface OnNoteClickedListener {
         void clicked(UserDocument userDocument);
+        void delete(UserDocument userDocument);
+        void copyUrl(UserDocument userDocument);
+        boolean isDeletable(UserDocument userDocument);
     }
 
     class NoteViewHolder extends RecyclerView.ViewHolder {
@@ -76,14 +61,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         private TextView mURLText;
         private TextView mTimeText;
 
-        public NoteViewHolder(@NonNull View itemView, OnDeleteClickedListener onDeleteClickedListener) {
+        public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.mContentCard = itemView.findViewById(R.id.content_card);
             this.mURLText = itemView.findViewById(R.id.url_text);
             this.mTimeText = itemView.findViewById(R.id.time_text);
 
-            PopupMenu popupMenu = new PopupMenu(mContext, itemView);
+            PopupMenu popupMenu = new PopupMenu(mContentCard.getContext(), itemView);
             popupMenu.inflate(R.menu.item_long_click_menu);
             popupMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
@@ -92,17 +77,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                         return true;
 
                     case R.id.copy_link_item:
-                        String delDogUrl = BinServiceUtils.getCurrentActiveService().getDomain() + mUserDocuments.get(getAdapterPosition()).getSlug();
-
-                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText(mContext.getString(R.string.app_name), delDogUrl);
-                        clipboard.setPrimaryClip(clip);
-
-                        Toast.makeText(mContext, mContext.getString(R.string.copied_to_clipboard, delDogUrl), Toast.LENGTH_SHORT).show();
+                        mOnNoteClickedListener.copyUrl(mUserDocuments.get(getAdapterPosition()));
                         return true;
 
                     case R.id.delete_item:
-                        onDeleteClickedListener.clicked(mUserDocuments.get(getAdapterPosition()));
+                        mOnNoteClickedListener.delete(mUserDocuments.get(getAdapterPosition()));
                         return true;
 
                     default:
@@ -112,7 +91,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
             mContentCard.setOnClickListener(v -> openDocument());
             mContentCard.setOnLongClickListener(v -> {
-                MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, checkDeletable(popupMenu), itemView);
+                MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContentCard.getContext(), checkDeletable(popupMenu), itemView);
                 menuPopupHelper.setForceShowIcon(true);
                 menuPopupHelper.show();
                 return true;
@@ -126,16 +105,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         private MenuBuilder checkDeletable(PopupMenu popupMenu) {
             Menu menu = popupMenu.getMenu();
-            menu.findItem(R.id.delete_item).setVisible(BinServiceUtils.getCurrentActiveService().documents().canDelete(mUserDocuments.get(getAdapterPosition())));
+            menu.findItem(R.id.delete_item).setVisible(mOnNoteClickedListener.isDeletable(mUserDocuments.get(getAdapterPosition())));
             return (MenuBuilder) menu;
         }
 
         private void openDocument() {
-            Intent intent = new Intent(mContext, TextViewerActivity.class);
-            intent.setData(Uri.parse(BinServiceUtils.getCurrentActiveService().getDomain() + mUserDocuments.get(getAdapterPosition()).getSlug()));
-            intent.putExtra("my_note", mUserDocuments.get(getAdapterPosition()).myNote());
-
-            mContext.startActivity(intent);
+            mOnNoteClickedListener.clicked(mUserDocuments.get(getAdapterPosition()));
         }
     }
 }

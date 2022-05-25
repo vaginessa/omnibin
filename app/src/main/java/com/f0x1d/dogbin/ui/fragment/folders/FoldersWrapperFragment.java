@@ -2,11 +2,9 @@ package com.f0x1d.dogbin.ui.fragment.folders;
 
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
-
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;

@@ -1,13 +1,10 @@
 package com.f0x1d.dogbin.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.R;
 import com.google.android.material.card.MaterialCardView;
@@ -20,11 +17,9 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
 
     private List<Folder> mFolders = new ArrayList<>();
 
-    private Context mContext;
     private FolderClickListener mFolderClickListener;
 
-    public FoldersAdapter(Context context, FolderClickListener folderClickListener) {
-        this.mContext = context;
+    public FoldersAdapter(FolderClickListener folderClickListener) {
         this.mFolderClickListener = folderClickListener;
     }
 
@@ -45,8 +40,8 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
     }
 
     public void setFolders(List<Folder> folders) {
-        mFolders.clear();
-        mFolders.addAll(folders);
+        mFolders = folders;
+        notifyDataSetChanged();
     }
 
     public interface FolderClickListener {

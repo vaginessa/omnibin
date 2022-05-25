@@ -8,7 +8,6 @@ import com.f0x1d.dogbin.network.model.foxbin.FoxBinLoginRegisterRequest;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinLoginRegisterResponse;
 import com.f0x1d.dogbin.network.okhttp.NetworkUtils;
 import com.f0x1d.dogbin.network.retrofit.foxbin.FoxBinApi;
-
 import retrofit2.Response;
 
 public class FoxBinAuth extends AuthModule {

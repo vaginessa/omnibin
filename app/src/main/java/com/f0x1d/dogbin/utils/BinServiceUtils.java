@@ -4,23 +4,20 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.Constants;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.service.foxbin.FoxBinService;
 import com.f0x1d.dogbin.network.service.pastebin.PasteBinService;
+import dalvik.system.BaseDexClassLoader;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import dalvik.system.BaseDexClassLoader;
 
 public class BinServiceUtils {
 
@@ -29,55 +26,53 @@ public class BinServiceUtils {
 
     public static String[] IMPLEMENTED_SERVICES = new String[]{FOXBIN_SERVICE, PASTEBIN_SERVICE};
 
+    private static MutableLiveData<BinService> sInstanceData = new MutableLiveData<>();
     private static BinService sInstance;
-    private static final MutableLiveData<List<ApplicationInfo>> sInstalledServicesData = new MutableLiveData<>(Collections.emptyList());
+    private static List<ApplicationInfo> sInstalledServices = Collections.emptyList();
 
-    public static BinService getCurrentActiveService() {
-        synchronized (BinServiceUtils.class) {
-            if (sInstance == null) {
-                List<ApplicationInfo> installedServices = getInstalledServices();
+    public static boolean loadingNeeded() {
+        return sInstance == null;
+    }
 
-                String selectedService = App.getPreferencesUtil().getSelectedService();
-                if (selectedService == null) {
-                    selectedService = FOXBIN_SERVICE;
-                    App.getPreferencesUtil().setSelectedService(selectedService);
-                }
+    public synchronized static void loadActiveServiceIfNeeded() {
+        if (sInstance == null) {
+            List<ApplicationInfo> installedServices = loadAndGetInstalledServices();
 
-                switch (selectedService) {
-                    case FOXBIN_SERVICE:
-                        return sInstance = FoxBinService.getInstance();
-                    case PASTEBIN_SERVICE:
-                        return sInstance = PasteBinService.getInstance();
-                }
+            String selectedService = App.getPreferencesUtil().getSelectedService();
 
-                try {
-                    for (ApplicationInfo installedService : installedServices) {
-                        if (installedService.packageName.equals(selectedService)) {
-                            return sInstance = loadServiceFromApp(installedService.packageName);
-                        }
+            switch (selectedService) {
+                case PASTEBIN_SERVICE:
+                    sInstance = PasteBinService.getInstance();
+                    break;
+
+                default:
+                case FOXBIN_SERVICE:
+                    sInstance = FoxBinService.getInstance();
+                    break;
+            }
+
+            try {
+                for (ApplicationInfo installedService : installedServices) {
+                    if (installedService.packageName.equals(selectedService)) {
+                        sInstance = loadServiceFromApp(installedService.packageName);
+                        break;
                     }
-                } catch (Exception e) {
-                    Utils.runOnUiThread(() ->
-                            Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
                 }
+            } catch (Exception e) {
+                Utils.runOnUiThread(() -> Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
 
                 App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
-                return sInstance = FoxBinService.getInstance();
+                sInstance = FoxBinService.getInstance();
             }
-            return sInstance;
+
+            sInstanceData.postValue(sInstance);
         }
     }
 
-    public static BinService getBinServiceForPackageName(String packageName) {
-        synchronized (BinServiceUtils.class) {
-            try {
-                sInstance = loadServiceFromApp(packageName);
-                App.getPreferencesUtil().setSelectedService(packageName);
-                return sInstance;
-            } catch (Exception e) {
-                return FoxBinService.getInstance();
-            }
-        }
+    public synchronized static void loadService(String packageName) throws Exception {
+        sInstance = loadServiceFromApp(packageName);
+        sInstanceData.postValue(sInstance);
+        App.getPreferencesUtil().setSelectedService(packageName);
     }
 
     private static BinService loadServiceFromApp(String packageName) throws Exception {
@@ -103,7 +98,7 @@ public class BinServiceUtils {
         return binService;
     }
 
-    private static List<ApplicationInfo> getInstalledServices() {
+    private static List<ApplicationInfo> loadAndGetInstalledServices() {
         List<ApplicationInfo> installedPlugins = new ArrayList<>();
         for (ApplicationInfo installedApplication : App.getInstance().getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA)) {
             if ((installedApplication.flags & ApplicationInfo.FLAG_SYSTEM) == 1)
@@ -113,8 +108,7 @@ public class BinServiceUtils {
                 installedPlugins.add(installedApplication);
         }
 
-        sInstalledServicesData.postValue(installedPlugins);
-
+        sInstalledServices = installedPlugins;
         return installedPlugins;
     }
 
@@ -126,14 +120,27 @@ public class BinServiceUtils {
     }
 
     public static void refreshInstalledServices() {
-        Utils.getExecutor().execute(BinServiceUtils::getInstalledServices);
+        Utils.getExecutor().execute(BinServiceUtils::loadAndGetInstalledServices);
     }
 
-    public static void refreshCurrentService() {
-        sInstance = null;
+    public synchronized static void refreshCurrentService() throws Exception {
+        loadService(App.getPreferencesUtil().getSelectedService());
     }
 
-    public static LiveData<List<ApplicationInfo>> getInstalledServicesData() {
-        return sInstalledServicesData;
+    public synchronized static void refreshCurrentServiceSafe() {
+        try {
+            loadService(App.getPreferencesUtil().getSelectedService());
+        } catch (Exception e) {
+            sInstance = null;
+            loadActiveServiceIfNeeded();
+        }
+    }
+
+    public static LiveData<BinService> getInstanceData() {
+        return sInstanceData;
+    }
+
+    public static List<ApplicationInfo> getInstalledServices() {
+        return sInstalledServices;
     }
 }

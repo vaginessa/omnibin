@@ -5,7 +5,6 @@ import com.f0x1d.dmsdk.module.AuthModule;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.BuildConfig;
 import com.f0x1d.dogbin.network.retrofit.pastebin.PasteBinApi;
-
 import okhttp3.MultipartBody;
 
 public class PasteBinAuth extends AuthModule {

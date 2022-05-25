@@ -6,19 +6,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
+import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
+import com.f0x1d.dogbin.utils.Event;
 import com.f0x1d.dogbin.viewmodel.WritingViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import de.markusressel.kodeeditor.library.view.CodeEditorLayout;
 
 public class TextEditActivity extends BaseActivity<WritingViewModel> {
@@ -89,45 +87,59 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
             }
         });
 
-        mViewModel.getResultUrlData().observe(this, resultUrl -> {
-            if (resultUrl == null) {
-                mSlugText.setError(getString(R.string.invalid_link));
+        mViewModel.getEventsData().observe(this, event -> {
+            if (event.isConsumed()) return;
+
+            switch (event.type()) {
+                case WritingViewModel.EVENT_TYPE_POSTED:
+                    posted(event.consume());
+                    break;
+
+                case WritingViewModel.EVENT_TYPE_SHOW_POSTING_DIALOG:
+                    publishDialog(event.argument(0), event, getText(), mSlugText.getText().toString());
+                    break;
+            }
+        });
+
+        if (mViewModel.getSlug() != null)
+            mSlugText.setText(mViewModel.getSlug());
+
+        if (mViewModel.isIntentToPost()) {
+            setText(mViewModel.getTextFromIntent());
+            mViewModel.sendDialogEvent();
+        }
+
+        mDoneButton.setOnClickListener(v -> mViewModel.sendDialogEvent());
+    }
+
+    private void posted(String resultUrl) {
+        if (resultUrl == null) {
+            mSlugText.setError(getString(R.string.invalid_link));
+            return;
+        }
+
+        if (!mViewModel.isInEditingMode()) {
+            setText("");
+            mSlugText.setText("");
+
+            if (mViewModel.isIntentToPost()) {
+                setResult(Activity.RESULT_OK, new Intent().setData(Uri.parse(resultUrl)));
+                finish();
                 return;
             }
 
-            if (!mViewModel.isInEditingMode()) {
-                setText("");
-                mSlugText.setText("");
+            Intent intent = new Intent(this, TextViewerActivity.class);
+            intent.setData(Uri.parse(resultUrl));
+            intent.putExtra("my_note", true);
+            startActivity(intent);
+        } else
+            setResult(Activity.RESULT_OK);
 
-                if (mViewModel.isIntentToPost()) {
-                    setResult(Activity.RESULT_OK, new Intent().setData(Uri.parse(resultUrl)));
-                    finish();
-                    return;
-                }
-
-                Intent intent = new Intent(this, TextViewerActivity.class);
-                intent.setData(Uri.parse(resultUrl));
-                intent.putExtra("my_note", true);
-                startActivity(intent);
-            } else
-                setResult(Activity.RESULT_OK);
-
-            finish();
-        });
-
-        if (mViewModel.isIntentToPost()) {
-            if (mViewModel.getSlug() != null)
-                mSlugText.setText(mViewModel.getSlug());
-
-            setText(mViewModel.getTextFromIntent());
-            publish(mViewModel.getTextFromIntent(), mViewModel.getSlug() == null ? "" : mViewModel.getSlug());
-        }
-
-        mDoneButton.setOnClickListener(v -> publish(getText(), mViewModel.getSlug() == null ? mSlugText.getText().toString() : mViewModel.getSlug()));
+        finish();
     }
 
-    private void publish(String text, String slug) {
-        View dialogView = BinServiceUtils.getCurrentActiveService().ui().buildSettingsDialog(mViewModel.isInEditingMode(), getTheme());
+    private void publishDialog(BinService binService, Event event, String text, String slug) {
+        View dialogView = binService.ui().buildSettingsDialog(mViewModel.isInEditingMode(), getTheme());
         if (dialogView == null) {
             mViewModel.publish(text, slug, null);
             return;
@@ -140,8 +152,9 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
                     mViewModel.publish(
                             text,
                             slug,
-                            BinServiceUtils.getCurrentActiveService().ui().collectDataFromDialog(dialogView, mViewModel.isInEditingMode())
+                            binService.ui().collectDataFromDialog(dialogView, mViewModel.isInEditingMode())
                     );
+                    event.consume();
                 })
                 .show();
     }

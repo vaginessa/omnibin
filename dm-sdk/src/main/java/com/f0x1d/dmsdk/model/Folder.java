@@ -11,12 +11,14 @@ public class Folder {
     private Drawable mIcon;
 
     private String mKey;
+    private boolean mAvailableUnauthorized;
 
-    public static Folder create(String title, Drawable icon, String key) {
+    public static Folder create(String title, Drawable icon, String key, boolean availableUnauthorized) {
         Folder folder = new Folder();
         folder.setTitle(title);
         folder.setIcon(icon);
         folder.setKey(key);
+        folder.setAvailableUnauthorized(availableUnauthorized);
         return folder;
     }
 
@@ -42,5 +44,13 @@ public class Folder {
 
     public void setKey(String key) {
         this.mKey = key;
+    }
+
+    public boolean isAvailableUnauthorized() {
+        return mAvailableUnauthorized;
+    }
+
+    public void setAvailableUnauthorized(boolean availableUnauthorized) {
+        this.mAvailableUnauthorized = availableUnauthorized;
     }
 }

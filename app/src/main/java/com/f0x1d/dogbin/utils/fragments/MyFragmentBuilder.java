@@ -1,7 +1,6 @@
 package com.f0x1d.dogbin.utils.fragments;
 
 import androidx.fragment.app.Fragment;
-
 import com.f0x1d.dogbin.ui.fragment.folders.FoldersFragment;
 import com.f0x1d.dogbin.ui.fragment.folders.FoldersWrapperFragment;
 import com.f0x1d.dogbin.ui.fragment.settings.SettingsFragment;

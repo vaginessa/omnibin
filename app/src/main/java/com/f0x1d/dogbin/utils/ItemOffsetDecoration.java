@@ -3,10 +3,8 @@ package com.f0x1d.dogbin.utils;
 import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.View;
-
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import com.f0x1d.dogbin.App;
 
 public class ItemOffsetDecoration extends RecyclerView.ItemDecoration {

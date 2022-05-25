@@ -2,9 +2,7 @@ package com.f0x1d.dogbin.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.preference.PreferenceManager;
-
 import com.f0x1d.dogbin.billing.DonationStatus;
 
 public class PreferencesUtils {

@@ -63,6 +63,10 @@ public class FragmentNavigator {
         return null;
     }
 
+    public void popBackStack() {
+        mFragmentManager.popBackStack();
+    }
+
     public interface FragmentBuilder {
         Fragment getFragment(String tag);
     }

@@ -1,17 +1,14 @@
 package com.f0x1d.dogbin.viewmodel;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
-import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.Utils;
-import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
+import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
-public class LoginViewModel extends BaseViewModel {
+public class LoginViewModel extends BaseBinServiceViewModel {
 
     private final MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mIsInLoginModeData = new MutableLiveData<>(true);
@@ -33,14 +30,16 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     private void doAuth(String login, String password, boolean register) {
+        if (isServiceUnloaded()) return;
+
         mLoadingStateData.setValue(LoadingState.LOADING);
 
         Utils.getExecutor().execute(() -> {
             try {
                 if (register)
-                    BinServiceUtils.getCurrentActiveService().auth().register(login, password);
+                    mCurrentService.auth().register(login, password);
                 else
-                    BinServiceUtils.getCurrentActiveService().auth().login(login, password);
+                    mCurrentService.auth().login(login, password);
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
                 mLoggedInData.postValue(true);

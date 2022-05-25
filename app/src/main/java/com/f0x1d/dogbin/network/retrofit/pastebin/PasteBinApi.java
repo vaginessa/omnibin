@@ -2,7 +2,6 @@ package com.f0x1d.dogbin.network.retrofit.pastebin;
 
 import com.f0x1d.dogbin.network.retrofit.pastebin.service.PasteBinApiService;
 import com.f0x1d.dogbin.network.retrofit.pastebin.service.PasteBinRawService;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;

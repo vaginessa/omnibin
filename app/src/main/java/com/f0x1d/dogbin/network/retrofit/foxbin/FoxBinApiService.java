@@ -5,7 +5,6 @@ import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNoteResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNotesResponse;
 import com.f0x1d.dogbin.network.model.foxbin.FoxBinLoginRegisterResponse;
 import com.f0x1d.dogbin.network.model.foxbin.base.BaseFoxBinResponse;
-
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

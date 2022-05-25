@@ -1,9 +1,6 @@
 package com.f0x1d.dogbin.network.service.pastebin;
 
-import static com.f0x1d.dogbin.network.service.pastebin.PasteBinService.isResponseOk;
-
 import android.os.Bundle;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.model.UserDocument;
@@ -11,8 +8,9 @@ import com.f0x1d.dmsdk.module.DocumentsModule;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.BuildConfig;
 import com.f0x1d.dogbin.network.retrofit.pastebin.PasteBinApi;
-
 import okhttp3.MultipartBody;
+
+import static com.f0x1d.dogbin.network.service.pastebin.PasteBinService.isResponseOk;
 
 public class PasteBinDocuments extends DocumentsModule {
 

@@ -2,7 +2,6 @@ package com.f0x1d.dogbin.network.okhttp;
 
 import com.f0x1d.dogbin.network.model.ErrorResponse;
 import com.f0x1d.dogbin.utils.Utils;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

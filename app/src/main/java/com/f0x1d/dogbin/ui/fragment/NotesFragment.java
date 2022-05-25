@@ -1,17 +1,20 @@
 package com.f0x1d.dogbin.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
+import com.f0x1d.dmsdk.model.Folder;
+import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.NotesAdapter;
+import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
 import com.f0x1d.dogbin.utils.Utils;
@@ -26,10 +29,11 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
 
     private NotesAdapter mAdapter;
 
-    public static NotesFragment newInstance(String folderTitle, String folderKey) {
+    public static NotesFragment newInstance(Folder folder) {
         Bundle args = new Bundle();
-        args.putString("folder_title", folderTitle);
-        args.putString("folder_key", folderKey);
+        args.putString("folder_title", folder.getTitle());
+        args.putString("folder_key", folder.getKey());
+        args.putBoolean("folder_available_unauthorized", folder.isAvailableUnauthorized());
 
         NotesFragment fragment = new NotesFragment();
         fragment.setArguments(args);
@@ -63,9 +67,30 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
         mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorPrimary));
         if (isNightTheme())
             mRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getColorFromAttr(requireActivity(), android.R.attr.windowBackground));
+        mRefreshLayout.setOnRefreshListener(mViewModel::load);
 
         mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
-        mNotesRecycler.setAdapter(mAdapter = new NotesAdapter(requireActivity(), userDocument -> mViewModel.deleteNote(userDocument)));
+        mNotesRecycler.setAdapter(mAdapter = new NotesAdapter(new NotesAdapter.OnNoteClickedListener() {
+            @Override
+            public void clicked(UserDocument userDocument) {
+                mViewModel.open(userDocument);
+            }
+
+            @Override
+            public void delete(UserDocument userDocument) {
+                mViewModel.deleteNote(userDocument);
+            }
+
+            @Override
+            public void copyUrl(UserDocument userDocument) {
+                mViewModel.copyUrl(userDocument);
+            }
+
+            @Override
+            public boolean isDeletable(UserDocument userDocument) {
+                return mViewModel.noteDeletable(userDocument);
+            }
+        }));
         mNotesRecycler.addItemDecoration(new ItemOffsetDecoration(8));
 
         mViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
@@ -84,18 +109,26 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
             }
         });
 
-        mViewModel.getNotesListData().observe(getViewLifecycleOwner(), notes -> {
-            if (notes == null)
-                return;
+        mViewModel.getEventsData().observe(getViewLifecycleOwner(), event -> {
+            if (event.isConsumed()) return;
 
-            mAdapter.setNotes(notes, false);
+            if (event.type().equals(NotesViewModel.EVENT_TYPE_OPEN_NOTE)) {
+                Intent intent = new Intent(requireContext(), TextViewerActivity.class);
+                intent.setData(Uri.parse(event.consume()));
+                intent.putExtra("my_note", (boolean) event.argument(0));
+
+                startActivity(intent);
+            }
         });
 
-        mRefreshLayout.setOnRefreshListener(mViewModel::load);
+        mViewModel.getNotesListData().observe(getViewLifecycleOwner(), notes -> mAdapter.setNotes(notes));
     }
 
     @Override
     protected ViewModelProvider.Factory buildFactory() {
-        return new NotesViewModel.NotesViewModelFactory(requireArguments().getString("folder_key"));
+        return new NotesViewModel.NotesViewModelFactory(
+                requireArguments().getString("folder_key"),
+                requireArguments().getBoolean("folder_available_unauthorized")
+        );
     }
 }

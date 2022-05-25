@@ -1,7 +1,5 @@
 package com.f0x1d.dogbin.viewmodel;
 
-import static com.f0x1d.dogbin.ui.activity.text.TextEditActivity.ACTION_UPLOAD_TO_FOXBIN;
-
 import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -9,21 +7,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
+import com.f0x1d.dogbin.utils.Event;
 import com.f0x1d.dogbin.utils.Utils;
-import com.f0x1d.dogbin.viewmodel.base.BaseViewModel;
+import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
-public class WritingViewModel extends BaseViewModel {
+import static com.f0x1d.dogbin.ui.activity.text.TextEditActivity.ACTION_UPLOAD_TO_FOXBIN;
+
+public class WritingViewModel extends BaseBinServiceViewModel {
+
+    public static final String EVENT_TYPE_POSTED = "posted_document";
+    public static final String EVENT_TYPE_SHOW_POSTING_DIALOG = "show_posting_dialog";
 
     public static class WritingViewModelFactory implements ViewModelProvider.Factory {
 
@@ -39,8 +38,6 @@ public class WritingViewModel extends BaseViewModel {
             return (T) new WritingViewModel(App.getInstance(), mIntent);
         }
     }
-
-    private final MutableLiveData<String> mResultUrlData = new MutableLiveData<>();
 
     private final boolean mInEditingMode;
     private final String mSlug;
@@ -59,8 +56,14 @@ public class WritingViewModel extends BaseViewModel {
                 (intent.getAction().equals(ACTION_UPLOAD_TO_FOXBIN) || intent.getAction().equals(Intent.ACTION_SEND));
     }
 
+    public void sendDialogEvent() {
+        if (isServiceUnloaded()) return;
+
+        mEventsData.postValue(new Event(EVENT_TYPE_SHOW_POSTING_DIALOG, Void.TYPE, mCurrentService));
+    }
+
     public void publish(String text, String slug, Bundle settings) {
-        if (text == null || text.isEmpty())
+        if (text == null || text.isEmpty() || isServiceUnloaded())
             return;
 
         mLoadingStateData.setValue(LoadingState.LOADING);
@@ -69,11 +72,11 @@ public class WritingViewModel extends BaseViewModel {
             try {
                 String resultSlug;
                 if (isInEditingMode())
-                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().editDocument(slug, text, settings);
+                    resultSlug = mCurrentService.documents().editDocument(slug, text, settings);
                 else
-                    resultSlug = BinServiceUtils.getCurrentActiveService().documents().createDocument(slug, text, settings);
+                    resultSlug = mCurrentService.documents().createDocument(slug, text, settings);
 
-                String resultUrl = resultSlug == null ? null : BinServiceUtils.getCurrentActiveService().getDomain() + resultSlug;
+                String resultUrl = resultSlug == null ? null : mCurrentService.getDomain() + resultSlug;
 
                 mLoadingStateData.postValue(LoadingState.LOADED);
 
@@ -85,15 +88,11 @@ public class WritingViewModel extends BaseViewModel {
                     Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.copied_to_clipboard, resultUrl), Toast.LENGTH_SHORT).show());
                 }
 
-                mResultUrlData.postValue(resultUrl);
+                mEventsData.postValue(new Event(EVENT_TYPE_POSTED, resultUrl));
             } catch (Exception e) {
                 processError(e);
             }
         });
-    }
-
-    public LiveData<String> getResultUrlData() {
-        return mResultUrlData;
     }
 
     public boolean isInEditingMode() {

@@ -2,12 +2,10 @@ package com.f0x1d.dogbin.viewmodel.base;
 
 import android.app.Application;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.Event;
 import com.f0x1d.dogbin.utils.Utils;

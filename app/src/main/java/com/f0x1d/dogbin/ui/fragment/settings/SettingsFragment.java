@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
-
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.billing.BillingManager;
@@ -53,8 +51,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         mSettingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
-
-        boolean loggedIn = BinServiceUtils.getCurrentActiveService().auth().loggedIn();
 
         addPreferencesFromResource(R.xml.settings);
 
@@ -108,15 +104,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         mUsernamePreference = findPreference("username");
-        if (!loggedIn)
-            mUsernamePreference.setVisible(false);
 
         mLoginPreference = findPreference("log_in");
-        if (loggedIn)
-            mLoginPreference.setTitle(R.string.log_out);
         mLoginPreference.setOnPreferenceClickListener(preference -> {
-            if (BinServiceUtils.getCurrentActiveService().auth().loggedIn()) {
-                BinServiceUtils.getCurrentActiveService().auth().logout();
+            if (mSettingsViewModel.getLoggedInData().getValue() == Boolean.TRUE) {
+                mSettingsViewModel.logout();
 
                 requireActivity().finish();
                 startActivity(new Intent(requireActivity(), MainActivity.class));
@@ -124,20 +116,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 requireActivity().finish();
                 startActivity(new Intent(requireActivity(), LoginActivity.class));
             }
-            return false;
+            return true;
         });
 
         mServicePreference = findPreference("select_service");
         mServicePreference.setOnPreferenceClickListener(preference -> {
-            List<ApplicationInfo> services = BinServiceUtils.getInstalledServicesData().getValue();
+            List<ApplicationInfo> services = BinServiceUtils.getInstalledServices();
 
             new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.select_service)
-                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services),
-                            (dialog, which) -> Utils.switchService(which, services, requireActivity()))
+                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
+                        Utils.switchService(which, services);
+                        dialog.dismiss();
+                    })
                     .setPositiveButton(android.R.string.cancel, null)
                     .show();
-            return false;
+            return true;
         });
 
         mClearCachePreference = findPreference("cache_nuke");
@@ -147,7 +141,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 App.getMyDatabase().getPastebinSavedNoteDao().nukeTable();
                 App.getMyDatabase().getFoxBinSavedNoteDao().nukeTable();
             });
-            return false;
+            return true;
+        });
+
+        mSettingsViewModel.getLoggedInData().observe(this, loggedIn -> {
+            mLoginPreference.setTitle(loggedIn ? R.string.log_out : R.string.log_in);
+            mUsernamePreference.setVisible(loggedIn);
         });
 
         mSettingsViewModel.getUsernameData().observe(this, username -> {

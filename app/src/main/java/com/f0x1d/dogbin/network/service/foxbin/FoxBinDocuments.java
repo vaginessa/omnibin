@@ -1,7 +1,6 @@
 package com.f0x1d.dogbin.network.service.foxbin;
 
 import android.os.Bundle;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.module.DocumentsModule;
@@ -14,7 +13,6 @@ import com.f0x1d.dogbin.network.model.foxbin.FoxBinGetNoteResponse;
 import com.f0x1d.dogbin.network.model.foxbin.base.BaseFoxBinResponse;
 import com.f0x1d.dogbin.network.okhttp.NetworkUtils;
 import com.f0x1d.dogbin.network.retrofit.foxbin.FoxBinApi;
-
 import retrofit2.Response;
 
 public class FoxBinDocuments extends DocumentsModule {
