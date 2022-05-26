@@ -36,8 +36,12 @@ public class FragmentNavigator {
     }
 
     public void switchTo(Fragment fragment, String tag, boolean backStack) {
+        switchTo(fragment, tag, backStack, true);
+    }
+
+    public void switchTo(Fragment fragment, String tag, boolean backStack, boolean animation) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
+        if (animation) fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
 
         Fragment currentFragment = getCurrentFragment();
         if (currentFragment != null)

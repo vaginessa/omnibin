@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.R;
 
 public abstract class BaseActivity<T extends AndroidViewModel> extends AppCompatActivity {
 
@@ -22,22 +21,6 @@ public abstract class BaseActivity<T extends AndroidViewModel> extends AppCompat
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             AppCompatDelegate.setDefaultNightMode(App.getPreferencesUtil().isDarkTheme() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        }
-
-        switch (App.getPreferencesUtil().selectedAccent()) {
-            default:
-            case 0:
-                setTheme(R.style.AppTheme);
-                break;
-            case 1:
-                //setTheme(R.style.AppTheme_Pink);
-                break;
-            case 2:
-                //setTheme(R.style.AppTheme_Lime);
-                break;
-            case 3:
-                //setTheme(R.style.AppTheme_Gold);
-                break;
         }
 
         setupNavBarAndStatusBar();

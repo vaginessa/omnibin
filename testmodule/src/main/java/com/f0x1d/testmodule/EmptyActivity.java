@@ -18,7 +18,7 @@ public class EmptyActivity extends AppCompatActivity {
             intent.putExtra("url", getIntent().getData().toString());
 
             startActivity(intent);
-            finish();
+            finishAndRemoveTask();
         }
     }
 }

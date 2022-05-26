@@ -104,7 +104,7 @@ if (getIntent().getData() != null) {
     intent.putExtra("url", getIntent().getData().toString());
 
     startActivity(intent);
-    finish();
+    finishAndRemoveTask();
 }
 ```
 

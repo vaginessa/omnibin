@@ -25,6 +25,11 @@ public class PasteBinService extends BinService {
     }
 
     @Override
+    public String getServiceFullName() {
+        return "pastebin";
+    }
+
+    @Override
     public String getServiceShortName() {
         return "pb";
     }

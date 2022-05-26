@@ -2,10 +2,7 @@ package com.f0x1d.dmsdk;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-
 import androidx.annotation.Keep;
-
 import com.f0x1d.dmsdk.module.AuthModule;
 import com.f0x1d.dmsdk.module.CacheModule;
 import com.f0x1d.dmsdk.module.DocumentsModule;
@@ -30,6 +27,11 @@ public abstract class BinService {
         this.mOmnibinContext = omnibinContext;
         this.mModulePreferences = modulePreferences;
     }
+
+    /**
+     * @return service full name
+     */
+    public abstract String getServiceFullName();
 
     /**
      * @return service short name

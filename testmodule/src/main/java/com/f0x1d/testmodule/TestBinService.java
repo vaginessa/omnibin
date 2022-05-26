@@ -1,10 +1,6 @@
 package com.f0x1d.testmodule;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import com.f0x1d.dmsdk.BinService;
-import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.module.AuthModule;
 import com.f0x1d.dmsdk.module.CacheModule;
 import com.f0x1d.dmsdk.module.DocumentsModule;
@@ -23,6 +19,11 @@ public class TestBinService extends BinService {
     private final TestCacheModule testCacheModule = new TestCacheModule(this);
     private final TestFoldersModule testFoldersModule = new TestFoldersModule(this);
     private final TestUIModule testUIModule = new TestUIModule(this);
+
+    @Override
+    public String getServiceFullName() {
+        return "TestModule";
+    }
 
     @Override
     public String getServiceShortName() {

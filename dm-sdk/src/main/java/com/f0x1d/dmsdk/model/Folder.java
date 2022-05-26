@@ -1,7 +1,6 @@
 package com.f0x1d.dmsdk.model;
 
 import android.graphics.drawable.Drawable;
-
 import androidx.annotation.Keep;
 
 @Keep

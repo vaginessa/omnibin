@@ -1,7 +1,6 @@
 package com.f0x1d.dmsdk.module;
 
 import androidx.annotation.Keep;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.module.base.BaseModule;
 

@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
         mBottomNavigation.setOnItemSelectedListener(item -> {
             mViewModel.setCurrentTab(item.getItemId());
 
-            Folder defaultFolderData = mViewModel.getDefaultFolderData().getValue();
+            Folder defaultFolderData = mViewModel.getNavigationData().getValue().defaultFolder;
 
             swapDrawableCheckedState(item.getItemId() == R.id.settings_navigation); // shit for my custom drawable
 
@@ -121,29 +121,29 @@ public class MainActivity extends BaseActivity<MainViewModel> {
         });
         getWindow().setNavigationBarColor(((MaterialShapeDrawable) mBottomNavigation.getBackground()).getResolvedTintColor());
 
-        mViewModel.getDefaultFolderData().observe(this, defaultFolderData -> {
-            if (savedInstanceState == null) {
-                mBottomNavigation.setSelectedItemId(R.id.default_folder_navigation);
-            }
+        mViewModel.getNavigationData().observe(this, data -> {
+            mBottomNavigation.getMenu().findItem(R.id.login_navigation).setVisible(!data.loggedIn);
+            mBottomNavigation.getMenu().findItem(R.id.folders_navigation).setVisible(data.showFolders);
 
-            MenuItem defaultFolderItem = mBottomNavigation.getMenu().findItem(R.id.default_folder_navigation);
-            defaultFolderItem.setTitle(defaultFolderData.getTitle());
-            defaultFolderItem.setIcon(defaultFolderData.getIcon());
-
-            mBottomNavigation.setVisibility(View.VISIBLE);
-        });
-
-        mViewModel.getLoggedInData().observe(this, loggedIn ->
-                mBottomNavigation.getMenu().findItem(R.id.login_navigation).setVisible(!loggedIn));
-        mViewModel.getShowFoldersItemData().observe(this, showFolders ->
-                mBottomNavigation.getMenu().findItem(R.id.folders_navigation).setVisible(showFolders));
-
-        mViewModel.getModuleIconData().observe(this, title -> {
-            mBinDrawable = new TextDrawable(title);
+            mBinDrawable = new TextDrawable(data.shortName);
             mBottomNavigation
                     .getMenu()
                     .findItem(R.id.settings_navigation)
                     .setIcon(mBinDrawable);
+
+            MenuItem defaultFolderItem = mBottomNavigation.getMenu().findItem(R.id.default_folder_navigation);
+            defaultFolderItem.setTitle(data.defaultFolder.getTitle());
+            defaultFolderItem.setIcon(data.defaultFolder.getIcon());
+
+            mBottomNavigation.setVisibility(View.VISIBLE);
+
+            if (mFragmentNavigator.getCurrentFragment() instanceof NotesFragment) {
+                mFragmentNavigator.switchTo(NotesFragment.newInstance(data.defaultFolder), data.defaultFolder.getKey() + "_notes", false, false);
+            }
+
+            if (savedInstanceState == null && mFragmentNavigator.getCurrentFragment() == null) {
+                mBottomNavigation.setSelectedItemId(R.id.default_folder_navigation);
+            }
         });
 
         ViewGroup navigationMenuView = (ViewGroup) mBottomNavigation.getChildAt(0);

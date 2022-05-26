@@ -24,6 +24,11 @@ public class FoxBinService extends BinService {
     }
 
     @Override
+    public String getServiceFullName() {
+        return "foxbin";
+    }
+
+    @Override
     public String getServiceShortName() {
         return "fb";
     }

@@ -28,11 +28,7 @@ public class MainViewModel extends BaseBinServiceViewModel {
 
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
 
-    private final MutableLiveData<Boolean> mLoggedInData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> mShowFoldersItemData = new MutableLiveData<>();
-    private final MutableLiveData<Folder> mDefaultFolderData = new MutableLiveData<>();
-    private final MutableLiveData<String> mModuleNameData = new MutableLiveData<>();
-
+    private final MutableLiveData<BottomNavigationData> mNavigationData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mPublishButtonVisibleData = new MutableLiveData<>(true);
 
     public MainViewModel(@NonNull Application application) {
@@ -41,10 +37,14 @@ public class MainViewModel extends BaseBinServiceViewModel {
 
     @Override
     protected void onServiceChanged(BinService service) {
-        mModuleNameData.postValue(mCurrentService.getServiceShortName());
-        mLoggedInData.postValue(mCurrentService.auth().loggedIn());
-        mShowFoldersItemData.postValue(mCurrentService.folders().showFoldersItem());
-        mDefaultFolderData.postValue(mCurrentService.folders().getDefaultFolder());
+        mNavigationData.setValue(
+                new BottomNavigationData(
+                        mCurrentService.auth().loggedIn(),
+                        mCurrentService.folders().showFoldersItem(),
+                        mCurrentService.folders().getDefaultFolder(),
+                        mCurrentService.getServiceShortName()
+                )
+        );
 
         if (!App.getPreferencesUtil().toasterShowed() && damnVTostersIsInstalled()) {
             mEventsData.postValue(new Event(EVENT_TOASTER_DIALOG, true));
@@ -84,23 +84,25 @@ public class MainViewModel extends BaseBinServiceViewModel {
                 Utils.isPackageInstalled("com.vtosters.lite", getApplication().getPackageManager());
     }
 
-    public LiveData<Boolean> getLoggedInData() {
-        return mLoggedInData;
-    }
-
-    public LiveData<Boolean> getShowFoldersItemData() {
-        return mShowFoldersItemData;
-    }
-
-    public LiveData<Folder> getDefaultFolderData() {
-        return mDefaultFolderData;
-    }
-
-    public LiveData<String> getModuleIconData() {
-        return mModuleNameData;
-    }
-
     public LiveData<Boolean> getPublishButtonVisibleData() {
         return mPublishButtonVisibleData;
+    }
+
+    public LiveData<BottomNavigationData> getNavigationData() {
+        return mNavigationData;
+    }
+
+    public static class BottomNavigationData {
+        public boolean loggedIn;
+        public boolean showFolders;
+        public Folder defaultFolder;
+        public String shortName;
+
+        public BottomNavigationData(boolean loggedIn, boolean showFolders, Folder defaultFolder, String shortName) {
+            this.loggedIn = loggedIn;
+            this.showFolders = showFolders;
+            this.defaultFolder = defaultFolder;
+            this.shortName = shortName;
+        }
     }
 }

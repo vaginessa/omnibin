@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -143,17 +146,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
             return true;
         });
+    }
 
-        mSettingsViewModel.getLoggedInData().observe(this, loggedIn -> {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mSettingsViewModel.getLoggedInData().observe(getViewLifecycleOwner(), loggedIn -> {
             mLoginPreference.setTitle(loggedIn ? R.string.log_out : R.string.log_in);
             mUsernamePreference.setVisible(loggedIn);
         });
 
-        mSettingsViewModel.getUsernameData().observe(this, username -> {
-            if (username == null)
-                return;
+        mSettingsViewModel.getUsernameData().observe(getViewLifecycleOwner(), username -> mUsernamePreference.setTitle(username));
 
-            mUsernamePreference.setTitle(username);
-        });
+        BinServiceUtils.getInstanceData().observe(getViewLifecycleOwner(), service -> mServicePreference.setSummary(service.getServiceFullName()));
     }
 }

@@ -3,9 +3,7 @@ package com.f0x1d.dmsdk.module;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.annotation.Keep;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.module.base.BaseModule;
 

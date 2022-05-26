@@ -1,9 +1,7 @@
 package com.f0x1d.dmsdk.module;
 
 import android.os.Bundle;
-
 import androidx.annotation.Keep;
-
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dmsdk.model.UserDocument;
