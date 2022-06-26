@@ -123,17 +123,9 @@ public class BinServiceUtils {
         Utils.getExecutor().execute(BinServiceUtils::loadAndGetInstalledServices);
     }
 
-    public synchronized static void refreshCurrentService() throws Exception {
-        loadService(App.getPreferencesUtil().getSelectedService());
-    }
-
-    public synchronized static void refreshCurrentServiceSafe() {
-        try {
-            loadService(App.getPreferencesUtil().getSelectedService());
-        } catch (Exception e) {
-            sInstance = null;
-            loadActiveServiceIfNeeded();
-        }
+    public synchronized static void refreshCurrentService() {
+        sInstance = null;
+        loadActiveServiceIfNeeded();
     }
 
     public static LiveData<BinService> getInstanceData() {

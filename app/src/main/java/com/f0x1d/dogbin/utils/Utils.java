@@ -126,6 +126,6 @@ public class Utils {
                 App.getPreferencesUtil().setSelectedService(services.get(which - BinServiceUtils.IMPLEMENTED_SERVICES.length).packageName);
         }
 
-        getExecutor().execute(BinServiceUtils::refreshCurrentServiceSafe);
+        getExecutor().execute(BinServiceUtils::refreshCurrentService);
     }
 }

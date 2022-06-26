@@ -66,7 +66,8 @@ public class MainViewModel extends BaseBinServiceViewModel {
                     mEventsData.postValue(buildNewActivityEvent(intent.getData()));
                 }
             } catch (Exception e) {
-                Utils.runOnUiThread(() -> Toast.makeText(getApplication(), R.string.error, Toast.LENGTH_SHORT).show());
+                e.printStackTrace();
+                Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
             }
         });
     }
