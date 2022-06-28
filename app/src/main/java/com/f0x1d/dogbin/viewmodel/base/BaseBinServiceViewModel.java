@@ -14,10 +14,9 @@ public abstract class BaseBinServiceViewModel extends BaseViewModel implements O
     protected BinService mCurrentService;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    private Runnable mListener = () -> {};
-
     public BaseBinServiceViewModel(@NonNull Application application) {
         super(application);
+
         mHandler.post(() -> {
             BinServiceUtils.getInstanceData().observeForever(this);
 
@@ -39,18 +38,7 @@ public abstract class BaseBinServiceViewModel extends BaseViewModel implements O
         if (binService != null) {
             mCurrentService = binService;
             onServiceChanged(binService);
-
-            mListener.run();
         }
-    }
-
-    public void setOnServiceLoadedListener(Runnable listener) {
-        if (!isServiceUnloaded()) {
-            listener.run();
-            return;
-        }
-
-        mListener = listener;
     }
 
     @Override

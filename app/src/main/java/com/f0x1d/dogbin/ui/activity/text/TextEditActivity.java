@@ -106,8 +106,6 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
 
         if (mViewModel.isIntentToPost()) {
             setText(mViewModel.getTextFromIntent());
-
-            mViewModel.setOnServiceLoadedListener(() -> mViewModel.sendDialogEvent());
         }
 
         mDoneButton.setOnClickListener(v -> mViewModel.sendDialogEvent());

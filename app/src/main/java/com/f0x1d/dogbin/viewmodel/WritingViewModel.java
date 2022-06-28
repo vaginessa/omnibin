@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.Event;
@@ -54,6 +55,12 @@ public class WritingViewModel extends BaseBinServiceViewModel {
         this.mIntentToCopy = intent.getBooleanExtra("copy", true);
         this.mIntentToPost = !mInEditingMode && mTextFromIntent != null && intent.getAction() != null &&
                 (intent.getAction().equals(ACTION_UPLOAD_TO_FOXBIN) || intent.getAction().equals(Intent.ACTION_SEND));
+    }
+
+    @Override
+    protected void onServiceChanged(BinService service) {
+        if (isIntentToPost())
+            sendDialogEvent();
     }
 
     public void sendDialogEvent() {
