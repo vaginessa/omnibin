@@ -4,7 +4,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
 import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
@@ -34,7 +34,7 @@ public class LoginViewModel extends BaseBinServiceViewModel {
 
         mLoadingStateData.setValue(LoadingState.LOADING);
 
-        Utils.getExecutor().execute(() -> {
+        ThreadingUtils.getExecutor().execute(() -> {
             try {
                 if (register)
                     mCurrentService.auth().register(login, password);

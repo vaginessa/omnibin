@@ -13,10 +13,8 @@ public class PasteBinApi {
     private PasteBinApiService mService;
     private PasteBinRawService mRawService;
 
-    public static PasteBinApi getInstance() {
-        synchronized (PasteBinApi.class) {
-            return sInstance == null ? sInstance = new PasteBinApi() : sInstance;
-        }
+    public static synchronized PasteBinApi getInstance() {
+        return sInstance == null ? sInstance = new PasteBinApi() : sInstance;
     }
 
     public PasteBinApiService getService() {

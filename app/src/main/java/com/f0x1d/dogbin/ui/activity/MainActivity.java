@@ -18,11 +18,11 @@ import com.f0x1d.dogbin.ui.activity.text.TextEditActivity;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.folders.FoldersWrapperFragment;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.TextDrawable;
-import com.f0x1d.dogbin.utils.Utils;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
+import com.f0x1d.dogbin.utils.services.BinServiceUtils;
+import com.f0x1d.dogbin.utils.services.ServicesUtils;
 import com.f0x1d.dogbin.viewmodel.MainViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -56,6 +56,12 @@ public class MainActivity extends BaseActivity<MainViewModel> {
         mPublishButton = findViewById(R.id.publish_button);
         mBottomNavigation = findViewById(R.id.bottom_navigation);
 
+        setupBottomNavigation(savedInstanceState);
+        mPublishButton.setOnClickListener(v -> startActivity(new Intent(this, TextEditActivity.class)));
+
+        if (savedInstanceState == null)
+            mViewModel.processIntent(getIntent());
+
         mViewModel.getEventsData().observe(this, event -> {
             if (event.isConsumed()) return;
 
@@ -70,13 +76,8 @@ public class MainActivity extends BaseActivity<MainViewModel> {
                         .show();
             }
         });
-        if (savedInstanceState == null)
-            mViewModel.processIntent(getIntent());
 
         mViewModel.getPublishButtonVisibleData().observe(this, isVisible -> mPublishButton.setVisibility(isVisible ? View.VISIBLE : View.GONE));
-
-        setupBottomNavigation(savedInstanceState);
-        mPublishButton.setOnClickListener(v -> startActivity(new Intent(this, TextEditActivity.class)));
     }
 
     @Override
@@ -126,6 +127,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
             mBottomNavigation.getMenu().findItem(R.id.folders_navigation).setVisible(data.showFolders);
 
             mBinDrawable = new TextDrawable(data.shortName);
+            swapDrawableCheckedState(mBottomNavigation.getSelectedItemId() == R.id.settings_navigation);
             mBottomNavigation
                     .getMenu()
                     .findItem(R.id.settings_navigation)
@@ -139,9 +141,7 @@ public class MainActivity extends BaseActivity<MainViewModel> {
 
             if (mFragmentNavigator.getCurrentFragment() instanceof NotesFragment) {
                 mFragmentNavigator.switchTo(NotesFragment.newInstance(data.defaultFolder), data.defaultFolder.getKey() + "_notes", false, false);
-            }
-
-            if (savedInstanceState == null && mFragmentNavigator.getCurrentFragment() == null) {
+            } else if (savedInstanceState == null && mFragmentNavigator.getCurrentFragment() == null) {
                 mBottomNavigation.setSelectedItemId(R.id.default_folder_navigation);
             }
         });
@@ -181,14 +181,14 @@ public class MainActivity extends BaseActivity<MainViewModel> {
         MenuBuilder menuBuilder = new MenuBuilder(v.getContext());
 
         List<ApplicationInfo> services = BinServiceUtils.getInstalledServices();
-        String[] installedServices = Utils.getInstalledServices(services);
+        String[] installedServices = ServicesUtils.getInstalledServices(services);
 
         for (int i = 0; i < installedServices.length; i++) {
             String installedService = installedServices[i];
 
             int finalI = i;
             menuBuilder.add(installedService).setOnMenuItemClickListener(item -> {
-                Utils.switchService(finalI, services);
+                ServicesUtils.switchService(finalI, services);
                 return true;
             });
         }

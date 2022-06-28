@@ -6,8 +6,8 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import com.f0x1d.dmsdk.BinService;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
+import com.f0x1d.dogbin.utils.services.BinServiceUtils;
 
 public abstract class BaseBinServiceViewModel extends BaseViewModel implements Observer<BinService> {
 
@@ -21,7 +21,7 @@ public abstract class BaseBinServiceViewModel extends BaseViewModel implements O
             BinServiceUtils.getInstanceData().observeForever(this);
 
             if (BinServiceUtils.loadingNeeded()) {
-                Utils.getExecutor().execute(BinServiceUtils::loadActiveServiceIfNeeded);
+                ThreadingUtils.getExecutor().execute(BinServiceUtils::loadActiveServiceIfNeeded);
             }
         });
     }

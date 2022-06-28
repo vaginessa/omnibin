@@ -5,36 +5,21 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.DocumentContent;
 import com.f0x1d.dogbin.App;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.Event;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
 import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
 public class TextViewModel extends BaseBinServiceViewModel {
 
-    public static class TextViewModelFactory implements ViewModelProvider.Factory {
-
-        private final Intent mIntent;
-
-        public TextViewModelFactory(Intent intent) {
-            this.mIntent = intent;
-        }
-
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new TextViewModel(App.getInstance(), mIntent);
-        }
-    }
+    public static final String EVENT_TYPE_REDIRECT = "redirect";
 
     private final MutableLiveData<String> mSlugData = new MutableLiveData<>();
     private final MutableLiveData<String> mTextResponseData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mIsEditableData = new MutableLiveData<>();
-    private final MutableLiveData<String> mRedirectURLData = new MutableLiveData<>();
 
     private final Intent mIntent;
     private final boolean mMyNote;
@@ -56,7 +41,7 @@ public class TextViewModel extends BaseBinServiceViewModel {
 
         mLoadingStateData.setValue(LoadingState.LOADING);
 
-        Utils.getExecutor().execute(() -> {
+        ThreadingUtils.getExecutor().execute(() -> {
             String slug = mSlugData.getValue();
             if (slug == null) {
                 slug = mCurrentService.getSlugFromLink(mIntent.getData().toString());
@@ -72,11 +57,7 @@ public class TextViewModel extends BaseBinServiceViewModel {
                 return;
             }
 
-            mLoadingStateData.postValue(LoadingState.LOADED);
-            mTextResponseData.postValue(content.getContent());
-            if (content.getEditable() != null) {
-                mIsEditableData.postValue(content.getEditable());
-            }
+            setupLiveData(content);
             updateText(slug);
         });
     }
@@ -84,18 +65,14 @@ public class TextViewModel extends BaseBinServiceViewModel {
     private void updateText(String slug) {
         try {
             DocumentContent body = mCurrentService.documents().getDocumentContent(slug);
-            if (App.getPreferencesUtil().isRedirectFromNoteEnabled() && mRedirectURLData.getValue() == null && body.isUrl())
-                mRedirectURLData.postValue(body.getContent());
+            if (App.getPreferencesUtil().isRedirectFromNoteEnabled() && body.isUrl())
+                mEventsData.postValue(new Event(EVENT_TYPE_REDIRECT, body.getContent()));
 
             if (mTextResponseData.getValue() != null && mTextResponseData.getValue().equals(body.getContent()) &&
                     mIsEditableData.getValue() != null && mIsEditableData.getValue().equals(body.getEditable()))
                 return;
 
-            mTextResponseData.postValue(body.getContent());
-            mLoadingStateData.postValue(LoadingState.LOADED);
-            if (body.getEditable() != null) {
-                mIsEditableData.postValue(body.getEditable());
-            }
+            setupLiveData(body);
 
             mCurrentService.cache().cacheDocument(slug, body.getContent(), mMyNote);
         } catch (Exception e) {
@@ -103,8 +80,16 @@ public class TextViewModel extends BaseBinServiceViewModel {
         }
     }
 
+    private void setupLiveData(DocumentContent content) {
+        mLoadingStateData.postValue(LoadingState.LOADED);
+        mTextResponseData.postValue(content.getContent());
+        if (content.getEditable() != null) {
+            mIsEditableData.postValue(content.getEditable());
+        }
+    }
+
     private void loadEditable(String slug) {
-        Utils.getExecutor().execute(() -> {
+        ThreadingUtils.getExecutor().execute(() -> {
             try {
                 Boolean editable = mCurrentService.documents().isEditableDocument(slug);
                 if (editable != null) {
@@ -126,9 +111,5 @@ public class TextViewModel extends BaseBinServiceViewModel {
 
     public LiveData<Boolean> getIsEditableData() {
         return mIsEditableData;
-    }
-
-    public LiveData<String> getIsRedirectData() {
-        return mRedirectURLData;
     }
 }

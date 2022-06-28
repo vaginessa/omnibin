@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.Event;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
 
 public class BaseViewModel extends AndroidViewModel {
 
@@ -23,7 +23,7 @@ public class BaseViewModel extends AndroidViewModel {
         t.printStackTrace();
 
         mLoadingStateData.postValue(LoadingState.LOADED);
-        Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show());
+        ThreadingUtils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, t.getLocalizedMessage()), Toast.LENGTH_LONG).show());
     }
 
     public LiveData<LoadingState> getLoadingStateData() {

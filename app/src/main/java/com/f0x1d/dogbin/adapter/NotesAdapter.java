@@ -9,17 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
 import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.adapter.base.BaseAdapter;
+import com.f0x1d.dogbin.adapter.base.BaseViewHolder;
 import com.google.android.material.card.MaterialCardView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
-
-    private List<UserDocument> mUserDocuments = new ArrayList<>();
+public class NotesAdapter extends BaseAdapter<UserDocument, NotesAdapter.NoteViewHolder> {
 
     private final OnNoteClickedListener mOnNoteClickedListener;
 
@@ -27,25 +23,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         this.mOnNoteClickedListener = onNoteClickedListener;
     }
 
-    @NonNull
     @Override
-    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NoteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        holder.bindTo(mUserDocuments.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mUserDocuments.size();
-    }
-
-    public void setNotes(List<UserDocument> userDocuments) {
-        mUserDocuments = userDocuments;
-        notifyDataSetChanged();
+    protected NoteViewHolder createHolder(ViewGroup parent, LayoutInflater layoutInflater) {
+        return new NoteViewHolder(layoutInflater.inflate(R.layout.item_note, parent, false));
     }
 
     public interface OnNoteClickedListener {
@@ -55,7 +35,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         boolean isDeletable(UserDocument userDocument);
     }
 
-    class NoteViewHolder extends RecyclerView.ViewHolder {
+    class NoteViewHolder extends BaseViewHolder<UserDocument> {
 
         private MaterialCardView mContentCard;
         private TextView mURLText;
@@ -77,11 +57,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                         return true;
 
                     case R.id.copy_link_item:
-                        mOnNoteClickedListener.copyUrl(mUserDocuments.get(getAdapterPosition()));
+                        mOnNoteClickedListener.copyUrl(mElements.get(getAdapterPosition()));
                         return true;
 
                     case R.id.delete_item:
-                        mOnNoteClickedListener.delete(mUserDocuments.get(getAdapterPosition()));
+                        mOnNoteClickedListener.delete(mElements.get(getAdapterPosition()));
                         return true;
 
                     default:
@@ -105,12 +85,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         private MenuBuilder checkDeletable(PopupMenu popupMenu) {
             Menu menu = popupMenu.getMenu();
-            menu.findItem(R.id.delete_item).setVisible(mOnNoteClickedListener.isDeletable(mUserDocuments.get(getAdapterPosition())));
+            menu.findItem(R.id.delete_item).setVisible(mOnNoteClickedListener.isDeletable(mElements.get(getAdapterPosition())));
             return (MenuBuilder) menu;
         }
 
         private void openDocument() {
-            mOnNoteClickedListener.clicked(mUserDocuments.get(getAdapterPosition()));
+            mOnNoteClickedListener.clicked(mElements.get(getAdapterPosition()));
         }
     }
 }

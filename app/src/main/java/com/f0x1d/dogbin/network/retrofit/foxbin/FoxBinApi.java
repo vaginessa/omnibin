@@ -10,10 +10,8 @@ public class FoxBinApi {
     private static FoxBinApi sInstance;
     private FoxBinApiService mService;
 
-    public static FoxBinApi getInstance() {
-        synchronized (FoxBinApi.class) {
-            return sInstance == null ? sInstance = new FoxBinApi() : sInstance;
-        }
+    public static synchronized FoxBinApi getInstance() {
+        return sInstance == null ? sInstance = new FoxBinApi() : sInstance;
     }
 
     public FoxBinApiService getService() {

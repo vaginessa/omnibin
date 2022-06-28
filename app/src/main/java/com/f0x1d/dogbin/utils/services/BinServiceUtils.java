@@ -1,4 +1,4 @@
-package com.f0x1d.dogbin.utils;
+package com.f0x1d.dogbin.utils.services;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -12,6 +12,7 @@ import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.network.service.foxbin.FoxBinService;
 import com.f0x1d.dogbin.network.service.pastebin.PasteBinService;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
 import dalvik.system.BaseDexClassLoader;
 
 import java.io.File;
@@ -59,7 +60,7 @@ public class BinServiceUtils {
                     }
                 }
             } catch (Exception e) {
-                Utils.runOnUiThread(() -> Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
+                ThreadingUtils.runOnUiThread(() -> Toast.makeText(App.getInstance(), App.getInstance().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
 
                 App.getPreferencesUtil().setSelectedService(FOXBIN_SERVICE);
                 sInstance = FoxBinService.getInstance();
@@ -120,7 +121,7 @@ public class BinServiceUtils {
     }
 
     public static void refreshInstalledServices() {
-        Utils.getExecutor().execute(BinServiceUtils::loadAndGetInstalledServices);
+        ThreadingUtils.getExecutor().execute(BinServiceUtils::loadAndGetInstalledServices);
     }
 
     public synchronized static void refreshCurrentService() {

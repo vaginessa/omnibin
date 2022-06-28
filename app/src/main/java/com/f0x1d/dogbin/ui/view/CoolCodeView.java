@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.f0x1d.dogbin.R;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ResourcesUtils;
 
 public class CoolCodeView extends ViewGroup {
 
@@ -68,10 +68,10 @@ public class CoolCodeView extends ViewGroup {
     private void init() {
         mViewConfiguration = ViewConfiguration.get(getContext());
 
-        mTenDp = Utils.dpToPx(10);
+        mTenDp = ResourcesUtils.dpToPx(10);
         mFiveDp = mTenDp / 2;
 
-        int textColor = Utils.getColorFromAttr(getContext(), R.attr.colorOnSurface);
+        int textColor = ResourcesUtils.getColorFromAttr(getContext(), R.attr.colorOnSurface);
 
         mCodeTextView = new TextView(getContext());
         mCodeTextView.setTypeface(Typeface.MONOSPACE);

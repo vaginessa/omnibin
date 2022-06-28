@@ -16,8 +16,9 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.NotesAdapter;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
+import com.f0x1d.dogbin.utils.AndroidUtils;
 import com.f0x1d.dogbin.utils.ItemOffsetDecoration;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ViewUtils;
 import com.f0x1d.dogbin.viewmodel.NotesViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -64,9 +65,7 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
             mToolbar.setNavigationOnClickListener(v -> getParentFragmentManager().popBackStack());
         }
 
-        mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorPrimary));
-        if (isNightTheme())
-            mRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getColorFromAttr(requireActivity(), android.R.attr.windowBackground));
+        ViewUtils.setupSwipeRefreshLayout(mRefreshLayout, isNightTheme());
         mRefreshLayout.setOnRefreshListener(mViewModel::load);
 
         mNotesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
@@ -94,9 +93,6 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
         mNotesRecycler.addItemDecoration(new ItemOffsetDecoration(8));
 
         mViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
-            if (loadingState == null)
-                return;
-
             switch (loadingState) {
                 case LOADING:
                     mRefreshLayout.setRefreshing(true);
@@ -121,14 +117,15 @@ public class NotesFragment extends BaseFragment<NotesViewModel> {
             }
         });
 
-        mViewModel.getNotesListData().observe(getViewLifecycleOwner(), notes -> mAdapter.setNotes(notes));
+        mViewModel.getNotesListData().observe(getViewLifecycleOwner(), notes -> mAdapter.setElements(notes));
     }
 
     @Override
     protected ViewModelProvider.Factory buildFactory() {
-        return new NotesViewModel.NotesViewModelFactory(
+        return AndroidUtils.buildViewModelFactory(() -> new NotesViewModel(
+                requireActivity().getApplication(),
                 requireArguments().getString("folder_key"),
                 requireArguments().getBoolean("folder_available_unauthorized")
-        );
+        ));
     }
 }

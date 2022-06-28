@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.f0x1d.dmsdk.BinService;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
 import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
@@ -26,7 +26,7 @@ public class SettingsViewModel extends BaseBinServiceViewModel {
     private void load() {
         mLoadingStateData.setValue(LoadingState.LOADING);
 
-        Utils.getExecutor().execute(() -> {
+        ThreadingUtils.getExecutor().execute(() -> {
             try {
                 boolean loggedIn = mCurrentService.auth().loggedIn();
                 mLoggedInData.postValue(loggedIn);

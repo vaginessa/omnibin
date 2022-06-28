@@ -56,14 +56,4 @@ public class FoxBinSavedNote {
     public void setTime(String time) {
         this.mTime = time;
     }
-
-    @Override
-    public String toString() {
-        return "SavedNote{" +
-                "mId=" + mId +
-                ", mContent='" + mContent + '\'' +
-                ", mSlug='" + mSlug + '\'' +
-                ", mTime='" + mTime + '\'' +
-                '}';
-    }
 }

@@ -24,13 +24,13 @@ public class FoxBinAuth extends AuthModule {
     @Override
     public void login(String username, String password) throws Exception {
         FoxBinLoginRegisterRequest foxBinLoginRegisterRequest = FoxBinLoginRegisterRequest.create(username, password);
-        doAuth(FoxBinApi.getInstance().getService().login(NetworkUtils.getBody(foxBinLoginRegisterRequest)).execute(), username);
+        doAuth(FoxBinApi.getInstance().getService().login(NetworkUtils.createBody(foxBinLoginRegisterRequest)).execute(), username);
     }
 
     @Override
     public void register(String username, String password) throws Exception {
         FoxBinLoginRegisterRequest foxBinLoginRegisterRequest = FoxBinLoginRegisterRequest.create(username, password);
-        doAuth(FoxBinApi.getInstance().getService().register(NetworkUtils.getBody(foxBinLoginRegisterRequest)).execute(), username);
+        doAuth(FoxBinApi.getInstance().getService().register(NetworkUtils.createBody(foxBinLoginRegisterRequest)).execute(), username);
     }
 
     private void doAuth(Response<FoxBinLoginRegisterResponse> response, String username) throws Exception {

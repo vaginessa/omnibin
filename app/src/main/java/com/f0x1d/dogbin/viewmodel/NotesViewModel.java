@@ -8,14 +8,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.UserDocument;
-import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.utils.Event;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
 import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
@@ -27,23 +24,6 @@ import java.util.concurrent.Executors;
 public class NotesViewModel extends BaseBinServiceViewModel {
 
     public static final String EVENT_TYPE_OPEN_NOTE = "open_note";
-
-    public static class NotesViewModelFactory implements ViewModelProvider.Factory {
-
-        private final String mFolderKey;
-        private final boolean mAvailableUnauthorized;
-
-        public NotesViewModelFactory(String folderKey, boolean availableUnauthorized) {
-            this.mFolderKey = folderKey;
-            this.mAvailableUnauthorized = availableUnauthorized;
-        }
-
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new NotesViewModel(App.getInstance(), mFolderKey, mAvailableUnauthorized);
-        }
-    }
 
     private final MutableLiveData<List<UserDocument>> mNotesListData = new MutableLiveData<>();
     private final String mFolderKey;
@@ -68,7 +48,7 @@ public class NotesViewModel extends BaseBinServiceViewModel {
 
         mLoadingStateData.setValue(LoadingState.LOADING);
 
-        Utils.getExecutor().execute(() -> {
+        ThreadingUtils.getExecutor().execute(() -> {
             try {
                 List<UserDocument> userDocuments = mCurrentService.folders().getUserDocumentsForFolder(mFolderKey);
 

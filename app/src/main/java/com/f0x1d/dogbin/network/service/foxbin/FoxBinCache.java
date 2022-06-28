@@ -6,7 +6,8 @@ import com.f0x1d.dmsdk.model.UserDocument;
 import com.f0x1d.dmsdk.module.CacheModule;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.TimeUtils;
+import com.f0x1d.dogbin.utils.services.ServicesConvertors;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class FoxBinCache extends CacheModule {
 
     @Override
     public List<UserDocument> getDocumentListFromCache() {
-        return Utils.toUserNotesFoxBin(App.getMyDatabase().getFoxBinSavedNoteDao().getAllSync(), false);
+        return ServicesConvertors.toUserNotesFoxBin(App.getMyDatabase().getFoxBinSavedNoteDao().getAllSync(), false);
     }
 
     @Override
@@ -35,6 +36,6 @@ public class FoxBinCache extends CacheModule {
         if (!myDocument && App.getPreferencesUtil().cacheOnlyMy())
             return;
 
-        App.getMyDatabase().getFoxBinSavedNoteDao().addToCache(FoxBinSavedNote.createNote(content, slug, Utils.currentTimeToString()));
+        App.getMyDatabase().getFoxBinSavedNoteDao().addToCache(FoxBinSavedNote.createNote(content, slug, TimeUtils.currentTimeToString()));
     }
 }

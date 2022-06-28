@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import com.f0x1d.dogbin.billing.DonationStatus;
+import com.f0x1d.dogbin.utils.services.BinServiceUtils;
 
 public class PreferencesUtils {
 

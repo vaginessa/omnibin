@@ -29,13 +29,17 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
 
     private static BillingManager sBillingManager;
 
-    private Context mContext;
+    private final Context mContext;
     private BillingClient mBillingClient;
 
-    private MutableLiveData<DonationStatus> mDonatedData = new MutableLiveData<>(App.getPreferencesUtil().getDonationStatus());
+    private final MutableLiveData<DonationStatus> mDonatedData = new MutableLiveData<>(App.getPreferencesUtil().getDonationStatus());
 
-    private MutableLiveData<Boolean> mLoadedSkuDetailsData = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> mLoadedSkuDetailsData = new MutableLiveData<>(false);
     private SkuDetails mSkuDetailsProduct;
+
+    public static synchronized BillingManager getInstance(Context c) {
+        return sBillingManager == null ? sBillingManager = new BillingManager(c) : sBillingManager;
+    }
 
     private BillingManager(Context c) {
         mContext = c.getApplicationContext();
@@ -50,12 +54,6 @@ public class BillingManager implements PurchasesUpdatedListener, BillingClientSt
                 .setListener(this)
                 .build();
         mBillingClient.startConnection(this);
-    }
-
-    public static BillingManager getInstance(Context c) {
-        synchronized (BillingManager.class) {
-            return sBillingManager == null ? sBillingManager = new BillingManager(c) : sBillingManager;
-        }
     }
 
     public void loadPurchases() {

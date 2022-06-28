@@ -44,21 +44,20 @@ public class DonateActivity extends BaseActivity<AndroidViewModel> {
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         mF0x1dIcon = findViewById(R.id.f0x1d_icon);
+        mF0x1dDonateButton = findViewById(R.id.f0x1d_donate_button);
 
         mDonateCard = findViewById(R.id.donate_card);
         mDonationStatusText = findViewById(R.id.donate_status_text);
         mCatIcon = findViewById(R.id.cat_icon);
         mDonateButton = findViewById(R.id.donate_button);
 
-        mF0x1dDonateButton = findViewById(R.id.f0x1d_donate_button);
-
         mF0x1dIcon.setShapeAppearanceModel(
                 mF0x1dIcon
                         .getShapeAppearanceModel()
                         .withCornerSize(20f)
         );
-
         mF0x1dDonateButton.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/F0x1d"))));
+
         mDonateButton.setOnClickListener(v -> mBillingManager.launchBillingFlow(this));
 
         mBillingManager.getDonatedData().observe(this, donationStatus -> {

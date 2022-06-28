@@ -5,14 +5,12 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import com.f0x1d.dogbin.db.dao.DogbinSavedNoteDao;
 import com.f0x1d.dogbin.db.dao.FoxBinSavedNoteDao;
 import com.f0x1d.dogbin.db.dao.PastebinSavedNoteDao;
-import com.f0x1d.dogbin.db.entity.DogbinSavedNote;
 import com.f0x1d.dogbin.db.entity.FoxBinSavedNote;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
 
-@Database(entities = {DogbinSavedNote.class, PastebinSavedNote.class, FoxBinSavedNote.class}, version = 5)
+@Database(entities = {PastebinSavedNote.class, FoxBinSavedNote.class}, version = 6)
 public abstract class MyDatabase extends RoomDatabase {
 
     public static Migration MIGRATION_1_2 = new Migration(1, 2) {
@@ -50,7 +48,13 @@ public abstract class MyDatabase extends RoomDatabase {
         }
     };
 
-    public abstract DogbinSavedNoteDao getDogbinSavedNoteDao();
+    public static Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("DROP TABLE IF EXISTS DogbinSavedNote");
+        }
+    };
+
     public abstract PastebinSavedNoteDao getPastebinSavedNoteDao();
     public abstract FoxBinSavedNoteDao getFoxBinSavedNoteDao();
 }

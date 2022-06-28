@@ -11,13 +11,13 @@ public class MyFragmentBuilder implements FragmentNavigator.FragmentBuilder {
     public Fragment getFragment(String tag) {
         switch (tag) {
             case "settings":
-                return SettingsWrapperFragment.newInstance();
+                return new SettingsWrapperFragment();
             case "settings_pref":
-                return SettingsFragment.newInstance();
+                return new SettingsFragment();
             case "folders":
-                return FoldersWrapperFragment.newInstance();
+                return new FoldersWrapperFragment();
             case "folders_wrapped":
-                return FoldersFragment.newInstance();
+                return new FoldersFragment();
 
             default:
                 return null;

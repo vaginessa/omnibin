@@ -12,6 +12,7 @@ import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
+import com.f0x1d.dogbin.utils.AndroidUtils;
 import com.f0x1d.dogbin.utils.Event;
 import com.f0x1d.dogbin.viewmodel.WritingViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -62,17 +63,16 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
 
         mToolbar.setTitle(mViewModel.isInEditingMode() ? R.string.editing_note : R.string.creating_note);
 
-        if (mViewModel.isInEditingMode()) {
+        if (mViewModel.getSlug() != null)
             mSlugText.setText(mViewModel.getSlug());
+        if (mViewModel.isInEditingMode())
             mSlugText.setEnabled(false);
+        if (mViewModel.isIntentToPost() || mViewModel.isInEditingMode())
+            setText(getIntent().getStringExtra(Intent.EXTRA_TEXT));
 
-            setText(mViewModel.getTextFromIntent());
-        }
+        mDoneButton.setOnClickListener(v -> mViewModel.sendDialogEvent());
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
-            if (loadingState == null)
-                return;
-
             switch (loadingState) {
                 case LOADING:
                     if (!mViewModel.isInEditingMode()) mSlugText.setEnabled(false);
@@ -100,15 +100,6 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
                     break;
             }
         });
-
-        if (mViewModel.getSlug() != null)
-            mSlugText.setText(mViewModel.getSlug());
-
-        if (mViewModel.isIntentToPost()) {
-            setText(mViewModel.getTextFromIntent());
-        }
-
-        mDoneButton.setOnClickListener(v -> mViewModel.sendDialogEvent());
     }
 
     private void posted(String resultUrl) {
@@ -160,7 +151,7 @@ public class TextEditActivity extends BaseActivity<WritingViewModel> {
 
     @Override
     protected ViewModelProvider.Factory buildFactory() {
-        return new WritingViewModel.WritingViewModelFactory(getIntent());
+        return AndroidUtils.buildViewModelFactory(() -> new WritingViewModel(getApplication(), getIntent()));
     }
 
     private String getText() {

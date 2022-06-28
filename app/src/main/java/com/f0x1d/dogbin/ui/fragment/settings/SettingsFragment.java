@@ -18,15 +18,18 @@ import com.f0x1d.dogbin.billing.BillingManager;
 import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.LoginActivity;
 import com.f0x1d.dogbin.ui.activity.MainActivity;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
 import com.f0x1d.dogbin.utils.PreferencesUtils;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
+import com.f0x1d.dogbin.utils.services.BinServiceUtils;
+import com.f0x1d.dogbin.utils.services.ServicesUtils;
 import com.f0x1d.dogbin.viewmodel.SettingsViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+
+    private SettingsViewModel mSettingsViewModel;
 
     private Preference mDonatePreference;
 
@@ -40,16 +43,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private Preference mServicePreference;
 
     private Preference mClearCachePreference;
-
-    private SettingsViewModel mSettingsViewModel;
-
-    public static SettingsFragment newInstance() {
-        Bundle args = new Bundle();
-
-        SettingsFragment fragment = new SettingsFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -128,8 +121,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.select_service)
-                    .setSingleChoiceItems(Utils.getInstalledServices(services), Utils.getSelectedService(services), (dialog, which) -> {
-                        Utils.switchService(which, services);
+                    .setSingleChoiceItems(ServicesUtils.getInstalledServices(services), ServicesUtils.getSelectedService(services), (dialog, which) -> {
+                        ServicesUtils.switchService(which, services);
                         dialog.dismiss();
                     })
                     .setPositiveButton(android.R.string.cancel, null)
@@ -139,8 +132,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mClearCachePreference = findPreference("cache_nuke");
         mClearCachePreference.setOnPreferenceClickListener(preference -> {
-            Utils.getExecutor().execute(() -> {
-                App.getMyDatabase().getDogbinSavedNoteDao().nukeTable();
+            ThreadingUtils.getExecutor().execute(() -> {
                 App.getMyDatabase().getPastebinSavedNoteDao().nukeTable();
                 App.getMyDatabase().getFoxBinSavedNoteDao().nukeTable();
             });

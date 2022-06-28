@@ -14,14 +14,6 @@ public class FoldersWrapperFragment extends BaseFragment<AndroidViewModel> {
 
     private FragmentNavigator mFragmentNavigator;
 
-    public static FoldersWrapperFragment newInstance() {
-        Bundle args = new Bundle();
-
-        FoldersWrapperFragment fragment = new FoldersWrapperFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     protected int layoutId() {
         return R.layout.fragment_folders_wrapper;

@@ -56,14 +56,4 @@ public class PastebinSavedNote {
     public void setTime(String time) {
         this.mTime = time;
     }
-
-    @Override
-    public String toString() {
-        return "PastebinSavedNote{" +
-                "mId=" + mId +
-                ", mContent='" + mContent + '\'' +
-                ", mSlug='" + mSlug + '\'' +
-                ", mTime='" + mTime + '\'' +
-                '}';
-    }
 }

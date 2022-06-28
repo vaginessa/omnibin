@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.f0x1d.dmsdk.BinService;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.utils.Event;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
 import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 import com.f0x1d.dogbin.viewmodel.base.LoadingState;
 
@@ -27,16 +27,15 @@ public class FoldersViewModel extends BaseBinServiceViewModel {
     @Override
     public void onServiceChanged(BinService service) {
         load();
+        mEventsData.setValue(new Event(EVENT_TYPE_CLEAR_BACKSTACK, Void.TYPE));
     }
 
     public void load() {
         if (isServiceUnloaded()) return;
 
-        mEventsData.setValue(new Event(EVENT_TYPE_CLEAR_BACKSTACK, Void.TYPE));
-
         mLoadingStateData.setValue(LoadingState.LOADING);
 
-        Utils.getExecutor().execute(() -> {
+        ThreadingUtils.getExecutor().execute(() -> {
             try {
                 List<Folder> folders = mCurrentService.folders().getAvailableFolders();
 

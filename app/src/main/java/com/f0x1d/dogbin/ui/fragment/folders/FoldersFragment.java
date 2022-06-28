@@ -11,7 +11,7 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.adapter.FoldersAdapter;
 import com.f0x1d.dogbin.ui.fragment.NotesFragment;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ViewUtils;
 import com.f0x1d.dogbin.viewmodel.FoldersViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -22,14 +22,6 @@ public class FoldersFragment extends BaseFragment<FoldersViewModel> {
     private SwipeRefreshLayout mRefreshLayout;
 
     private FoldersAdapter mAdapter;
-
-    public static FoldersFragment newInstance() {
-        Bundle args = new Bundle();
-
-        FoldersFragment fragment = new FoldersFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     protected int layoutId() {
@@ -51,9 +43,7 @@ public class FoldersFragment extends BaseFragment<FoldersViewModel> {
 
         mToolbar.setTitle(R.string.folders);
 
-        mRefreshLayout.setColorSchemeColors(Utils.getColorFromAttr(requireActivity(), R.attr.colorPrimary));
-        if (isNightTheme())
-            mRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getColorFromAttr(requireActivity(), android.R.attr.windowBackground));
+        ViewUtils.setupSwipeRefreshLayout(mRefreshLayout, isNightTheme());
         mRefreshLayout.setOnRefreshListener(mViewModel::load);
 
         mFoldersRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
@@ -61,9 +51,6 @@ public class FoldersFragment extends BaseFragment<FoldersViewModel> {
                 ((FoldersWrapperFragment) getParentFragment()).getFragmentNavigator().switchTo(NotesFragment.newInstance(folder), folder.getKey() + "_notes", true)));
 
         mViewModel.getLoadingStateData().observe(getViewLifecycleOwner(), loadingState -> {
-            if (loadingState == null)
-                return;
-
             switch (loadingState) {
                 case LOADING:
                     mRefreshLayout.setRefreshing(true);
@@ -86,6 +73,6 @@ public class FoldersFragment extends BaseFragment<FoldersViewModel> {
             }
         });
 
-        mViewModel.getFoldersData().observe(getViewLifecycleOwner(), folders -> mAdapter.setFolders(folders));
+        mViewModel.getFoldersData().observe(getViewLifecycleOwner(), folders -> mAdapter.setElements(folders));
     }
 }

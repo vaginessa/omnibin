@@ -9,21 +9,10 @@ import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.fragment.base.BaseFragment;
 import com.f0x1d.dogbin.utils.fragments.FragmentNavigator;
 import com.f0x1d.dogbin.utils.fragments.MyFragmentBuilder;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class SettingsWrapperFragment extends BaseFragment<AndroidViewModel> {
 
-    private MaterialToolbar mToolbar;
-
     private FragmentNavigator mFragmentNavigator;
-
-    public static SettingsWrapperFragment newInstance() {
-        Bundle args = new Bundle();
-
-        SettingsWrapperFragment fragment = new SettingsWrapperFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     protected int layoutId() {
@@ -38,9 +27,6 @@ public class SettingsWrapperFragment extends BaseFragment<AndroidViewModel> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mToolbar = findViewById(R.id.toolbar);
-        mToolbar.setTitle(R.string.settings);
 
         mFragmentNavigator = new FragmentNavigator(getChildFragmentManager(), R.id.wrapper_container, new MyFragmentBuilder());
         if (savedInstanceState == null)

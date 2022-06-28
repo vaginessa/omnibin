@@ -4,18 +4,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.R;
+import com.f0x1d.dogbin.adapter.base.BaseAdapter;
+import com.f0x1d.dogbin.adapter.base.BaseViewHolder;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderViewHolder> {
-
-    private List<Folder> mFolders = new ArrayList<>();
+public class FoldersAdapter extends BaseAdapter<Folder, FoldersAdapter.FolderViewHolder> {
 
     private FolderClickListener mFolderClickListener;
 
@@ -23,32 +19,16 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
         this.mFolderClickListener = folderClickListener;
     }
 
-    @NonNull
     @Override
-    public FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new FolderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_folder, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull FolderViewHolder holder, int position) {
-        holder.bindTo(mFolders.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mFolders.size();
-    }
-
-    public void setFolders(List<Folder> folders) {
-        mFolders = folders;
-        notifyDataSetChanged();
+    protected FolderViewHolder createHolder(ViewGroup parent, LayoutInflater layoutInflater) {
+        return new FolderViewHolder(layoutInflater.inflate(R.layout.item_folder, parent, false));
     }
 
     public interface FolderClickListener {
         void onClicked(Folder folder);
     }
 
-    class FolderViewHolder extends RecyclerView.ViewHolder {
+    class FolderViewHolder extends BaseViewHolder<Folder> {
 
         private MaterialCardView mContentCard;
         private MaterialTextView mFolderTitleText;
@@ -59,7 +39,7 @@ public class FoldersAdapter extends RecyclerView.Adapter<FoldersAdapter.FolderVi
             mContentCard = itemView.findViewById(R.id.content_card);
             mFolderTitleText = itemView.findViewById(R.id.folder_title_text);
 
-            mContentCard.setOnClickListener(v -> mFolderClickListener.onClicked(mFolders.get(getAdapterPosition())));
+            mContentCard.setOnClickListener(v -> mFolderClickListener.onClicked(mElements.get(getAdapterPosition())));
         }
 
         public void bindTo(Folder folder) {

@@ -39,7 +39,7 @@ public class FoxBinDocuments extends DocumentsModule {
         if (!slug.isEmpty()) ((FoxBinCreateDocumentWithSlugRequest) foxBinCreateDocumentRequest).setSlug(slug);
 
         Response<FoxBinCreatedDocumentResponse> response =
-                FoxBinApi.getInstance().getService().createDocument(NetworkUtils.getBody(foxBinCreateDocumentRequest)).execute();
+                FoxBinApi.getInstance().getService().createDocument(NetworkUtils.createBody(foxBinCreateDocumentRequest)).execute();
         NetworkUtils.checkResponseForError(response, FoxBinErrorResponse.class);
         return response.body().getSlug();
     }
@@ -52,7 +52,7 @@ public class FoxBinDocuments extends DocumentsModule {
         foxBinCreateDocumentRequest.setSlug(slug);
 
         Response<FoxBinCreatedDocumentResponse> response =
-                FoxBinApi.getInstance().getService().editDocument(NetworkUtils.getBody(foxBinCreateDocumentRequest)).execute();
+                FoxBinApi.getInstance().getService().editDocument(NetworkUtils.createBody(foxBinCreateDocumentRequest)).execute();
         NetworkUtils.checkResponseForError(response, FoxBinErrorResponse.class);
         return response.body().getSlug();
     }

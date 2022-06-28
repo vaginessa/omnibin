@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.f0x1d.dogbin.billing.DonationStatus;
 import com.f0x1d.dogbin.ui.activity.DonateActivity;
 import com.f0x1d.dogbin.ui.activity.base.BaseActivity;
 import com.f0x1d.dogbin.ui.view.CoolCodeView;
+import com.f0x1d.dogbin.utils.AndroidUtils;
 import com.f0x1d.dogbin.viewmodel.TextViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -48,9 +50,6 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
         setupToolbar();
 
         mViewModel.getLoadingStateData().observe(this, loadingState -> {
-            if (loadingState == null)
-                return;
-
             switch (loadingState) {
                 case LOADING:
                     mLoadingProgress.setVisibility(View.VISIBLE);
@@ -63,39 +62,38 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
             }
         });
 
-        mViewModel.getTextData().observe(this, text -> {
-            if (text == null)
-                return;
-
-            mTextCodeView.setText(text);
-        });
-
-        mViewModel.getIsRedirectData().observe(this, redirectURL -> {
-            if (redirectURL == null)
-                return;
-
-            new CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(redirectURL));
-            finish();
-        });
-
+        mViewModel.getTextData().observe(this, text -> mTextCodeView.setText(text));
         mViewModel.getIsEditableData().observe(this, isEditable -> mToolbar.getMenu().findItem(R.id.edit_item).setVisible(isEditable));
+
+        mViewModel.getEventsData().observe(this, event -> {
+            if (event.isConsumed()) return;
+
+            if (event.type().equals(TextViewModel.EVENT_TYPE_REDIRECT)) {
+                new CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(event.consume()));
+                finish();
+            }
+        });
 
         supportApp();
     }
 
     private void setupToolbar() {
         mViewModel.getSlugData().observe(this, slug -> mToolbar.setTitle(slug));
+
         mToolbar.inflateMenu(R.menu.text_viewer_menu);
-        mToolbar.getMenu().findItem(R.id.edit_item).setOnMenuItemClickListener(item -> {
+
+        MenuItem editItem = mToolbar.getMenu().findItem(R.id.edit_item);
+        editItem.setOnMenuItemClickListener(item -> {
             startActivityForResult(new Intent(TextViewerActivity.this, TextEditActivity.class)
                     .putExtra("slug", mViewModel.getSlugData().getValue())
                     .putExtra(Intent.EXTRA_TEXT, mViewModel.getTextData().getValue())
                     .putExtra("edit", true), 1);
             return true;
         });
-        mToolbar.getMenu().findItem(R.id.edit_item).setVisible(false);
+        editItem.setVisible(false);
 
-        mToolbar.getMenu().findItem(R.id.text_wrap_item).setOnMenuItemClickListener(item -> {
+        MenuItem textWrapItem = mToolbar.getMenu().findItem(R.id.text_wrap_item);
+        textWrapItem.setOnMenuItemClickListener(item -> {
             boolean checked = item.isChecked();
 
             mTextCodeView.setWrapText(!checked);
@@ -104,7 +102,7 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
             item.setChecked(!checked);
             return true;
         });
-        mToolbar.getMenu().findItem(R.id.text_wrap_item).setChecked(App.getPreferencesUtil().textWrap());
+        textWrapItem.setChecked(App.getPreferencesUtil().textWrap());
     }
 
     private void supportApp() {
@@ -127,7 +125,7 @@ public class TextViewerActivity extends BaseActivity<TextViewModel> {
 
     @Override
     protected ViewModelProvider.Factory buildFactory() {
-        return new TextViewModel.TextViewModelFactory(getIntent());
+        return AndroidUtils.buildViewModelFactory(() -> new TextViewModel(getApplication(), getIntent()));
     }
 
     @Override

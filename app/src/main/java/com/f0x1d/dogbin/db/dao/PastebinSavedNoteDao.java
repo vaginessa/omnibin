@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import com.f0x1d.dogbin.db.entity.PastebinSavedNote;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.TimeUtils;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public interface PastebinSavedNoteDao {
         if (maybeSavedNote == null)
             insert(savedNote);
         else if (!maybeSavedNote.getContent().equals(savedNote.getContent()))
-            updateContentBySlug(savedNote.getSlug(), savedNote.getContent(), Utils.currentTimeToString());
+            updateContentBySlug(savedNote.getSlug(), savedNote.getContent(), TimeUtils.currentTimeToString());
     }
 
     @Insert

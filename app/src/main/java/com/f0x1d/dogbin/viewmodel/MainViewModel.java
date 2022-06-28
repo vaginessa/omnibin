@@ -13,9 +13,10 @@ import com.f0x1d.dmsdk.model.Folder;
 import com.f0x1d.dogbin.App;
 import com.f0x1d.dogbin.R;
 import com.f0x1d.dogbin.ui.activity.text.TextViewerActivity;
-import com.f0x1d.dogbin.utils.BinServiceUtils;
+import com.f0x1d.dogbin.utils.AndroidUtils;
 import com.f0x1d.dogbin.utils.Event;
-import com.f0x1d.dogbin.utils.Utils;
+import com.f0x1d.dogbin.utils.ThreadingUtils;
+import com.f0x1d.dogbin.utils.services.BinServiceUtils;
 import com.f0x1d.dogbin.viewmodel.base.BaseBinServiceViewModel;
 
 import java.util.concurrent.Executor;
@@ -67,7 +68,7 @@ public class MainViewModel extends BaseBinServiceViewModel {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Utils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
+                ThreadingUtils.runOnUiThread(() -> Toast.makeText(getApplication(), getApplication().getString(R.string.error, e.getLocalizedMessage()), Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -81,8 +82,8 @@ public class MainViewModel extends BaseBinServiceViewModel {
     }
 
     private boolean damnVTostersIsInstalled() {
-        return Utils.isPackageInstalled("com.vtosters.android", getApplication().getPackageManager()) ||
-                Utils.isPackageInstalled("com.vtosters.lite", getApplication().getPackageManager());
+        return AndroidUtils.isPackageInstalled("com.vtosters.android", getApplication().getPackageManager()) ||
+                AndroidUtils.isPackageInstalled("com.vtosters.lite", getApplication().getPackageManager());
     }
 
     public LiveData<Boolean> getPublishButtonVisibleData() {
