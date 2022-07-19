@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -259,18 +260,21 @@ public class CoolCodeView extends ViewGroup {
     }
 
     private void startMomentumAnimator(long timeTravelled, float xDistance, float yDistance) {
-        float xSpeed = xDistance / (timeTravelled == 0 ? 1 : timeTravelled); // idk how people scroll so fast
+        float xSpeed = xDistance / (timeTravelled == 0 ? 1 : timeTravelled) / 1.3f;
         float ySpeed = yDistance / (timeTravelled == 0 ? 1 : timeTravelled);
 
         if (mPreviousMovementData.getX() <= 1.3 && mPreviousMovementData.getY() <= 1.3) return; // like random touches
 
         mInMomentum = true;
 
+        float maxSpeed = Math.max(Math.abs(xSpeed), Math.abs(ySpeed));
+
         mValueAnimator = new ValueAnimator();
-        mValueAnimator.setIntValues((int) mTenDp, 1); // some random values that i like
-        mValueAnimator.setDuration(2000);
+        mValueAnimator.setFloatValues(maxSpeed * 5f, 1f);
+        mValueAnimator.setDuration((long) (maxSpeed * 500L));
+        mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         mValueAnimator.addUpdateListener(animation -> {
-            int multiplier = (int) animation.getAnimatedValue();
+            float multiplier = (float) animation.getAnimatedValue();
 
             boolean xSuitsBounds = xSuitsBounds();
             boolean ySuitsBounds = ySuitsBounds();
